@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html lang="cz">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Akordy a stupnice</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> 
+
+    <style>
+        table {
+            border: 1px solid black;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 8px;
+        }
+
+        .note-on {
+            background-color: yellow;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+
+
+    <script src="shared.js"></script>
+    <script src="database.js"></script>
+    <script src="chordgen.js"></script>
+    <script src="dbcore.js"></script>
+    <script src="chordprinter.js"></script>
+    <script src="harmonicaprinter.js"></script>
+    <script src="sound.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="tab-content">
+            <div class=".jumbotron .jumbotron-fluid">
+                <h3>Akordy</h3>
+                <select id="cbChordTypes" onchange="refreshAll()"></select>
+                <div id="divOutput"></div>
+
+                <h3>Vyhledání akordů</h3>
+                <p>Napište tóny oddělené mezerou: </p><input id="tbDistances" type="text" onkeyup="guessChordsByTones()" />
+                <div id="divFoundChord"></div>
+            </div>
+
+            <div>
+                <h3>Stupnice - 1</h3>
+                <select id="cbTones" onchange="refreshAll()"></select>
+                <select id="cbScales" onchange="refreshAll()"></select>
+                <div id="divOutputScale"></div>
+
+                <h3>Stupnice - 2</h3>
+                <select id="cbTones2" onchange="refreshAll()"></select>
+                <select id="cbScales2" onchange="refreshAll()"></select>
+                <div id="divOutputScale2"></div>
+
+                <p>hledání stupnice podle tónů</p>
+                <input id="tbScaleDistances" type="text" onkeyup="guessScalesByTones()" />
+                <div id="divFoundScale"></div>
+            </div>
+
+            <div>
+                <h3>Harmonika</h3>
+                <p>Zadejte klíč: </p> <select id="cbHarmonicaTones" onchange="refreshAll()"></select>
+                <div id="divHarmonica"></div>
+            </div>
+
+            <div>
+                <h3>Ladění</h3>
+                <select id="cbTunings"></select>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function setCssClass(control, cssClass, isOn) {
+            let contains = control.classList.contains(cssClass);
+
+            if (isOn) {
+                if (!contains)
+                    control.classList.add(cssClass);
+            }
+            else {
+                if (contains)
+                    control.classList.remove(cssClass);
+            }
+        }
+
+        function clone(src) {
+            let str = JSON.stringify(src);
+            try
+            {
+                return JSON.parse(str);
+            }
+            catch(ex)
+            {
+                window.console.error(str);
+            }
+        }
+
+        function generateSelectedChord(ctx) {
+            let chordTypeName = document.getElementById('cbChordTypes').selectedOptions[0].value;
+            document.getElementById('divOutput').innerHTML = new ChordPrinter(ctx).printChordsTable(chordTypeName);
+        }
+
+        function generateSelectedScale(ctx) {
+            document.getElementById('divOutputScale').innerHTML = new ChordPrinter(ctx).printScalesTable(
+                document.getElementById('cbTones').selectedOptions[0].value, 
+                document.getElementById('cbScales').selectedOptions[0].value
+            );
+        }
+
+        function refreshAll() {
+            currentCtx.ToneMap = [];
+            currentCtx.HarmonicaToneName = document.getElementById('cbHarmonicaTones').selectedOptions[0].value
+
+            document.getElementById('divHarmonica').innerHTML = new HarmonicaPrinter(currentCtx).printHarmonicaTable();
+
+            generateSelectedChord(currentCtx);
+            generateSelectedScale(currentCtx);
+
+            let ctx = new Context();
+            ctx.Tuning = getCurrentTuning();
+            document.getElementById('divOutputScale2').innerHTML = new ChordPrinter(ctx).printScalesTable(
+                document.getElementById('cbTones2').selectedOptions[0].value, 
+                document.getElementById('cbScales2').selectedOptions[0].value
+            );
+            
+            colorKeyTones(currentCtx);
+        }
+
+        function getCurrentTuning() {
+            return new DBCore().findTuningByName(document.getElementById('cbTunings').selectedOptions[0].value);
+        }
+
+        function colorKeyTones(ctx) {
+            if ((ctx.ToneMap == undefined) || (ctx.TonesInScale == undefined))
+                return;
+
+            for (let j = 0; j < ctx.ToneMap.length; j++) {
+                // window.console.debug(ctx.ToneMap[j].ControlId + " - on");
+                let ctrl = document.getElementById(ctx.ToneMap[j].ControlId);
+                if(ctrl != null)
+                {
+                    setCssClass(ctrl, 'note-on', false);
+                }
+
+            }
+
+            for (let i = 0; i < ctx.TonesInScale.length; i++) {
+                colorChordTonesByScale(ctx, ctx.TonesInScale[i]);
+            }
+        }
+
+        function colorChordTonesByScale(ctx, tonesInScale) {
+            if ((ctx.ToneMap == undefined) || (ctx.TonesInScale == undefined))
+                return;
+
+            for (let i = 0; i < tonesInScale.length; i++) {
+                let tone = tonesInScale[i];
+                let ctrl = document.getElementById(findToneControlIdForChordByTone(ctx, tone));
+                if(ctrl != null) {
+                    setCssClass(ctrl, 'note-on', true);
+                }
+            }
+        }
+
+        function findToneControlIdForChordByTone(ctx, tone) {
+            if ((ctx.ToneMap == undefined) || (ctx.TonesInScale == undefined))
+                return;
+
+            for (let i = 0; i < ctx.ToneMap.length; i++) {
+                if (DBCore.isToneEqual(ctx.ToneMap[i].Tone, tone)) {
+                    return ctx.ToneMap[i].ControlId;
+                }
+            }
+
+            return undefined;
+        }
+
+        function playToneWithOctave(toneName, toneOctave, tuningName) {
+            sound.playToneWithOctave(toneName, toneOctave, tuningName);
+        }
+
+        function guessChordsByTones() {
+            let textResult = new ChordGen().guessChordsByTones(document.getElementById('tbDistances').value);
+            document.getElementById('divFoundChord').innerHTML = textResult;
+        }
+
+        function guessScalesByTones() {
+            let textResult = new ChordGen().guessScalesByTones(document.getElementById('tbScaleDistances').value);
+            document.getElementById('divFoundScale').innerHTML = textResult;
+        }
+        
+
+        let currentCtx = new Context();
+        currentCtx.Tuning = new DBCore().findTuningByName("equal-tempered");
+        currentCtx.ShiftOctave = 4;
+        let sound = new Sound(currentCtx);
+
+        // fill tones
+        function fillTones(cbTones) {
+            for (let i = 0; i < DB.tones.length; i++) {
+                let tone = DB.tones[i];
+                let option = document.createElement("option");
+                option.text = tone.name;
+                cbTones.add(option);
+            }
+        }
+
+        // fill tones
+        function fillChordTypes(cbChordTypes) {
+            for (let i = 0; i < DB.chords.length; i++) {
+                let chord = DB.chords[i];
+                let option = document.createElement("option");
+                option.text = chord.name;
+                cbChordTypes.add(option);
+            }
+        }
+
+        // fill scales
+        function fillScales(cbScales) {
+            for (let i = 0; i < DB.scales.length; i++) {
+                let scale = DB.scales[i];
+                let option = document.createElement("option");
+                option.text = scale.name;
+                cbScales.add(option);
+            }
+        }
+
+        // fill tunings
+        function fillTunings(cbTunings) {
+            for (let i = 0; i < DB.tunings.length; i++) {
+                let tuning = DB.tunings[i];
+                let option = document.createElement("option");
+                option.text = tuning.name;
+                cbTunings.add(option);
+            }
+        }
+
+        // -- init ui
+        fillChordTypes(document.getElementById('cbChordTypes'));
+        fillTones(document.getElementById('cbTones'));
+        fillScales(document.getElementById('cbScales'));
+        fillTones(document.getElementById('cbTones2'));
+        fillScales(document.getElementById('cbScales2'));
+        fillTones(document.getElementById('cbHarmonicaTones'));
+        fillTunings(document.getElementById('cbTunings'));
+
+        refreshAll();
+    </script>
+</body>
+
+</html>
