@@ -51,7 +51,17 @@ const DB = {
       "name": "6",
       "distances": [ 0, 4, 7, 9 ],
       "families": ["6"]
-    }
+    },
+    {
+      "name": "9",
+      "distances": [ 0, 2, 4, 10 ],
+      "families": ["9"]
+    },
+    {
+      "name": "m9",
+      "distances": [ 0, 2, 3, 10 ],
+      "families": ["9"]
+    } 
   ],
 
   "scales": [

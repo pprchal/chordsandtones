@@ -73,6 +73,10 @@
                 <p>hledání stupnice podle tónů</p>
                 <input id="tbScaleDistances" type="text" onkeyup="guessScalesByTones()" />
                 <div id="divFoundScale"></div>
+
+                <p>Přehrát melodii</p>
+                <input id="tbPlayMelody" type="text" />
+                <input id="btPlayMelody" type="button" value="Hraj >" onclick="playMelody()" />
             </div>
 
             <div>
@@ -90,6 +94,26 @@
 
 
     <script>
+        function playMelody() {
+            let melody = document.getElementById('tbPlayMelody').value;
+
+            for(let i =0; i < melody.length; i++){
+                let note = melody[i];
+                playToneWithOctave(note, 0, 'equal-tempered');
+               
+                sleep(200);
+            }
+        }
+
+        function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+
         function setCssClass(control, cssClass, isOn) {
             let contains = control.classList.contains(cssClass);
 

@@ -85,6 +85,10 @@ class ChordGen {
         return tones;        
     }
 
+    findEnharmonicTone(tone){
+        
+    }
+
     // @chord
     // @distance
     isMatchingChordDistance(chord, distance){
