@@ -23,11 +23,13 @@ class ToneMapRecord {
 
 
 class BasePrinter{
-    // @tone
-    getToneName(tone, format) {
-        if(format == undefined)
-            format = 'html';
+    // @chord
+    formatChordName(chord) {
+        return this.formatHtmlTone(chord.rootTone);
+    }       
 
+    // @tone
+    formatPlainTone(tone) {
         let toneName = tone.name;
 
         if(tone.octave == 0)
@@ -35,7 +37,10 @@ class BasePrinter{
 
         if(format === 'plain') 
             return toneName + tone.octave;
-
-        return toneName + "<sup>" + tone.octave + "</sup>";
     }     
+
+    formatHtmlTone(tone){
+        // D♯
+        return tone.name.replace('#', '<sup>&#9839;</sup>');
+    }
 }

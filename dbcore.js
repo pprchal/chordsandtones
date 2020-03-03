@@ -53,6 +53,10 @@ class DBCore {
         return null;            
     }
 
+    // getMaxChordsToneCount() {
+    //     return Math.max.apply(Math, DB.chords.map(function(ch) { return ch.distances.length; }))
+    // }
+
     // @tuningName
     findTuningByName(tuningName) {
         for(let i = 0; i < DB.tunings.length; i++) {

@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Akordy a stupnice</title>
+    <title>GT</title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -57,6 +57,9 @@
                 <h3>Vyhledání akordů</h3>
                 <p>Napište tóny oddělené mezerou: </p><input id="tbDistances" type="text" onkeyup="guessChordsByTones()" />
                 <div id="divFoundChord"></div>
+
+                <h3>Akordy - přehled</h3>
+                <div id="divChordReview"></div>
             </div>
 
             <div>
@@ -73,10 +76,6 @@
                 <p>hledání stupnice podle tónů</p>
                 <input id="tbScaleDistances" type="text" onkeyup="guessScalesByTones()" />
                 <div id="divFoundScale"></div>
-
-                <p>Přehrát melodii</p>
-                <input id="tbPlayMelody" type="text" />
-                <input id="btPlayMelody" type="button" value="Hraj >" onclick="playMelody()" />
             </div>
 
             <div>
@@ -94,26 +93,6 @@
 
 
     <script>
-        function playMelody() {
-            let melody = document.getElementById('tbPlayMelody').value;
-
-            for(let i =0; i < melody.length; i++){
-                let note = melody[i];
-                playToneWithOctave(note, 0, 'equal-tempered');
-               
-                sleep(200);
-            }
-        }
-
-        function sleep(milliseconds) {
-  var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > milliseconds){
-      break;
-    }
-  }
-}
-
         function setCssClass(control, cssClass, isOn) {
             let contains = control.classList.contains(cssClass);
 
@@ -151,6 +130,10 @@
             );
         }
 
+        function generateChordsReview(ctx){
+            document.getElementById('divChordReview').innerHTML = new ChordPrinter(ctx).printChordsReview();
+        }
+
         function refreshAll() {
             currentCtx.ToneMap = [];
             currentCtx.HarmonicaToneName = document.getElementById('cbHarmonicaTones').selectedOptions[0].value
@@ -167,6 +150,7 @@
                 document.getElementById('cbScales2').selectedOptions[0].value
             );
             
+            generateChordsReview(currentCtx);
             colorKeyTones(currentCtx);
         }
 

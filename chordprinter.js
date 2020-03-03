@@ -21,6 +21,50 @@ class ChordPrinter extends BasePrinter{
         return html;
     }        
 
+    
+    printTonesHeader(){
+        // new ChordPrinter(new Context()).printTonesHeader()
+        let html = '<tr><td>&nbsp;</td>';
+        for (let i=0; i<DB.tones.length; i++){
+            html += `<th>${this.formatHtmlTone(DB.tones[i])}</th>`;
+            
+        }
+        return html + '</tr>';
+    }
+
+    printChordReviewRow(chord){
+        let html = `<tr><td>${chord.name}</td>`;
+        let arr = this.prepareArrByTones();
+
+        for(let i = 0; i<arr.length; i++){
+            if(i < chord.distances.length){
+                arr[chord.distances[i]] = chord.distances[i];
+            }
+        }
+
+        for(let j = 0; j<arr.length; j++){
+            html += `<td>${arr[j]}</td>`;
+        }
+
+        return html + '</tr>';
+    }
+
+    prepareArrByTones() {
+        let arr = [];
+        for(let i = 0; i<DB.tones.length; i++){
+            arr[i] = '&nbsp;';
+        }
+        return arr;
+    }
+
+    printChordsReview(){
+        let html = '<table>' + this.printTonesHeader();
+
+        for (let i=0; i<DB.chords.length; i++){
+            html += this.printChordReviewRow(DB.chords[i]);
+        }
+        return html + '</table>';
+    }
 
     // @chord
     printSingleChordTableBody(chord) {
@@ -31,7 +75,7 @@ class ChordPrinter extends BasePrinter{
             this.ctx.ChordToneId = this.ctx.ChordToneId + 1;
             let chordToneId = "chordTone_" + this.ctx.ChordToneId;
             let tone = chord.tones[i];
-            html +="<td id=\"" + chordToneId + "\">" + this.getToneName(tone, 'html') + "</td>";
+            html += `<td id="${chordToneId}">${this.formatHtmlTone(tone)}</td>`;
 
             this.ctx.ToneMap.push(new ToneMapRecord(chordToneId, tone));
         }
@@ -41,7 +85,7 @@ class ChordPrinter extends BasePrinter{
     }   
 
     renderChordTd(chord){
-        return '<td><a class="btn btn-primary btn-block" href="#" role="button">' + this.getChordName(chord) + '</a></td>';
+        return `<td><a class="btn btn-primary btn-block" href="#" role="button">${this.formatChordName(chord)}</a></td>`;
     }
 
     // @chordTypeName (maj7)
@@ -65,11 +109,6 @@ class ChordPrinter extends BasePrinter{
     }  
 
     
-    // @chord
-    getChordName(chord) {
-        return chord.rootTone.name + chord.name;
-    }       
-    
     // @distances
     printChordHeader(distances) {
         let html = "<tr>";
@@ -77,7 +116,7 @@ class ChordPrinter extends BasePrinter{
         html += "<td></td>";
         for (let i =0; i<distances.length; i++) {
             let distance = distances[i];
-            html += "<th>"+ this.formatDistance(distance) + "</th>";
+            html += `<th>${this.formatDistance(distance)}</th>`;
         }
         html += "</tr>";
         return html;
@@ -95,12 +134,16 @@ class ChordPrinter extends BasePrinter{
         let html = "<tr>";
         for (let i = 0; i < tones.length; i++) {
             let tone = tones[i];
-            let script = "playToneWithOctave('" + tone.name + "', " +  tone.octave +  ", '" + this.ctx.Tuning.name +  "')";
-            html +="<td><input type=\"button\" value=\"" + this.getToneName(tone, 'plain') + "\" onclick=\"" + script + "\"></input></td>";
+            html += `<td>${this.renderScaleButton(tone)}</td>`;
         }
         html += "</tr>";
         return html;
     } 
+
+    renderScaleButton(tone){
+        let script = `playToneWithOctave('${tone.name}', '${tone.octave}', '${this.ctx.Tuning.name}')`;
+        return `<a class="btn btn-primary btn-block" href="javascript:none" onclick="${script}; return false;" role="button">${this.formatPlainTone(tone)}</a>`;
+    }
 
     printScaleTable = function() {
         let scale = this.ctx.Scale;
@@ -122,7 +165,7 @@ class ChordPrinter extends BasePrinter{
 
         for (let i =0; i<distances.length; i++) {
             let distance = distances[i];
-            html += "<th>"+ this.formatDistance(distance) + "</th>";
+            html += `<th>${this.formatDistance(distance)}</th>`;
         }
         html += "</tr>";
         return html;

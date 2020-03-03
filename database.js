@@ -13,13 +13,13 @@ const DB = {
       "families": ["7"]
     },
     {
-      "name": "maj7",
-      "distances": [ 0, 4, 7, 11 ],
+      "name": "7/6",
+      "distances": [ 0, 4, 7, 9, 10 ],
       "families": ["7"]
     },
     {
-      "name": "7/6",
-      "distances": [ 0, 4, 7, 9, 10 ],
+      "name": "maj7",
+      "distances": [ 0, 4, 7, 11 ],
       "families": ["7"]
     },
     {
@@ -27,6 +27,16 @@ const DB = {
       "distances": [ 0, 2, 4, 7, 11 ],
       "families": ["6"]
     },              
+    {
+      "name": "6",
+      "distances": [ 0, 4, 7, 9 ],
+      "families": ["6"]
+    },
+    {
+      "name": "aug7",
+      "distances": [ 0, 4, 8, 10 ],
+      "families": ["7"]
+    },
     {
       "name": "mol",
       "distances": [ 0, 3, 7],
@@ -38,30 +48,10 @@ const DB = {
       "families": ["dim"]
     },
     {
-      "name": "aug7",
-      "distances": [ 0, 4, 8, 10 ],
-      "families": ["7"]
-    },
-    {
       "name": "sus4",
       "distances": [ 0, 5, 7 ],
       "families": ["sus"]
-    },
-    {
-      "name": "6",
-      "distances": [ 0, 4, 7, 9 ],
-      "families": ["6"]
-    },
-    {
-      "name": "9",
-      "distances": [ 0, 2, 4, 10 ],
-      "families": ["9"]
-    },
-    {
-      "name": "m9",
-      "distances": [ 0, 2, 3, 10 ],
-      "families": ["9"]
-    } 
+    }
   ],
 
   "scales": [

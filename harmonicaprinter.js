@@ -25,12 +25,13 @@ class HarmonicaPrinter extends BasePrinter {
         html += "</table>";
         return html;
     }        
-
+    
+    
     renderRow(rootTone, row, rowNumber){
         let html = "<tr>";
 
-        html += "<td>" + row.name + "</td>";
-        html += "<td>" + row.type + "</td>";
+        html += `<td>${row.name}</td>`;
+        html += `<td>${row.type}</td>`;
 
         for (let i =0; i < row.offsets.length; i++){
             if(isNaN(row.offsets[i])){
@@ -43,7 +44,7 @@ class HarmonicaPrinter extends BasePrinter {
                 harmonicaTone.octave = this.getOctaveForHarmonicaTone(rowNumber, i);
                 let harmonicaToneId = "harmonicaTone_" + this.ctx.HarmonicaToneId;
                 this.ctx.ToneMap.push(new ToneMapRecord(harmonicaToneId, harmonicaTone));
-                html += "<td id=\"" + harmonicaToneId + "\">" + this.getToneName(harmonicaTone) + "</td>";
+                html += `<td id="${harmonicaToneId}">${this.formatHtmlTone(harmonicaTone)}</td>`;
             }
         }
 
@@ -70,7 +71,7 @@ class HarmonicaPrinter extends BasePrinter {
         html +="<td></td><td></td>";
 
         for (let i =0; i<harmonica.template[0].offsets.length; i++) {
-            html += "<th>"+ (i+1) + "</th>";
+            html += `<th>${(i+1)}</th>`;
         }
         html += "</tr>";
         return html;
