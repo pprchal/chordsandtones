@@ -3,18 +3,15 @@
 <html lang="cz">
 
 <head>
-    <meta charset="UTF-8" />
-    <title>GT</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Chords and tones</title>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> 
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 
     <style>
         table {
@@ -41,50 +38,55 @@
     <script src="database.js"></script>
     <script src="chordgen.js"></script>
     <script src="dbcore.js"></script>
-    <script src="chordprinter.js"></script>
-    <script src="harmonicaprinter.js"></script>
+    <script src="chord_control.js"></script>
+    <script src="harmonica_control.js"></script>
+    <script src="scale_control.js"></script>
     <script src="sound.js"></script>
 </head>
 
 <body>
     <div class="container">
-        <div class="tab-content">
-            <div class=".jumbotron .jumbotron-fluid">
-                <h3>Akordy</h3>
-                <select id="cbChordTypes" onchange="refreshAll()"></select>
-                <div id="divOutput"></div>
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="pills-chords-tab" data-toggle="pill" href="#pills-chords" role="tab" aria-controls="pills-chords" aria-selected="true">Akordy</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="pills-harp-tab" data-toggle="pill" href="#pills-harp" role="tab" aria-controls="pillsharp" aria-selected="false">Harmonika</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="pills-tuning-tab" data-toggle="pill" href="#pills-tuning" role="tab" aria-controls="pillsharp" aria-selected="false">Ladění</a>
+            </li>
+        </ul>
 
-                <h3>Vyhledání akordů</h3>
-                <p>Napište tóny oddělené mezerou: </p><input id="tbDistances" type="text" onkeyup="guessChordsByTones()" />
-                <div id="divFoundChord"></div>
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-chords" role="tabpanel" aria-labelledby="pills-chords-tab">
+                <h1 class="bd-title">Tabulka akordů <select id="cbChordTypes" onchange="refreshChords()"></select></h1>
+                <div id="divOutput"></div>
+                <br />
+        
+                <h3>Stupnice <select id="cbTones" onchange="refreshChords()"></select>
+                    <select id="cbScales" onchange="refreshChords()"></select>
+                </h3>
+
+                <div>
+                    <div id="divOutputScale"></div>
+                    <input id="tbOutputScale" type="text" />
+                </div>
+                <br />
 
                 <h3>Akordy - přehled</h3>
                 <div id="divChordReview"></div>
             </div>
 
-            <div>
-                <h3>Stupnice - 1</h3>
-                <select id="cbTones" onchange="refreshAll()"></select>
-                <select id="cbScales" onchange="refreshAll()"></select>
-                <div id="divOutputScale"></div>
-
-                <h3>Stupnice - 2</h3>
-                <select id="cbTones2" onchange="refreshAll()"></select>
-                <select id="cbScales2" onchange="refreshAll()"></select>
-                <div id="divOutputScale2"></div>
-
-                <p>hledání stupnice podle tónů</p>
-                <input id="tbScaleDistances" type="text" onkeyup="guessScalesByTones()" />
-                <div id="divFoundScale"></div>
-            </div>
-
-            <div>
-                <h3>Harmonika</h3>
-                <p>Zadejte klíč: </p> <select id="cbHarmonicaTones" onchange="refreshAll()"></select>
+            <div class="tab-pane fade" id="pills-harp" role="tabpanel" aria-labelledby="pills-harp-tab">
+                <h3>Harmonika, klíč: <select id="cbHarmonicaKeys" onchange="refreshHarp()"></select></h3>
                 <div id="divHarmonica"></div>
+                <br/>
+                <h3>Stupnice - <select id="cbTonesHarp" onchange="refreshHarp()"></select><select id="cbScalesHarp" onchange="refreshHarp()"></select></h3>
+                <div id="divOutputScaleHarp"></div>
             </div>
 
-            <div>
+            <div class="tab-pane fade" id="pills-tuning" role="tabpanel" aria-labelledby="pills-tuning-tab">
                 <h3>Ladění</h3>
                 <select id="cbTunings"></select>
             </div>
@@ -106,122 +108,73 @@
             }
         }
 
-        function clone(src) {
-            let str = JSON.stringify(src);
-            try
-            {
-                return JSON.parse(str);
-            }
-            catch(ex)
-            {
-                window.console.error(str);
-            }
-        }
-
-        function generateSelectedChord(ctx) {
+        function generateSelectedChord() {
             let chordTypeName = document.getElementById('cbChordTypes').selectedOptions[0].value;
-            document.getElementById('divOutput').innerHTML = new ChordPrinter(ctx).printChordsTable(chordTypeName);
+            document.getElementById('divOutput').innerHTML = new ChordControl().printChordsTable(chordTypeName).html;
         }
 
         function generateSelectedScale(ctx) {
-            document.getElementById('divOutputScale').innerHTML = new ChordPrinter(ctx).printScalesTable(
+            document.getElementById('divOutputScale').innerHTML = new ScaleControl().render(
                 document.getElementById('cbTones').selectedOptions[0].value, 
-                document.getElementById('cbScales').selectedOptions[0].value
-            );
+                document.getElementById('cbScales').selectedOptions[0].value,
+                'tbOutputScale'
+            ).html;
         }
 
         function generateChordsReview(ctx){
-            document.getElementById('divChordReview').innerHTML = new ChordPrinter(ctx).printChordsReview();
+            document.getElementById('divChordReview').innerHTML = new ChordControl(ctx).printChordsReview();
         }
 
         function refreshAll() {
-            currentCtx.ToneMap = [];
-            currentCtx.HarmonicaToneName = document.getElementById('cbHarmonicaTones').selectedOptions[0].value
+            refreshChords();
+            refreshHarp();
+        }
 
-            document.getElementById('divHarmonica').innerHTML = new HarmonicaPrinter(currentCtx).printHarmonicaTable();
+        function refreshChords() {
+            generateSelectedChord();
+            generateSelectedScale(P_CONTEXT);
+            generateChordsReview(P_CONTEXT);
+        }
 
-            generateSelectedChord(currentCtx);
-            generateSelectedScale(currentCtx);
+        function refreshHarp(){
+            // prepare args...
+            let harpKey = document.getElementById('cbHarmonicaKeys').selectedOptions[0].value;
+            let playKey = document.getElementById('cbTonesHarp').selectedOptions[0].value;
+            let playScale = document.getElementById('cbScalesHarp').selectedOptions[0].value;
+            window.console.debug(`Harp in key: [${harpKey}] colorize scale: [${playKey}${playScale}]`);
 
-            let ctx = new Context();
-            ctx.Tuning = getCurrentTuning();
-            document.getElementById('divOutputScale2').innerHTML = new ChordPrinter(ctx).printScalesTable(
-                document.getElementById('cbTones2').selectedOptions[0].value, 
-                document.getElementById('cbScales2').selectedOptions[0].value
+            // render scale
+            let scaleCtl = new ScaleControl().render(
+                playKey, 
+                playScale,
+                'tbOutputScaleHarp'
             );
-            
-            generateChordsReview(currentCtx);
-            colorKeyTones(currentCtx);
+            document.getElementById('divOutputScaleHarp').innerHTML = scaleCtl.html;
+
+            // render harp
+            let hc = new HarmonicaControl();
+            let harpCtx = hc.render(harpKey);
+            document.getElementById('divHarmonica').innerHTML = harpCtx.html;
+
+            // do coloring
+            hc.colorKeyTones(scaleCtl);
         }
 
-        function getCurrentTuning() {
-            return new DBCore().findTuningByName(document.getElementById('cbTunings').selectedOptions[0].value);
+
+        function playToneWithOctave(toneName, toneOctave, tuningName, appendControlId) {
+            document.getElementById(appendControlId).value += toneName;
+            P_SOUND.playToneWithOctave(toneName, toneOctave, tuningName);
         }
 
-        function colorKeyTones(ctx) {
-            if ((ctx.ToneMap == undefined) || (ctx.TonesInScale == undefined))
-                return;
-
-            for (let j = 0; j < ctx.ToneMap.length; j++) {
-                // window.console.debug(ctx.ToneMap[j].ControlId + " - on");
-                let ctrl = document.getElementById(ctx.ToneMap[j].ControlId);
-                if(ctrl != null)
-                {
-                    setCssClass(ctrl, 'note-on', false);
-                }
-
-            }
-
-            for (let i = 0; i < ctx.TonesInScale.length; i++) {
-                colorChordTonesByScale(ctx, ctx.TonesInScale[i]);
-            }
-        }
-
-        function colorChordTonesByScale(ctx, tonesInScale) {
-            if ((ctx.ToneMap == undefined) || (ctx.TonesInScale == undefined))
-                return;
-
-            for (let i = 0; i < tonesInScale.length; i++) {
-                let tone = tonesInScale[i];
-                let ctrl = document.getElementById(findToneControlIdForChordByTone(ctx, tone));
-                if(ctrl != null) {
-                    setCssClass(ctrl, 'note-on', true);
-                }
-            }
-        }
-
-        function findToneControlIdForChordByTone(ctx, tone) {
-            if ((ctx.ToneMap == undefined) || (ctx.TonesInScale == undefined))
-                return;
-
-            for (let i = 0; i < ctx.ToneMap.length; i++) {
-                if (DBCore.isToneEqual(ctx.ToneMap[i].Tone, tone)) {
-                    return ctx.ToneMap[i].ControlId;
-                }
-            }
-
-            return undefined;
-        }
-
-        function playToneWithOctave(toneName, toneOctave, tuningName) {
-            sound.playToneWithOctave(toneName, toneOctave, tuningName);
-        }
-
-        function guessChordsByTones() {
-            let textResult = new ChordGen().guessChordsByTones(document.getElementById('tbDistances').value);
-            document.getElementById('divFoundChord').innerHTML = textResult;
-        }
-
-        function guessScalesByTones() {
-            let textResult = new ChordGen().guessScalesByTones(document.getElementById('tbScaleDistances').value);
-            document.getElementById('divFoundScale').innerHTML = textResult;
-        }
-        
-
-        let currentCtx = new Context();
-        currentCtx.Tuning = new DBCore().findTuningByName("equal-tempered");
-        currentCtx.ShiftOctave = 4;
-        let sound = new Sound(currentCtx);
+        // --------------------------------------------------------------------------------
+        // GLOBALS
+        // function getCurrentTuning() {
+        //     return new DBCore().findTuningByName(document.getElementById('cbTunings').selectedOptions[0].value);
+        // }
+        let P_CONTEXT = new Context();
+        P_CONTEXT.Tuning = new DBCore().findTuningByName('equal-tempered');
+        let P_SOUND = new Sound(P_CONTEXT);
+        // --------------------------------------------------------------------------------
 
         // fill tones
         function fillTones(cbTones) {
@@ -267,9 +220,9 @@
         fillChordTypes(document.getElementById('cbChordTypes'));
         fillTones(document.getElementById('cbTones'));
         fillScales(document.getElementById('cbScales'));
-        fillTones(document.getElementById('cbTones2'));
-        fillScales(document.getElementById('cbScales2'));
-        fillTones(document.getElementById('cbHarmonicaTones'));
+        fillTones(document.getElementById('cbTonesHarp'));
+        fillScales(document.getElementById('cbScalesHarp'));
+        fillTones(document.getElementById('cbHarmonicaKeys'));
         fillTunings(document.getElementById('cbTunings'));
 
         refreshAll();

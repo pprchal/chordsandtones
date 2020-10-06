@@ -1,15 +1,14 @@
-// Pavel Prchal 2019
+// Pavel Prchal 2019, 2020
+
+function clone(src) {
+    return {...src};
+}
 
 class Context {
     constructor(){
         this.Tuning = undefined;
-        this.ShiftOctave = 4;
         this.TonesInScale = undefined;
         this.ToneMap = new Array();
-        this.ChordToneId = 1;
-        this.HarmonicaName = undefined;
-        this.HarmonicaToneId = 1;
-        this.HarmonicaToneName = undefined;
     }
 }
 
@@ -22,7 +21,7 @@ class ToneMapRecord {
 }
 
 
-class BasePrinter{
+class BaseControl{
     // @chord
     formatChordName(chord) {
         return this.formatHtmlTone(chord.rootTone);
@@ -30,17 +29,16 @@ class BasePrinter{
 
     // @tone
     formatPlainTone(tone) {
-        let toneName = tone.name;
-
-        if(tone.octave == 0)
-            return toneName;
-
-        if(format === 'plain') 
-            return toneName + tone.octave;
+        return tone.name;
     }     
 
     formatHtmlTone(tone){
         // D♯
         return tone.name.replace('#', '<sup>&#9839;</sup>');
     }
+    
+    // @distance
+    formatDistance(distance) {
+        return distance + " - " + this.DBC.findInterval(distance).name;
+    }    
 }

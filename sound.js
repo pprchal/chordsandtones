@@ -38,10 +38,8 @@ class Sound {
     }
     
     playToneWithOctave(toneName, toneOctave, tuningName){
-        let shiftOctave = 4;
         let index = DB.tones.indexOf(this.DBC.findToneByName(toneName)) + (DB.tones.length * (toneOctave + 4));
         let freq = this.DBC.findTuningByName(tuningName).frequencies[index];
-
         this.playNote(freq, 300);
         return index;
     }

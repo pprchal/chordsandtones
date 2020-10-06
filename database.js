@@ -33,6 +33,21 @@ const DB = {
       "families": ["6"]
     },
     {
+      "name": "9",
+      "distances": [ 0, 4, 10, 14 ],
+      "families": ["9"]
+    },
+    {
+      "name": "11",
+      "distances": [ 0, 5, 10, 14, 19 ],
+      "families": ["11"]
+    },
+    {
+      "name": "m11",
+      "distances": [ 0, 5, 10, 14, 17 ],
+      "families": ["11"]
+    },
+    {
       "name": "aug7",
       "distances": [ 0, 4, 8, 10 ],
       "families": ["7"]
@@ -156,13 +171,13 @@ const DB = {
           "name": "Richter diatonická",
           "startOctave": 3,
           "template" : [
-             { "name": "Celý tón",  "type": "+", "offsets": [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 10 ] },
+             { "name": "1",         "type": "+", "offsets": [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 10 ] },
              { "name": "1/2",       "type": "+", "offsets": [NaN, NaN, NaN, NaN, NaN, NaN, NaN, 3,   6,   11 ] },
              { "name": "výdech",    "type": "+", "offsets": [0,   4,   7,   0,   4,   7,   0,   4,   7,   0  ] },
              { "name": "nádech",    "type": "-", "offsets": [2,   7,   11,  2,   5,   9,   11,  2,   5,   9  ] },
              { "name": "1/2",       "type": "-", "offsets": [1,   6,   10,  1,   NaN, 8  , NaN, NaN, NaN, NaN] },
-             { "name": "Celý tón",  "type": "-", "offsets": [NaN, 5,   9,   NaN, NaN, NaN, NaN, NaN, NaN, NaN] },
-             { "name": "1,5",       "type": "-", "offsets": [NaN, NaN, 8,   NaN, NaN, NaN, NaN, NaN, NaN, NaN] }
+             { "name": "1",         "type": "-", "offsets": [NaN, 5,   9,   NaN, NaN, NaN, NaN, NaN, NaN, NaN] },
+             { "name": "1 1/2",     "type": "-", "offsets": [NaN, NaN, 8,   NaN, NaN, NaN, NaN, NaN, NaN, NaN] }
           ]
       }
   ]

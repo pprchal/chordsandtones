@@ -123,14 +123,12 @@ class ChordGen {
             return 0;
         }
 
-        let octave = 0;
         let i = DB.tones.indexOf(toneA);
         let dist = 0;
 
         do{
             i++;
             if(i >= DB.tones.length){
-                octave++;
                 i = 0;
             }
             dist++;

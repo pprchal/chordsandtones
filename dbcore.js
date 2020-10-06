@@ -53,10 +53,6 @@ class DBCore {
         return null;            
     }
 
-    // getMaxChordsToneCount() {
-    //     return Math.max.apply(Math, DB.chords.map(function(ch) { return ch.distances.length; }))
-    // }
-
     // @tuningName
     findTuningByName(tuningName) {
         for(let i = 0; i < DB.tunings.length; i++) {
@@ -71,11 +67,11 @@ class DBCore {
     // @tone
     // @toneName
     static isMatchingToneName(tone, toneName) {
-        return tone.name == toneName;
+        return tone.name === toneName;
     }     
 
     static isToneEqual(tone1, tone2) {
-        return tone1.name == tone2.name;
+        return tone1.name === tone2.name;
     }  
     
     // @distance
