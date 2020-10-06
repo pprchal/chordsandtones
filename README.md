@@ -2,9 +2,12 @@
 
 Learning app for chords, tones and scales
 
-For this moment, demo is hosted on my private blog:
-[http://pavel.borec.cz/chordGen.html](http://pavel.borec.cz/chordGen.html)
+For this moment, stable is hosted on my private blog:
+[http://pavel.borec.cz/chordGen.html]
 
+
+or - little bit experimental on
+[https://pprchal.github.io/chordsandtones/]
 
 # release history
 * 01-06-2020 bug hunting
