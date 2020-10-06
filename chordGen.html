@@ -39,6 +39,7 @@
     <script src="chordgen.js"></script>
     <script src="dbcore.js"></script>
     <script src="chord_control.js"></script>
+    <script src="chord_review_control.js"></script>
     <script src="harmonica_control.js"></script>
     <script src="scale_control.js"></script>
     <script src="sound.js"></script>
@@ -113,7 +114,7 @@
             document.getElementById('divOutput').innerHTML = new ChordControl().printChordsTable(chordTypeName).html;
         }
 
-        function generateSelectedScale(ctx) {
+        function generateSelectedScale() {
             document.getElementById('divOutputScale').innerHTML = new ScaleControl().render(
                 document.getElementById('cbTones').selectedOptions[0].value, 
                 document.getElementById('cbScales').selectedOptions[0].value,
@@ -121,8 +122,8 @@
             ).html;
         }
 
-        function generateChordsReview(ctx){
-            document.getElementById('divChordReview').innerHTML = new ChordControl(ctx).printChordsReview();
+        function generateChordsReview(){
+            document.getElementById('divChordReview').innerHTML = new ChordReviewControl().printChordsReview();
         }
 
         function refreshAll() {
@@ -132,8 +133,8 @@
 
         function refreshChords() {
             generateSelectedChord();
-            generateSelectedScale(P_CONTEXT);
-            generateChordsReview(P_CONTEXT);
+            generateSelectedScale();
+            generateChordsReview();
         }
 
         function refreshHarp(){

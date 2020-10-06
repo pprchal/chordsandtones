@@ -22,6 +22,10 @@ class ToneMapRecord {
 
 
 class BaseControl{
+    constructor() {
+        this.DBC = new DBCore();
+    }
+
     // @chord
     formatChordName(chord) {
         return this.formatHtmlTone(chord.rootTone);
@@ -39,6 +43,10 @@ class BaseControl{
     
     // @distance
     formatDistance(distance) {
-        return distance + " - " + this.DBC.findInterval(distance).name;
+        let name = this.DBC.findInterval(distance).name;
+        if(distance == 0)
+            return name;
+
+        return `${distance} - ${name}`;
     }    
 }

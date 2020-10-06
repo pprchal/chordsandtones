@@ -5,13 +5,12 @@
 class HarmonicaControl extends BaseControl {
     constructor() {
         super();
-        this.DBC = new DBCore();
         this.HarmonicaToneId = 1;
+        this.ctx = new Context();
+        this.ctx.Tuning = this.DBC.findTuningByName('equal-tempered');
     }
 
     render(harpKey) {
-        this.ctx = new Context();
-        this.ctx.Tuning = new DBCore().findTuningByName('equal-tempered');
         this.ctx.ToneMap = [];
 
         let harmonica = this.DBC.findHarmonicaByName('Richter diatonická');
