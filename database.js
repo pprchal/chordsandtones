@@ -8,6 +8,11 @@ const DB = {
       "families": ["dur"]
     },
     {
+      "name": "aug",
+      "distances": [ 0, 4, 8 ],
+      "families": ["aug"]
+    },
+    {
       "name": "7",
       "distances": [ 0, 4, 7, 10 ],
       "families": ["7"]
@@ -21,6 +26,11 @@ const DB = {
       "name": "maj7",
       "distances": [ 0, 4, 7, 11 ],
       "families": ["7"]
+    },
+    {
+      "name": "5",
+      "distances": [ 0, 7, 12 ],
+      "families": ["5"]
     },
     {
       "name": "6/9",
@@ -46,6 +56,16 @@ const DB = {
       "name": "m11",
       "distances": [ 0, 5, 10, 14, 17 ],
       "families": ["11"]
+    },
+    {
+      "name": "13",
+      "distances": [ 0, 4, 10, 14, 21 ],
+      "families": ["13"]
+    },
+    {
+      "name": "m13",
+      "distances": [ 0, 4, 10, 15, 21 ],
+      "families": ["13"]
     },
     {
       "name": "aug7",

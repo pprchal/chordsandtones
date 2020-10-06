@@ -43,6 +43,9 @@
     <script src="harmonica_control.js"></script>
     <script src="scale_control.js"></script>
     <script src="sound.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
 </head>
 
 <body>
@@ -50,6 +53,9 @@
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" id="pills-chords-tab" data-toggle="pill" href="#pills-chords" role="tab" aria-controls="pills-chords" aria-selected="true">Akordy</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="pills-chordsdef-tab" data-toggle="pill" href="#pills-chordsdef" role="tab" aria-controls="pills-chordsdef" aria-selected="true">Katalog</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="pills-harp-tab" data-toggle="pill" href="#pills-harp" role="tab" aria-controls="pillsharp" aria-selected="false">Harmonika</a>
@@ -73,11 +79,12 @@
                     <div id="divOutputScale"></div>
                     <input id="tbOutputScale" type="text" />
                 </div>
-                <br />
+            </div>
 
+            <div class="tab-pane fade" id="pills-chordsdef" role="tabpanel" aria-labelledby="pills-chordsdef-tab">
                 <h3>Akordy - přehled</h3>
                 <div id="divChordReview"></div>
-            </div>
+            </div>            
 
             <div class="tab-pane fade" id="pills-harp" role="tabpanel" aria-labelledby="pills-harp-tab">
                 <h3>Harmonika, klíč: <select id="cbHarmonicaKeys" onchange="refreshHarp()"></select></h3>
@@ -123,7 +130,12 @@
         }
 
         function generateChordsReview(){
-            document.getElementById('divChordReview').innerHTML = new ChordReviewControl().printChordsReview();
+            document.getElementById('divChordReview').innerHTML = new ChordReviewControl().printChordsReview('tableChordsReview').html;
+            $('#tableChordsReview').DataTable( {
+                searching: false,
+                paging: false,
+                info: false
+            } );
         }
 
         function refreshAll() {

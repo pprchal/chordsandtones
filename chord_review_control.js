@@ -9,13 +9,13 @@ class ChordReviewControl extends BaseControl{
         this.ctx.Tuning = this.DBC.findTuningByName('equal-tempered');
     }
 
-    printChordsReview(){
-        let html = '<table class="table table-hover">' + this.printTonesHeader();
-
+    printChordsReview(tableId){
+        let html = `<table id="${tableId}" class="table table-hover">${this.printTonesHeader()}`;
         for (let i=0; i<DB.chords.length; i++){
             html += this.printChordReviewRow(DB.chords[i]);
         }
-        return html + '</table>';
+        this.ctx.html = html + '</table>';
+        return this.ctx;
     }
 
     printChordReviewRow(chord){
@@ -45,7 +45,7 @@ class ChordReviewControl extends BaseControl{
     }
 
     printTonesHeader(){
-        let html = '<tr><td>&nbsp;</td>';
+        let html = '<thead><tr><td>&nbsp;</td>';
         for (let i=0; i<DB.tones.length; i++){
             html += `<th>${this.formatHtmlTone(DB.tones[i])}</th>`;
         }
@@ -53,6 +53,6 @@ class ChordReviewControl extends BaseControl{
         for (let i=0; i<DB.tones.length; i++){
             html += `<th>${this.formatHtmlTone(DB.tones[i])}</th>`;
         }
-        return html + '</tr>';
+        return html + '</tr></thead>';
     }
 }
