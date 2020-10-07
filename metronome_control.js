@@ -17,9 +17,8 @@ class MetronomeControl extends BaseControl{
         this.debug(`Updating metronome to: ${metroA}/${metroB}`);
 
         let r = this.r;
-        // var r = Raphael("", 640, 480),
         let angle = 0;
-        
+
         while (angle < 360) {
             var color = Raphael.getColor();
             (function (t, c) {
