@@ -12,7 +12,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-    <script src="raphael.js" type="text/javascript" charset="utf-8"></script>
+    <script src="raphael.min.js" type="text/javascript" charset="utf-8"></script>
 
     <style>
         table {
@@ -109,14 +109,17 @@
             <div class="tab-pane fade" id="pills-metro" role="tabpanel" aria-labelledby="pills-metro-tab">
                 <h3>Metronom</h3>
                 <select id="cbMetroA" onchange="refreshMetronome()">
+                    <option>2</option>
                     <option>3</option>
                     <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
                 </select>
                 <select id="cbMetroB" onchange="refreshMetronome()">
                     <option>3</option>
                     <option>4</option>
                 </select>
-                <a class="btn btn-primary btn-block" href="javascript:none" onclick="return false;" role="button">Start</a>   
+                <a id="btStartStop" class="btn btn-primary btn-block" href="javascript:none" onclick="toggleMetronome(); return false;" role="button">Start</a>   
                 <br>
                 <div id="metronomeHolder"></div>                
 
@@ -135,6 +138,10 @@
 
 
     <script>
+        function toggleMetronome() {
+            let running = P_METRONOME.toggleStartStop();
+            document.getElementById('btStartStop').innerText = running ? "Stop" : "Start";
+        }
         function setCssClass(control, cssClass, isOn) {
             let contains = control.classList.contains(cssClass);
 
