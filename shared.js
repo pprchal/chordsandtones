@@ -17,6 +17,10 @@ class BaseControl{
         this.DBC = new DBCore();
     }
 
+    debug(msg){
+        window.console.debug(msg);
+    }
+
     // @chord
     formatChordName(chord) {
         return this.formatHtmlTone(chord.rootTone);

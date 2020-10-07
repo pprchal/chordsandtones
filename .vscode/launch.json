@@ -8,14 +8,8 @@
         "name": "Launch Edge",
         "request": "launch",
         "type": "pwa-msedge",
-        "file": "c:\\Users\\pavel\\Desktop\\chordsandtones\\index.html",
+        "file": "${workspaceFolder}\\index.html",
         "webRoot": "${workspaceFolder}"
     }
-        // {
-        //     "type": "pwa-msedge",
-        //     "request": "launch",
-        //     "name": "Open chordGen.html",
-        //     "file": "c:\\Users\\Pavel\\Desktop\\chordsandtones\\chordGen.html"
-        // }
     ]
 }

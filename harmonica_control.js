@@ -13,7 +13,7 @@ class HarmonicaControl extends BaseControl {
     }
 
     render() {
-        window.console.debug(`Rendering harp in key: [${this.HarpRootTone.name}] [${this.Harmonica.name}]`);
+        this.debug(`Rendering harp in key: [${this.HarpRootTone.name}] [${this.Harmonica.name}]`);
 
         let html = "<table>";
         for (let i =0; i < this.Harmonica.template.length; i++){
@@ -60,7 +60,7 @@ class HarmonicaControl extends BaseControl {
                 let harmonicaToneId = `harmonicaTone_${harmonicaTone.name}_${this.HarmonicaToneId}`;
                 this.ToneMap.push(new ToneMapRecord(harmonicaToneId, harmonicaTone));
                 html += `<td id="${harmonicaToneId}">${this.formatHtmlTone(harmonicaTone)}</td>`;
-                window.console.debug(`${harmonicaTone.name} - ${harmonicaToneId}`);
+                this.debug(`${harmonicaTone.name} - ${harmonicaToneId}`);
             }
         }
 

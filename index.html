@@ -12,6 +12,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="raphael.js" type="text/javascript" charset="utf-8"></script>
 
     <style>
         table {
@@ -48,6 +49,12 @@
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+
+    <script>
+        function getSelectedValue(id){
+            return document.getElementById(id).selectedOptions[0].value;
+        }        
+    </script>
 </head>
 
 <body>
@@ -101,19 +108,23 @@
 
             <div class="tab-pane fade" id="pills-metro" role="tabpanel" aria-labelledby="pills-metro-tab">
                 <h3>Metronom</h3>
-                <select id="cbMetro1"></select>
-                <select id="cbMetro1"></select>
+                <select id="cbMetroA" onchange="refreshMetronome()">
+                    <option>3</option>
+                    <option>4</option>
+                </select>
+                <select id="cbMetroB" onchange="refreshMetronome()">
+                    <option>3</option>
+                    <option>4</option>
+                </select>
                 <a class="btn btn-primary btn-block" href="javascript:none" onclick="return false;" role="button">Start</a>   
-                <svg width="200" height="200" viewBox="0 0 200 200">
-                    <g transform="translate(100,100)" stroke="#000" stroke-width="2">
-                      <path d="M0 0-70 70A99 99 0 0 1-70-70Z" fill="#f00"/>
-                      <path d="M0 0-70-70A99 99 0 0 1 70-70Z" fill="#080"/>
-                      <path d="M0 0 70-70A99 99 0 0 1 70 70Z" fill="#dd0"/>
-                      <path d="M0 0 70 70A99 99 0 0 1-70 70Z" fill="#04e"/>
-                    </g>
-                  </svg>
-                </div>
+                <br>
+                <div id="metronomeHolder"></div>                
 
+                <script>
+                    let P_METRONOME = new MetronomeControl("metronomeHolder", getSelectedValue('cbMetroA'), getSelectedValue('cbMetroB'));
+                    P_METRONOME.render();
+                </script>
+            </div>
 
             <div class="tab-pane fade" id="pills-tuning" role="tabpanel" aria-labelledby="pills-tuning-tab">
                 <h3>Ladění</h3>
@@ -138,14 +149,14 @@
         }
 
         function generateSelectedChord() {
-            let chordTypeName = document.getElementById('cbChordTypes').selectedOptions[0].value;
+            let chordTypeName = getSelectedValue('cbChordTypes');
             document.getElementById('divOutput').innerHTML = new ChordControl(chordTypeName).render();
         }
 
         function generateSelectedScale() {
             document.getElementById('divOutputScale').innerHTML = new ScaleControl(
-                document.getElementById('cbTones').selectedOptions[0].value,
-                document.getElementById('cbScales').selectedOptions[0].value,
+                getSelectedValue('cbTones'),
+                getSelectedValue('cbScales'),
                 'tbOutputScale'
             ).render();
         }
@@ -172,9 +183,9 @@
 
         function refreshHarp(){
             // prepare args...
-            let harpKey = document.getElementById('cbHarmonicaKeys').selectedOptions[0].value;
-            let playKey = document.getElementById('cbTonesHarp').selectedOptions[0].value;
-            let playScale = document.getElementById('cbScalesHarp').selectedOptions[0].value;
+            let harpKey = getSelectedValue('cbHarmonicaKeys');
+            let playKey = getSelectedValue('cbTonesHarp');
+            let playScale = getSelectedValue('cbScalesHarp');
             window.console.debug(`Harp in key: [${harpKey}] colorize scale: [${playKey}${playScale}]`);
 
             // render scale
@@ -189,19 +200,16 @@
             harpCtl.colorKeyTones(scaleCtl);
         }
 
+        function refreshMetronome(){
+            P_METRONOME.update(getSelectedValue('cbMetroA'), getSelectedValue('cbMetroB'));
+        }
 
         function playToneWithOctave(toneName, toneOctave, tuningName, appendControlId) {
             document.getElementById(appendControlId).value += toneName;
             soundCtl.playToneWithOctave(toneName, toneOctave, tuningName);
         }
 
-        // --------------------------------------------------------------------------------
-        // GLOBALS
-        // function getCurrentTuning() {
-        //     return new DBCore().findTuningByName(document.getElementById('cbTunings').selectedOptions[0].value);
-        // }
         let soundCtl = new SoundControl(new DBCore().findTuningByName('equal-tempered'));
-        // --------------------------------------------------------------------------------
 
         // fill tones
         function fillTones(cbTones) {
