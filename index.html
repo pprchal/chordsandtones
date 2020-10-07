@@ -8,10 +8,10 @@
     <title>Chords and tones</title>
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script> -->
 
     <style>
         table {
@@ -38,14 +38,16 @@
     <script src="database.js"></script>
     <script src="chordgen.js"></script>
     <script src="dbcore.js"></script>
+
     <script src="chord_control.js"></script>
     <script src="chord_review_control.js"></script>
     <script src="harmonica_control.js"></script>
     <script src="scale_control.js"></script>
-    <script src="sound.js"></script>
+    <script src="sound_control.js"></script>
+    <script src="metronome_control.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script> -->
 </head>
 
 <body>
@@ -59,6 +61,9 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="pills-harp-tab" data-toggle="pill" href="#pills-harp" role="tab" aria-controls="pillsharp" aria-selected="false">Harmonika</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="pills-metro-tab" data-toggle="pill" href="#pills-metro" role="tab" aria-controls="pillsmetro" aria-selected="false">Metronom</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="pills-tuning-tab" data-toggle="pill" href="#pills-tuning" role="tab" aria-controls="pillsharp" aria-selected="false">Ladění</a>
@@ -94,6 +99,22 @@
                 <div id="divOutputScaleHarp"></div>
             </div>
 
+            <div class="tab-pane fade" id="pills-metro" role="tabpanel" aria-labelledby="pills-metro-tab">
+                <h3>Metronom</h3>
+                <select id="cbMetro1"></select>
+                <select id="cbMetro1"></select>
+                <a class="btn btn-primary btn-block" href="javascript:none" onclick="return false;" role="button">Start</a>   
+                <svg width="200" height="200" viewBox="0 0 200 200">
+                    <g transform="translate(100,100)" stroke="#000" stroke-width="2">
+                      <path d="M0 0-70 70A99 99 0 0 1-70-70Z" fill="#f00"/>
+                      <path d="M0 0-70-70A99 99 0 0 1 70-70Z" fill="#080"/>
+                      <path d="M0 0 70-70A99 99 0 0 1 70 70Z" fill="#dd0"/>
+                      <path d="M0 0 70 70A99 99 0 0 1-70 70Z" fill="#04e"/>
+                    </g>
+                  </svg>
+                </div>
+
+
             <div class="tab-pane fade" id="pills-tuning" role="tabpanel" aria-labelledby="pills-tuning-tab">
                 <h3>Ladění</h3>
                 <select id="cbTunings"></select>
@@ -118,24 +139,24 @@
 
         function generateSelectedChord() {
             let chordTypeName = document.getElementById('cbChordTypes').selectedOptions[0].value;
-            document.getElementById('divOutput').innerHTML = new ChordControl().printChordsTable(chordTypeName).html;
+            document.getElementById('divOutput').innerHTML = new ChordControl(chordTypeName).render();
         }
 
         function generateSelectedScale() {
-            document.getElementById('divOutputScale').innerHTML = new ScaleControl().render(
-                document.getElementById('cbTones').selectedOptions[0].value, 
+            document.getElementById('divOutputScale').innerHTML = new ScaleControl(
+                document.getElementById('cbTones').selectedOptions[0].value,
                 document.getElementById('cbScales').selectedOptions[0].value,
                 'tbOutputScale'
-            ).html;
+            ).render();
         }
 
         function generateChordsReview(){
-            document.getElementById('divChordReview').innerHTML = new ChordReviewControl().printChordsReview('tableChordsReview').html;
-            $('#tableChordsReview').DataTable( {
-                searching: false,
-                paging: false,
-                info: false
-            } );
+            document.getElementById('divChordReview').innerHTML = new ChordReviewControl('tableChordsReview').render();
+            // $('#tableChordsReview').DataTable( {
+            //     searching: false,
+            //     paging: false,
+            //     info: false
+            // } );
         }
 
         function refreshAll() {
@@ -157,26 +178,21 @@
             window.console.debug(`Harp in key: [${harpKey}] colorize scale: [${playKey}${playScale}]`);
 
             // render scale
-            let scaleCtl = new ScaleControl().render(
-                playKey, 
-                playScale,
-                'tbOutputScaleHarp'
-            );
-            document.getElementById('divOutputScaleHarp').innerHTML = scaleCtl.html;
+            let scaleCtl = new ScaleControl(playKey, playScale, 'tbOutputScaleHarp')
+            document.getElementById('divOutputScaleHarp').innerHTML = scaleCtl.render();
 
             // render harp
-            let hc = new HarmonicaControl();
-            let harpCtx = hc.render(harpKey);
-            document.getElementById('divHarmonica').innerHTML = harpCtx.html;
+            let harpCtl = new HarmonicaControl(harpKey);
+            document.getElementById('divHarmonica').innerHTML = harpCtl.render();
 
             // do coloring
-            hc.colorKeyTones(scaleCtl);
+            harpCtl.colorKeyTones(scaleCtl);
         }
 
 
         function playToneWithOctave(toneName, toneOctave, tuningName, appendControlId) {
             document.getElementById(appendControlId).value += toneName;
-            P_SOUND.playToneWithOctave(toneName, toneOctave, tuningName);
+            soundCtl.playToneWithOctave(toneName, toneOctave, tuningName);
         }
 
         // --------------------------------------------------------------------------------
@@ -184,9 +200,7 @@
         // function getCurrentTuning() {
         //     return new DBCore().findTuningByName(document.getElementById('cbTunings').selectedOptions[0].value);
         // }
-        let P_CONTEXT = new Context();
-        P_CONTEXT.Tuning = new DBCore().findTuningByName('equal-tempered');
-        let P_SOUND = new Sound(P_CONTEXT);
+        let soundCtl = new SoundControl(new DBCore().findTuningByName('equal-tempered'));
         // --------------------------------------------------------------------------------
 
         // fill tones

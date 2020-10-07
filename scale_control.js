@@ -2,29 +2,27 @@
 // -------------------- ScaleControl
 // --------------------
 class ScaleControl extends BaseControl{
-    constructor() {
+    constructor(rootToneName, scaleName, appendControlId) {
         super();
-        this.ctx = new Context();
-        this.ctx.Tuning = this.DBC.findTuningByName('equal-tempered');
+        this.Tuning = this.DBC.findTuningByName('equal-tempered');
+        this.RootTone = this.DBC.findToneByName(rootToneName);
+        this.Scale = this.DBC.findScaleByName(scaleName);
+        this.TonesInScale = new ChordGen().generateScaleTableForTone(
+            this.RootTone,
+            this.Scale
+        );
+        this.AppendControlId = appendControlId;
     }
 
     // @rootToneName (C)
     // @scaleName (dur)
-    render(rootToneName, scaleName, appendControlId) {
-        this.ctx.RootTone = this.DBC.findToneByName(rootToneName);
-        this.ctx.Scale = this.DBC.findScaleByName(scaleName);
-        this.ctx.TonesInScale = new ChordGen().generateScaleTableForTone(
-            this.ctx.RootTone,
-            this.ctx.Scale
+    render() {
+        return this.printScaleTable(
+            this.Scale, 
+            this.Tuning.name,
+            this.TonesInScale,
+            this.AppendControlId
         );
-        this.ctx.html = this.printScaleTable(
-            this.ctx.Scale, 
-            this.ctx.Tuning.name,
-            this.ctx.TonesInScale,
-            appendControlId
-        );
-
-        return this.ctx;
     }
 
 

@@ -2,20 +2,19 @@
 // -------------------- ChordReviewControl
 // --------------------
 class ChordReviewControl extends BaseControl{
-    constructor() {
+    constructor(tableId) {
         super();
         this.ChordToneId = 1;
-        this.ctx = new Context();
-        this.ctx.Tuning = this.DBC.findTuningByName('equal-tempered');
+        this.Tuning = this.DBC.findTuningByName('equal-tempered');
+        this.TableId = tableId;
     }
 
-    printChordsReview(tableId){
-        let html = `<table id="${tableId}" class="table table-hover">${this.printTonesHeader()}`;
+    render(){
+        let html = `<table id="${this.TableId}" class="table table-hover">${this.printTonesHeader()}`;
         for (let i=0; i<DB.chords.length; i++){
             html += this.printChordReviewRow(DB.chords[i]);
         }
-        this.ctx.html = html + '</table>';
-        return this.ctx;
+        return html + '</table>';
     }
 
     printChordReviewRow(chord){

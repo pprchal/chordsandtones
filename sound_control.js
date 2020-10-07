@@ -2,9 +2,10 @@
 
 // -------------------- Sound
 // --------------------
-class Sound {
-    constructor(context){
-        this.ctx = context;
+class SoundControl  extends BaseControl{ 
+    constructor(tuning){
+        super();
+        this.Tuning = tuning;
         this.audioCtx = new(window.AudioContext || window.webkitAudioContext)();
         this.DBC = new DBCore();
     }
@@ -28,7 +29,7 @@ class Sound {
 
         let chord = new ChordGen().generateChordTableForTone(chordType, rootNote);
         for(let tone of chord.tones){
-            this.playNote(this.getFrequency(tone, this.ctx.Tuning), 400);
+            this.playNote(this.getFrequency(tone, this.Tuning), 400);
         };
     }
 

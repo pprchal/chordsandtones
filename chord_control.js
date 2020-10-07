@@ -2,30 +2,27 @@
 // -------------------- ChordControl
 // --------------------
 class ChordControl extends BaseControl{
-    constructor() {
+    constructor(chordTypeName) {
         super();
         this.ChordToneId = 1;
-        this.ctx = new Context();
-        this.ctx.Tuning = this.DBC.findTuningByName('equal-tempered');
+        this.Tuning = this.DBC.findTuningByName('equal-tempered');
+        this.ChordType = this.DBC.findChordByName(chordTypeName);
     }
 
     // @chordTypeName (maj7)
-    printChordsTable(chordTypeName) {
-        let chordType = this.DBC.findChordByName(chordTypeName);
+    render() {
         let chordsInType = new Array();
         let chordGen = new ChordGen();
-        window.console.debug(`Rendering chord table: [${chordType.name}]`);
-        this.ctx.ChordType = chordType;
+        window.console.debug(`Rendering chord table: [${this.ChordType.name}]`);
 
         for (let i = 0; i < DB.tones.length; i++) {
             chordsInType.push(chordGen.generateChordTableForTone(
-                chordType,
+                this.ChordType,
                 DB.tones[i]
             ));
         }
 
-        this.ctx.html = this.printChordTable(chordsInType, chordType);
-        return this.ctx;
+        return this.printChordTable(chordsInType, this.ChordType);
     }  
 
 

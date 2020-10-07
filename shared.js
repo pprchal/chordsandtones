@@ -4,14 +4,6 @@ function clone(src) {
     return {...src};
 }
 
-class Context {
-    constructor(){
-        this.Tuning = undefined;
-        this.TonesInScale = undefined;
-        this.ToneMap = new Array();
-    }
-}
-
 
 class ToneMapRecord {
     constructor(controlId, tone){
@@ -19,7 +11,6 @@ class ToneMapRecord {
         this.Tone = tone;
     }
 }
-
 
 class BaseControl{
     constructor() {

@@ -5,35 +5,17 @@
 class DBCore {
     // @chordName
     findChordByName(chordName) {
-        for(let i = 0; i < DB.chords.length; i++) {
-            if(this.isMatchingChordName(DB.chords[i], chordName)) {
-                return DB.chords[i];
-            }
-        }
-
-        return null;
+        return DB.chords.find(chord => this.isMatchingChordName(chord, chordName));
     }
 
     // @scaleName
     findScaleByName(scaleName) {
-        for(let i = 0; i < DB.scales.length; i++) {
-            if(DB.scales[i].name == scaleName) {
-                return DB.scales[i];
-            }
-        }
-
-        return null;
+        return DB.scales.find(scale => scale.name === scaleName);
     }
 
     // @harmonicaName
     findHarmonicaByName(harmonicaName) {
-        for(let i = 0; i < DB.harmonicas.length; i++) {
-            if(DB.harmonicas[i].name == harmonicaName) {
-                return DB.harmonicas[i];
-            }
-        }
-
-        return null;
+        return DB.harmonicas.find(harmonica => harmonica.name === harmonicaName);
     }
 
     // @chord
@@ -44,24 +26,12 @@ class DBCore {
 
     // @toneName
     findToneByName(toneName) {
-        for(let i = 0; i < DB.tones.length; i++) {
-            if(DBCore.isMatchingToneName(DB.tones[i], toneName)) {
-                return DB.tones[i];
-            }
-        }
-
-        return null;            
+        return DB.tones.find(tone => DBCore.isMatchingToneName(tone, toneName));
     }
 
     // @tuningName
     findTuningByName(tuningName) {
-        for(let i = 0; i < DB.tunings.length; i++) {
-            if(DBCore.isMatchingToneName(DB.tunings[i], tuningName)) {
-                return DB.tunings[i];
-            }
-        }
-
-        return null;            
+        return DB.tunings.find(tuning => DBCore.isMatchingToneName(tuning, tuningName));
     }
 
     // @tone

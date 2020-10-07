@@ -3,32 +3,29 @@
 // -------------------- HarmonicaControl
 // --------------------
 class HarmonicaControl extends BaseControl {
-    constructor() {
+    constructor(harpKey) {
         super();
         this.HarmonicaToneId = 1;
-        this.ctx = new Context();
-        this.ctx.Tuning = this.DBC.findTuningByName('equal-tempered');
+        this.Tuning = this.DBC.findTuningByName('equal-tempered');
+        this.ToneMap = [];
+        this.HarpRootTone = this.DBC.findToneByName(harpKey);
+        this.Harmonica = this.DBC.findHarmonicaByName('Richter diatonická');
     }
 
-    render(harpKey) {
-        this.ctx.ToneMap = [];
-
-        let harmonica = this.DBC.findHarmonicaByName('Richter diatonická');
-        let harpRootTone = this.DBC.findToneByName(harpKey);
-        window.console.debug(`Rendering harp in key: [${harpKey}] [${harmonica.name}]`);
+    render() {
+        window.console.debug(`Rendering harp in key: [${this.HarpRootTone.name}] [${this.Harmonica.name}]`);
 
         let html = "<table>";
-        for (let i =0; i < harmonica.template.length; i++){
+        for (let i =0; i < this.Harmonica.template.length; i++){
 
             if(i == 3) {
-                html += this.printHoleNumbers(harmonica);
+                html += this.printHoleNumbers(this.Harmonica);
             }
-            html += this.renderRow(harpRootTone, harmonica.template[i], i);
+            html += this.renderRow(this.HarpRootTone, this.Harmonica.template[i], i);
         }
 
-        html += "</table>";
-        this.ctx.html = html;
-        return this.ctx;
+        this.uniqueTones = new Set(this.ToneMap.map(r => r.Tone.name));
+        return html += "</table>";
     }        
     
     formatHarmonicaRowTitle(row){
@@ -61,9 +58,8 @@ class HarmonicaControl extends BaseControl {
 
                 harmonicaTone.octave = this.getOctaveForHarmonicaTone(rowNumber, i);
                 let harmonicaToneId = `harmonicaTone_${harmonicaTone.name}_${this.HarmonicaToneId}`;
-                this.ctx.ToneMap.push(new ToneMapRecord(harmonicaToneId, harmonicaTone));
+                this.ToneMap.push(new ToneMapRecord(harmonicaToneId, harmonicaTone));
                 html += `<td id="${harmonicaToneId}">${this.formatHtmlTone(harmonicaTone)}</td>`;
-
                 window.console.debug(`${harmonicaTone.name} - ${harmonicaToneId}`);
             }
         }
@@ -97,23 +93,20 @@ class HarmonicaControl extends BaseControl {
         return html;
     }  
 
-    colorKeyTones(ctx) {
-        if ((ctx.ToneMap === undefined) || (ctx.TonesInScale === undefined))
-            return;
-
-        this.decolorAll(ctx.ToneMap);
-        for (let i = 0; i < ctx.TonesInScale.length; i++) {
-            let toneScale =  ctx.TonesInScale[i];
+    colorKeyTones(scaleCtl) {
+        this.decolorAll(this.ToneMap);
+        for (let i = 0; i < scaleCtl.TonesInScale.length; i++) {
+            let toneScale =  scaleCtl.TonesInScale[i];
             for(let j = 0; j < toneScale.length; j++){
                 // this i wanna to hi !
                 let singleTone =toneScale[j];
-                this.colorAllHarpTones(ctx, singleTone);
+                this.colorAllHarpTones(scaleCtl, singleTone);
             }
         }
     }
 
-    colorAllHarpTones(scaleCtx) {
-        scaleCtx.TonesInScale.forEach(scale => this.colorHarpTones(scale))
+    colorAllHarpTones(scaleCtl) {
+        scaleCtl.TonesInScale.forEach(scale => this.colorHarpTones(scale))
     }
 
     colorHarpTones(tonesInScale) {
@@ -140,8 +133,7 @@ class HarmonicaControl extends BaseControl {
     }
 
     findToneControlIdsByTone(tone) {
-        return this.ctx
-            .ToneMap
+        return this.ToneMap
             .filter(tr => DBCore.isToneEqual(tr.Tone, tone));
     }
 }

@@ -8,7 +8,7 @@
         "name": "Launch Edge",
         "request": "launch",
         "type": "pwa-msedge",
-        "file": "c:\\Users\\prcha\\Desktop\\chordsandtones\\chordGen.html",
+        "file": "c:\\Users\\pavel\\Desktop\\chordsandtones\\index.html",
         "webRoot": "${workspaceFolder}"
     }
         // {
