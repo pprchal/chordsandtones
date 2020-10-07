@@ -124,7 +124,14 @@
                 <div id="metronomeHolder"></div>                
 
                 <script>
-                    let P_METRONOME = new MetronomeControl("metronomeHolder", getSelectedValue('cbMetroA'), getSelectedValue('cbMetroB'));
+                    this.P_SOUND = new SoundControl(new DBCore().findTuningByName('equal-tempered'));
+                    let P_METRONOME = new MetronomeControl(
+                        "metronomeHolder", 
+                        getSelectedValue('cbMetroA'), 
+                        getSelectedValue('cbMetroB'),
+                        40,
+                        this.P_SOUND
+                    );
                     P_METRONOME.render();
                 </script>
             </div>
@@ -213,10 +220,9 @@
 
         function playToneWithOctave(toneName, toneOctave, tuningName, appendControlId) {
             document.getElementById(appendControlId).value += toneName;
-            soundCtl.playToneWithOctave(toneName, toneOctave, tuningName);
+            this.P_SOUND.playToneWithOctave(toneName, toneOctave, tuningName);
         }
 
-        let soundCtl = new SoundControl(new DBCore().findTuningByName('equal-tempered'));
 
         // fill tones
         function fillTones(cbTones) {

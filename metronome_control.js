@@ -2,13 +2,14 @@
 // -------------------- MetronomeControl
 // --------------------
 class MetronomeControl extends BaseControl{
-    constructor(holderId, metroA, metroB, bpm) {
+    constructor(holderId, metroA, metroB, bpm, sound) {
         super();
         this.r = Raphael(holderId, 640, 480);
         this.A = metroA;
         this.B = metroB;
         this.running = false;
-        this.bpm = 40;
+        this.bpm = bpm;
+        this.sound = sound;
     }
 
     render() {
@@ -16,11 +17,20 @@ class MetronomeControl extends BaseControl{
     }  
 
     start(){
+        this.td = (this.bpm / 60) * 1000;
+        this.debug(`BPM(${this.bpm}): ${this.td} ms `);
+        setInterval(this.myTimer, this.td);
 
     }
 
-    stop(){
+    myTimer()
+    {
+        // this.debug('tick');
+        this.P_SOUND.playToneWithOctave('C', '0', 'equal-tempered');
+    }
 
+    stop(){
+        window.clearInterval();
     }
     
     toggleStartStop(){

@@ -29,7 +29,7 @@ class SoundControl  extends BaseControl{
 
         let chord = new ChordGen().generateChordTableForTone(chordType, rootNote);
         for(let tone of chord.tones){
-            this.playNote(this.getFrequency(tone, this.Tuning), 400);
+            this.playNote(this.getFrequency(tone, this.Tuning), 200);
         };
     }
 
