@@ -34,15 +34,6 @@ class ScaleControl extends BaseControl{
         return html + '</tr>';
     }
 
-    // remove
-    prepareArrByTones() {
-        let arr = [];
-        for(let i = 0; i<DB.tones.length; i++){
-            arr[i] = '&nbsp;';
-        }
-        return arr;
-    }
-
     // @tones[]
     printSingleScaleTableBody(tones, appendControlId, tuningName) {
         let html = "<tr>";
