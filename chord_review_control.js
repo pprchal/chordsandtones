@@ -10,14 +10,18 @@ class ChordReviewControl extends BaseControl{
     }
 
     render(){
-        let html = `<table id="${this.TableId}" class="table table-hover">${this.printTonesHeader()}`;
-        for (let i=0; i<DB.chords.length; i++){
-            html += this.printChordReviewRow(DB.chords[i]);
-        }
-        return html + '</table>';
+        return `<table id="${this.TableId}" class="table table-hover">` +
+            this.printHeader() +
+            this.renderRows() +
+        "</table>";
     }
 
-    printChordReviewRow(chord){
+    renderRows(){
+        return DB.chords.reduce((html, chord) => html + this.printChordRow(chord), "");
+    }
+
+
+    printChordRow(chord){
         let html = `<tr><td><b>${chord.name}<b></td>`;
         let arr = this.prepareArrByTones();
 
@@ -43,7 +47,7 @@ class ChordReviewControl extends BaseControl{
         return arr;
     }
 
-    printTonesHeader(){
+    printHeader(){
         let html = '<thead><tr><td>&nbsp;</td>';
         for (let i=0; i<DB.tones.length; i++){
             html += `<th>${this.formatHtmlTone(DB.tones[i])}</th>`;

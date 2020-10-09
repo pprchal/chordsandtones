@@ -10,7 +10,7 @@ class ScaleReviewControl extends BaseControl{
 
     render(){
         let html = `<table id="${this.TableId}" class="table table-hover">`;
-        html += this.printTonesHeader();
+        html += this.printHeader();
         DB.scales.forEach((scale) => html += this.renderScale(scale));
         return html + "</table>";
     }
@@ -23,7 +23,11 @@ class ScaleReviewControl extends BaseControl{
 
         for(let i = 0; i<arr.length; i++){
             if(i < scaleDistance.length){
-                arr[scaleDistance[i]] = scaleDistance[i];
+                let tone = DB.tones[scaleDistance[i]];
+                arr[scaleDistance[i]] = tone.name;
+            }
+            else{
+                this.debug('???');
             }
         }
 
@@ -42,10 +46,10 @@ class ScaleReviewControl extends BaseControl{
         return arr;
     }
 
-    printTonesHeader(){
+    printHeader(){
         let html = '<thead><tr><td>&nbsp;</td>';
         for (let i=0; i<DB.tones.length; i++){
-            html += `<th>${this.formatHtmlTone(DB.tones[i])}</th>`;
+            html += `<th>${(i + 1)}</th>`;
         }
         return html + '</tr></thead>';
     }
