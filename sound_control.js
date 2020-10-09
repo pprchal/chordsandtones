@@ -34,12 +34,12 @@ class SoundControl  extends BaseControl{
     }
 
     getFrequency(tone, tuning){
-        let index = DB.tones.indexOf(tone) + (DB.tones.length * (tone.octave + 4));
+        let index = DB.tones.indexOf(tone) + (DB.tones.length * (tone.octave + 3));
         return tuning.frequencies[index];
     }
     
     playToneWithOctave(toneName, toneOctave, tuningName){
-        let index = DB.tones.indexOf(this.DBC.findToneByName(toneName)) + (DB.tones.length * (toneOctave + 4));
+        let index = DB.tones.indexOf(this.DBC.findToneByName(toneName)) + (DB.tones.length * (toneOctave + 3));
         let freq = this.DBC.findTuningByName(tuningName).frequencies[index];
         this.playNote(freq, 300);
         return index;

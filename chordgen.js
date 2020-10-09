@@ -36,6 +36,7 @@ class ChordGen {
             chord.tones.push(chordTone);
         }
 
+        window.console.debug(`Chord ${rootTone}${chordTemplate} generated: ${chord.tones}`);
         chord.rootTone = rootTone;
         return chord;
     }  
