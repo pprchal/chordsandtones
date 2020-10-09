@@ -27,7 +27,7 @@ class ChordReviewControl extends BaseControl{
 
         for(let i = 0; i<arr.length; i++){
             if(i < chord.distances.length){
-                arr[chord.distances[i]] = chord.distances[i];
+                arr[chord.distances[i]] = this.formatChordDistance(chord.distances[i]); // DB.tones[chord.distances[i]].name;
             }
         }
 
@@ -36,6 +36,21 @@ class ChordReviewControl extends BaseControl{
         }
 
         return html + '</tr>';
+    }
+
+    formatChordDistance(chordDistance){
+        let dist = chordDistance;
+        while(dist >= DB.tones.length)
+        {
+            dist -= DB.tones.length;
+        }
+
+        try{
+            return DB.tones[dist].name;
+        }
+        catch(e){
+            return "---";
+        }
     }
 
     prepareArrByTones() {

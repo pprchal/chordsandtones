@@ -11,16 +11,12 @@ class ChordControl extends BaseControl{
 
     // @chordTypeName (maj7)
     render() {
-        let chordsInType = new Array();
-        let chordGen = new ChordGen();
         window.console.debug(`Rendering chord table: [${this.ChordType.name}]`);
-
-        for (let i = 0; i < DB.tones.length; i++) {
-            chordsInType.push(chordGen.generateChordTableForTone(
-                this.ChordType,
-                DB.tones[i]
-            ));
-        }
+        let chordGen = new ChordGen();
+        let chordsInType = DB.tones.map(tone => chordGen.generateChordTableForTone(
+            this.ChordType,
+            tone
+        ));
 
         return this.printChordTable(chordsInType, this.ChordType);
     }  
@@ -29,20 +25,15 @@ class ChordControl extends BaseControl{
     printChordTable(chordsInType, chordType) {
         return "<table class=\"table table-hover\">" + 
             this.printChordHeader(chordType.distances) + 
-            chordsInType.reduce((html, chord) => html + this.printChord(chord)) +
+            chordsInType.reduce((html, chord) => html + this.printChord(chord), "") +
         "</table>";
     } 
 
     // @distances
     printChordHeader(distances) {
-        let html = "<tr>";
-
-        for (let i =0; i<distances.length; i++) {
-            let distance = distances[i];
-            html += `<th>${this.formatDistance(distance)}</th>`;
-        }
-        html += "</tr>";
-        return html;
+        return "<tr>" +
+            distances.reduce((html, distance) => html + `<th>${this.formatDistance(distance)}</th>`, "") +
+        "</tr>";
     }        
     
     // @chord
