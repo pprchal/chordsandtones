@@ -4,74 +4,53 @@
 class ScaleControl extends BaseControl{
     constructor(rootToneName, scaleName, appendControlId) {
         super();
-        this.Tuning = this.DBC.findTuningByName('equal-tempered');
         this.RootTone = this.DBC.findToneByName(rootToneName);
         this.Scale = this.DBC.findScaleByName(scaleName);
-        this.TonesInScale = new ChordGen().generateScaleTableForTone(
-            this.RootTone,
-            this.Scale
-        );
         this.AppendControlId = appendControlId;
+        this.TonesInScale = new ChordGen().generateScaleTablesForTone(this.RootTone, this.Scale);
+        this.Tuning = this.DBC.findTuningByName('equal-tempered');
     }
 
     // @rootToneName (C)
     // @scaleName (dur)
     render() {
-        return this.printScaleTable(
-            this.Scale, 
-            this.Tuning.name,
-            this.TonesInScale,
-            this.AppendControlId
-        );
+        let html = "";
+        for(let i=0; i<this.Scale.distances.length; i++){
+            html += this.renderSingleScale(i);
+        }
+        return html;        
     }
 
-    printScaleTable(scale, tuningName, tonesInScale, appendControlId) {
-        let html = "";
-
-        for(let i=0; i<scale.distances.length; i++){
-            html += "<table>";
-            html += this.printScaleHeader(scale.distances[i]);
-            html += this.printSingleScaleTableBody(tonesInScale[i], appendControlId, tuningName);
-            html += "</table>";
-        }
-
-        return html;
-    }  
+    renderSingleScale(i){
+        return "<table>" +
+            this.printScaleHeader(this.Scale.distances[i]) +
+            this.printSingleScaleTableBody(this.TonesInScale[i]) +
+        "</table>";
+    }
 
 
     printTonesHeader(){
-        let html = '<tr><td>&nbsp;</td>';
-        for (let i=0; i<DB.tones.length; i++){
-            html += `<th>${this.formatHtmlTone(DB.tones[i])}</th>`;
-        }
-        return html + '</tr>';
+        return "<tr><td>&nbsp;</td>" +
+            DB.tones.reduce((html, tone) => html + `<th>${this.formatHtmlTone(tone)}</th>`, "") +
+        "</tr>";
     }
 
     // @tones[]
-    printSingleScaleTableBody(tones, appendControlId, tuningName) {
-        let html = "<tr>";
-        for (let i = 0; i < tones.length; i++) {
-            let tone = tones[i];
-            html += `<td>${this.renderScaleButton(tone, appendControlId, tuningName)}</td>`;
-        }
-        html += "</tr>";
-        return html;
+    printSingleScaleTableBody(tonesInScale) {
+        return "<tr>" +
+            tonesInScale.reduce((html, tone) => html + `<td>${this.renderScaleButton(tone)}</td>`, "") +
+        "</tr>";
     } 
 
-    renderScaleButton(tone, appendControlId, tuningName){
-        let script = `playToneWithOctave('${tone.name}', '${tone.octave}', '${tuningName}', '${appendControlId}')`;
+    renderScaleButton(tone){
+        let script = `playToneWithOctave('${tone.name}', '${tone.octave}', '${this.Tuning.Name}', '${this.AppendControlId}')`;
         return `<a class="btn btn-primary btn-block" href="javascript:none" onclick="${script}; return false;" role="button">${this.formatPlainTone(tone)}</a>`;
     }
 
 
     printScaleHeader(distances) {
-        let html = "<tr>";
-
-        for (let i =0; i<distances.length; i++) {
-            let distance = distances[i];
-            html += `<th>${this.formatDistance(distance)}</th>`;
-        }
-        html += "</tr>";
-        return html;
+        return "<tr>" +
+            distances.reduce((html, distance) => html + `<th>${this.formatDistance(distance)}</th>`, "") +
+        "</tr>";
     }        
 }

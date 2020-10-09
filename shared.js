@@ -38,10 +38,6 @@ class BaseControl{
     
     // @distance
     formatDistance(distance) {
-        let name = this.DBC.findInterval(distance).name;
-        if(distance == 0)
-            return name;
-
-        return `${distance} - ${name}`;
+        return `${(distance + 1)} - ${this.DBC.findInterval(distance).name}`;
     }    
 }

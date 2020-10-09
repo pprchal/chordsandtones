@@ -42,7 +42,7 @@ class ChordGen {
 
     // @rootTone
     // @scale
-    generateScaleTableForTone(rootTone, scale) {
+    generateScaleTablesForTone(rootTone, scale) {
         let scaleTonesAll = new Array();
         for(let i = 0; i < scale.distances.length; i++){
             scaleTonesAll.push(this.generateScaleTableForDistance(rootTone, scale.distances[i]));
