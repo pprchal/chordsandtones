@@ -40,10 +40,11 @@
     <script src="chordgen.js"></script>
     <script src="dbcore.js"></script>
 
+    <script src="scale_control.js"></script>
+    <script src="scale_review_control.js"></script>
     <script src="chord_control.js"></script>
     <script src="chord_review_control.js"></script>
     <script src="harmonica_control.js"></script>
-    <script src="scale_control.js"></script>
     <script src="sound_control.js"></script>
     <script src="metronome_control.js"></script>
 
@@ -96,6 +97,9 @@
             <div class="tab-pane fade" id="pills-chordsdef" role="tabpanel" aria-labelledby="pills-chordsdef-tab">
                 <h3>Akordy - přehled</h3>
                 <div id="divChordReview"></div>
+
+                <h3>Stupnice - přehled</h3>
+                <div id="divScaleReview"></div>
             </div>            
 
             <div class="tab-pane fade" id="pills-harp" role="tabpanel" aria-labelledby="pills-harp-tab">
@@ -175,7 +179,7 @@
             ).render();
         }
 
-        function generateChordsReview(){
+        function fillChordsReview(){
             document.getElementById('divChordReview').innerHTML = new ChordReviewControl('tableChordsReview').render();
             $('#tableChordsReview').DataTable( {
                 searching: false,
@@ -184,6 +188,15 @@
             } );
         }
 
+        function fillScalesReview(){
+            document.getElementById('divScaleReview').innerHTML = new ScaleReviewControl('tableScalesReview').render();
+            // $('#tableScalesReview').DataTable( {
+            //     searching: false,
+            //     paging: false,
+            //     info: false
+            // } );
+        }
+        
         function refreshAll() {
             refreshChords();
             refreshHarp();
@@ -192,7 +205,6 @@
         function refreshChords() {
             generateSelectedChord();
             generateSelectedScale();
-            generateChordsReview();
         }
 
         function refreshHarp(){
@@ -272,7 +284,8 @@
         fillScales(document.getElementById('cbScalesHarp'));
         fillTones(document.getElementById('cbHarmonicaKeys'));
         fillTunings(document.getElementById('cbTunings'));
-
+        fillChordsReview();
+        fillScalesReview();
         refreshAll();
     </script>
 </body>
