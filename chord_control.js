@@ -27,12 +27,10 @@ class ChordControl extends BaseControl{
 
 
     printChordTable(chordsInType, chordType) {
-        let html = "<table class=\"table table-hover\">" + this.printChordHeader(chordType.distances);
-        for (let i = 0; i < chordsInType.length; i++) {
-            html += this.printSingleChordTableBody(chordsInType[i]);
-        }
-        html += "</table>";
-        return html;
+        return "<table class=\"table table-hover\">" + 
+            this.printChordHeader(chordType.distances) + 
+            chordsInType.reduce((html, chord) => html + this.printChord(chord)) +
+        "</table>";
     } 
 
     // @distances
@@ -48,20 +46,12 @@ class ChordControl extends BaseControl{
     }        
     
     // @chord
-    printSingleChordTableBody(chord) {
-        var html = "<tr>";
-        for (let i = 0; i < chord.tones.length; i++) {
-            this.ChordToneId = this.ChordToneId + 1;
-            let chordToneId = `chordTone_${this.ChordToneId}`;
-            let tone = chord.tones[i];
-            html += `<td id="${chordToneId}">${this.formatHtmlTone(tone)}</td>`;
-        }
-        
-        html += "</tr>";
-        return html;
+    printChord(chord) {
+        return "<tr>" +
+            chord.tones.reduce((html, tone) => {
+                this.ChordToneId = this.ChordToneId + 1;
+                return html + `<td id="chordTone_${this.ChordToneId}">${this.formatHtmlTone(tone)}</td>`;
+            }, "") +
+        "</tr>";
     }
-
-    // renderChordToneButton(tone){
-    //     return `<a class="btn btn-primary btn-block" href="#" role="button">${this.formatHtmlTone(tone)}</a>`;
-    // }
 }

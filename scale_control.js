@@ -25,6 +25,19 @@ class ScaleControl extends BaseControl{
         );
     }
 
+    printScaleTable(scale, tuningName, tonesInScale, appendControlId) {
+        let html = "";
+
+        for(let i=0; i<scale.distances.length; i++){
+            html += "<table>";
+            html += this.printScaleHeader(scale.distances[i]);
+            html += this.printSingleScaleTableBody(tonesInScale[i], appendControlId, tuningName);
+            html += "</table>";
+        }
+
+        return html;
+    }  
+
 
     printTonesHeader(){
         let html = '<tr><td>&nbsp;</td>';
@@ -50,18 +63,6 @@ class ScaleControl extends BaseControl{
         return `<a class="btn btn-primary btn-block" href="javascript:none" onclick="${script}; return false;" role="button">${this.formatPlainTone(tone)}</a>`;
     }
 
-    printScaleTable(scale, tuningName, tonesInScale, appendControlId) {
-        let html = "";
-
-        for(let i=0; i<scale.distances.length; i++){
-            html += "<table>";
-            html += this.printScaleHeader(scale.distances[i]);
-            html += this.printSingleScaleTableBody(tonesInScale[i], appendControlId, tuningName);
-            html += "</table>";
-        }
-
-        return html;
-    }  
 
     printScaleHeader(distances) {
         let html = "<tr>";

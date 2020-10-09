@@ -9,10 +9,10 @@ class ScaleReviewControl extends BaseControl{
     }
 
     render(){
-        let html = `<table id="${this.TableId}" class="table table-hover">`;
-        html += this.printHeader();
-        DB.scales.forEach((scale) => html += this.renderScale(scale));
-        return html + "</table>";
+        return `<table id="${this.TableId}" class="table table-hover">` +
+            this.printHeader() +
+            DB.scales.reduce((html, scale) => html + this.renderScale(scale), "") +
+        "</table>";
     }
 
     renderScale(scale){
