@@ -5,8 +5,8 @@ class ChordControl extends BaseControl{
     constructor(controlId, chordTypeName) {
         super(controlId);
         this.ChordToneId = 1;
-        this.Tuning = this.DBC.findTuningByName('equal-tempered');
-        this.ChordType = this.DBC.findChordByName(chordTypeName);
+        this.Tuning = this.ChordGen.findTuningByName('equal-tempered');
+        this.ChordType = this.ChordGen.findChordByName(chordTypeName);
     }
 
     // @chordTypeName (maj7)
@@ -45,7 +45,7 @@ class ChordControl extends BaseControl{
             let tone = chord.tones[i];
             if(i == 0)
             {
-                html += `<td id="chordTone_${this.ChordToneId}">${this.formatHtmlTone(tone)}</td>`;
+                html += `<td>${this.renderChordButton(chord)}</td>`;
             }else{
                 html += `<td id="chordTone_${this.ChordToneId}">${this.formatHtmlTone(tone)}</td>`;
             }
@@ -56,8 +56,8 @@ class ChordControl extends BaseControl{
     }
 
     renderChordButton(chord){
-        let script = `displayCharChords('${tone.name}', '${tone.octave}')`;
-        return `<a class="btn btn-primary btn-block" href="javascript:none" onclick="${script}; return false;" role="button">${this.formatPlainTone(tone)}</a>`;
+        let script = `displayCharChords('${chord.rootTone.name}', '${chord.name}')`;
+        return `<a class="btn btn-primary btn-block" href="javascript:none" onclick="${script}; return false;" role="button">${this.formatPlainTone(chord.rootTone)}</a>`;
     }
 
 }

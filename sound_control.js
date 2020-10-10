@@ -5,9 +5,9 @@
 class SoundControl  extends BaseControl{ 
     constructor(controlId){
         super(controlId);
-        this.Tuning = new DBCore().findTuningByName('equal-tempered');
+        this.ChordGen = new ChordGen();
+        this.Tuning = this.ChordGen.findTuningByName('equal-tempered');
         this.audioCtx = new(window.AudioContext || window.webkitAudioContext)();
-        this.DBC = new DBCore();
     }
     
     playNote(frequency, duration) {
@@ -24,10 +24,10 @@ class SoundControl  extends BaseControl{
     }
 
     playChord(rootNoteName, chordTypeName){
-        let rootNote = this.DBC.findToneByName(rootNoteName);
-        let chordType = this.DBC.findChordByName(chordTypeName);
+        let rootNote = this.ChordGen.findToneByName(rootNoteName);
+        let chordType = this.ChordGen.findChordByName(chordTypeName);
 
-        let chord = new ChordGen().generateChordTableForTone(chordType, rootNote);
+        let chord = this.ChordGen.generateChordTableForTone(chordType, rootNote);
         for(let tone of chord.tones){
             this.playNote(this.getFrequency(tone, this.Tuning), 200);
         };
@@ -39,8 +39,8 @@ class SoundControl  extends BaseControl{
     }
     
     playToneWithOctave(toneName, toneOctave, tuningName){
-        let index = DB.tones.indexOf(this.DBC.findToneByName(toneName)) + (DB.tones.length * (toneOctave + 3));
-        let freq = this.DBC.findTuningByName(tuningName).frequencies[index];
+        let index = DB.tones.indexOf(this.ChordGen.findToneByName(toneName)) + (DB.tones.length * (toneOctave + 3));
+        let freq = this.ChordGen.findTuningByName(tuningName).frequencies[index];
         this.playNote(freq, 300);
         return index;
     }

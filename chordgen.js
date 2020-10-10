@@ -11,10 +11,6 @@ class PossibleChord {
 // -------------------- ChordGen
 // --------------------
 class ChordGen {
-    constructor(){
-        this.DBC = new DBCore();
-    }
-
     // @chordTemplate
     // @rootTone
     generateChordTableForTone(chordTemplate, rootTone) {
@@ -36,7 +32,7 @@ class ChordGen {
             chord.tones.push(chordTone);
         }
 
-        window.console.debug(`Chord ${rootTone}${chordTemplate} generated: ${chord.tones}`);
+        // window.console.debug(`Chord ${rootTone}${chordTemplate} generated: ${chord.tones}`);
         chord.rootTone = rootTone;
         return chord;
     }  
@@ -73,8 +69,21 @@ class ChordGen {
         return scaleTones;
     }
 
-    findCharChords(){
-        
+    findCharChords(rootTone){
+        let chordRootTone = this.findToneByName(rootTone);
+        let res2 = "";
+
+        for(let i=0; i < DB.qround.length; i++){
+            let qr = DB.qround[i];
+            if(qr.chord === ""){
+                continue;
+            }
+
+            let t = this.plusTone(chordRootTone, qr.n);
+            res2 += `${qr.name} - ${t.name}${qr.chord}\n`;
+        }
+
+        return res2;
     }
 
     parseTones(rawToneNames){
@@ -82,7 +91,7 @@ class ChordGen {
         let split = rawToneNames.split(" ");
 
         for(let i = 0; i < split.length; i++){
-            let tone = this.DBC.findToneByName(split[i]);
+            let tone = this.findToneByName(split[i]);
             if(tone != null){
                 tones.push(tone);
             }
@@ -138,7 +147,7 @@ class ChordGen {
             }
             dist++;
 
-        }while(!DBCore.isMatchingToneName(DB.tones[i], toneB.name));
+        }while(!this.isMatchingToneName(DB.tones[i], toneB.name));
 
         return dist;
     }
@@ -179,5 +188,56 @@ class ChordGen {
         
         return dists.join();
     } 
+    // @chordName
+    findChordByName(chordName) {
+        return DB.chords.find(chord => this.isMatchingChordName(chord, chordName));
+    }
+
+    // @scaleName
+    findScaleByName(scaleName) {
+        return DB.scales.find(scale => scale.name === scaleName);
+    }
+
+    // @harmonicaName
+    findHarmonicaByName(harmonicaName) {
+        return DB.harmonicas.find(harmonica => harmonica.name === harmonicaName);
+    }
+
+    // @chord
+    // @chordName
+    isMatchingChordName(chord, chordName) {
+        return chord.name === chordName;
+    }        
+
+    // @toneName
+    findToneByName(toneName) {
+        return DB.tones.find(tone => ChordGen.isMatchingToneName(tone, toneName));
+    }
+
+    // @tuningName
+    findTuningByName(tuningName) {
+        return DB.tunings.find(tuning => ChordGen.isMatchingToneName(tuning, tuningName));
+    }
+
+    // @tone
+    // @toneName
+    static isMatchingToneName(tone, toneName) {
+        return tone.name === toneName;
+    }     
+
+    static isToneEqual(tone1, tone2) {
+        return tone1.name === tone2.name;
+    }  
+    
+    // @distance
+    findInterval(distance) {
+        for (let i=0; i<DB.intervals.length; i++){
+            if(DB.intervals[i].distance == distance){
+                return DB.intervals[i];
+            }
+        }
+
+        return DB.intervals[0];
+    }
 }
 

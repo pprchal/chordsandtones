@@ -6,10 +6,10 @@ class HarmonicaControl extends BaseControl {
     constructor(controlId, harpKey) {
         super(controlId);
         this.HarmonicaToneId = 1;
-        this.Tuning = this.DBC.findTuningByName('equal-tempered');
+        this.Tuning = this.ChordGen.findTuningByName('equal-tempered');
         this.ToneMap = [];
-        this.HarpRootTone = this.DBC.findToneByName(harpKey);
-        this.Harmonica = this.DBC.findHarmonicaByName('Richter diatonická');
+        this.HarpRootTone = this.ChordGen.findToneByName(harpKey);
+        this.Harmonica = this.ChordGen.findHarmonicaByName('Richter diatonická');
     }
 
     render() {
@@ -107,7 +107,7 @@ class HarmonicaControl extends BaseControl {
     }
 
     setColor(toneControlId, on) {
-        window.console.debug(`${toneControlId}: [${(on ? "ON" : "OFF")}]`);
+        // window.console.debug(`${toneControlId}: [${(on ? "ON" : "OFF")}]`);
         setCssClass(
             document.getElementById(toneControlId), 
             'note-on',
@@ -121,6 +121,6 @@ class HarmonicaControl extends BaseControl {
 
     findToneControlIdsByTone(tone) {
         return this.ToneMap
-            .filter(tr => DBCore.isToneEqual(tr.Tone, tone));
+            .filter(tr => ChordGen.isToneEqual(tr.Tone, tone));
     }
 }

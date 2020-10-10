@@ -2,8 +2,8 @@
 // -------------------- MetronomeControl
 // --------------------
 class MetronomeControl extends BaseControl{
-    constructor(holderId, metroA, metroB, bpm, sound) {
-        super();
+    constructor(controlId, holderId, metroA, metroB, bpm, sound) {
+        super(controlId);
         this.r = Raphael(holderId, 640, 480);
         this.A = metroA;
         this.B = metroB;

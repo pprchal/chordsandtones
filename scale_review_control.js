@@ -3,9 +3,8 @@
 // --------------------
 class ScaleReviewControl extends BaseControl{
     constructor(controlId) {
-        super();
-        this.Tuning = this.DBC.findTuningByName('equal-tempered');
-        this.ControlId = controlId;
+        super(controlId);
+        this.Tuning = this.ChordGen.findTuningByName('equal-tempered');
         this.ScalesMap = []
     }
 

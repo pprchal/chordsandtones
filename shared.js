@@ -15,7 +15,7 @@ class ToneMapRecord {
 class BaseControl{
     constructor(controlId) {
         this.ControlId = controlId;
-        this.DBC = new DBCore();
+        this.ChordGen = new ChordGen();
     }
 
     setHtml(html){
@@ -43,6 +43,6 @@ class BaseControl{
     
     // @distance
     formatDistance(distance) {
-        return `${(distance + 1)} - ${this.DBC.findInterval(distance).name}`;
+        return `${(distance + 1)} - ${this.ChordGen.findInterval(distance).name}`;
     }    
 }

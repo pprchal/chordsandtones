@@ -40,7 +40,6 @@
     <script src="shared.js"></script>
     <script src="database.js"></script>
     <script src="chordgen.js"></script>
-    <script src="dbcore.js"></script>
 
     <script src="scale_control.js"></script>
     <script src="scale_review_control.js"></script>
@@ -92,6 +91,8 @@
                     <div id="divOutputScale"></div>
                     <input id="tbOutputScale" type="text" />
                 </div>
+
+                <div id="divCharChords"></div>
             </div>
 
             <div class="tab-pane fade" id="pills-chordsdef" role="tabpanel" aria-labelledby="pills-chordsdef-tab">
@@ -166,9 +167,11 @@
             }
         }
 
+        let P_CHORD = undefined;
         function generateSelectedChord() {
             let chordTypeName = getSelectedValue('cbChordTypes');
-            new ChordControl('divOutput', chordTypeName).render();
+            P_CHORD = new ChordControl('divOutput', chordTypeName)
+            P_CHORD.render();
         }
 
         function generateSelectedScale() {
@@ -278,6 +281,10 @@
                 option.text = tuning.name;
                 cbTunings.add(option);
             }
+        }
+
+        function displayCharChords(rootTone, chordType){
+            document.getElementById('divCharChords').innerText = new ChordGen().findCharChords(rootTone);
         }
 
         // -- init ui
