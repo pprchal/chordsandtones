@@ -13,8 +13,13 @@ class ToneMapRecord {
 }
 
 class BaseControl{
-    constructor() {
+    constructor(controlId) {
+        this.ControlId = controlId;
         this.DBC = new DBCore();
+    }
+
+    setHtml(html){
+        document.getElementById(this.ControlId).innerHTML = html;
     }
 
     debug(msg){

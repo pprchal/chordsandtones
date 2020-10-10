@@ -3,9 +3,9 @@
 // -------------------- Sound
 // --------------------
 class SoundControl  extends BaseControl{ 
-    constructor(tuning){
-        super();
-        this.Tuning = tuning;
+    constructor(controlId){
+        super(controlId);
+        this.Tuning = new DBCore().findTuningByName('equal-tempered');
         this.audioCtx = new(window.AudioContext || window.webkitAudioContext)();
         this.DBC = new DBCore();
     }

@@ -3,8 +3,8 @@
 // -------------------- HarmonicaControl
 // --------------------
 class HarmonicaControl extends BaseControl {
-    constructor(harpKey) {
-        super();
+    constructor(controlId, harpKey) {
+        super(controlId);
         this.HarmonicaToneId = 1;
         this.Tuning = this.DBC.findTuningByName('equal-tempered');
         this.ToneMap = [];
@@ -25,7 +25,7 @@ class HarmonicaControl extends BaseControl {
         }
 
         this.uniqueTones = new Set(this.ToneMap.map(r => r.Tone.name));
-        return html += "</table>";
+        this.setHtml(html + "</table>");
     }        
     
     formatHarmonicaRowTitle(row){

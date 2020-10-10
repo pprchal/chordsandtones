@@ -2,21 +2,27 @@
 // -------------------- ScaleReviewControl
 // --------------------
 class ScaleReviewControl extends BaseControl{
-    constructor(tableId) {
+    constructor(controlId) {
         super();
         this.Tuning = this.DBC.findTuningByName('equal-tempered');
-        this.TableId = tableId;
+        this.ControlId = controlId;
+        this.ScalesMap = []
     }
 
     render(){
-        return `<table id="${this.TableId}" class="table table-hover">` +
+        this.setHtml(`<table id="${this.ControlId}" class="table table-hover">` +
             this.printHeader() +
             DB.scales.reduce((html, scale) => html + this.renderScale(scale), "") +
-        "</table>";
+        "</table>");
     }
 
     renderScale(scale){
-        let html = `<tr><td>${scale.name}</td>`;
+        let scaleMap = {
+            name: scale.name,
+            tones: []
+        };
+        this.ScalesMap.push(scaleMap);
+
 
         let arr = this.prepareArrByTones();
         let scaleDistance = scale.distances[0];
@@ -31,11 +37,10 @@ class ScaleReviewControl extends BaseControl{
             }
         }
 
-        for(let j = 0; j<arr.length; j++){
-            html += `<td>${arr[j]}</td>`;
-        }
-
-        return html + '</tr>';
+        arr = [`${(this.button('-'))}${(this.button('+'))}`, ...arr]
+        return `<tr><td>${scale.name}</td>` + 
+            arr.reduce((a, x) =>  a + `<td>${x}</td>`, "") +
+            "</tr>";
     }
 
     prepareArrByTones() {
@@ -46,8 +51,14 @@ class ScaleReviewControl extends BaseControl{
         return arr;
     }
 
+    button(direction){
+        return `<a id="btShiftScale_${this.ControlId}" class="btn btn-primary btn-block" href="javascript:none" onclick="shiftScale('${direction}', this); return false;" role="button">${direction}</a>`;   
+    }
+
     printHeader(){
-        let html = '<thead><tr><td>&nbsp;</td>';
+        let html = '<thead><tr><td>&nbsp;</td>' +
+            `<td>&nbsp;</td>`;
+
         for (let i=0; i<DB.tones.length; i++){
             html += `<th>${(i + 1)}</th>`;
         }

@@ -172,18 +172,18 @@ const DB = {
   ],
 
   "qround" : [ 
-      { "n": 0, name: "tónika" },
-      { "n": 7, name: "dominanta"},
-      { "n": 2, name: "mollová subdominanta"},
-      { "n": 9, name: "mollová tónika"},
-      { "n": 4, name: "mollová dominanta"},
-      { "n": 11, name: "dominanta"},
-      { "n": 6, name: "dominanta"},
-      { "n": 1, name: "dominanta"},
-      { "n": 8, name: "dominanta"},
-      { "n": 3, name: "dominanta"},
-      { "n": 10, name: "dominanta"},
-      { "n": 5, name: "dominanta"}
+      { "n": 0, name: "tónika" },             // C
+      { "n": 7, name: "dominanta"},           // G
+      { "n": 2, name: "mollová subdominanta"},// D
+      { "n": 9, name: "mollová tónika"},      // A
+      { "n": 4, name: "mollová dominanta"},   // E
+      { "n": 11, name: "dominanta"},          // H
+      { "n": 6, name: "dominanta"},           // F#
+      { "n": 1, name: ""},                    // C#           
+      { "n": 8, name: ""},                    // G#
+      { "n": 3, name: ""},                    // D#
+      { "n": 10, name: ""},                   // B
+      { "n": 5, name: ""}                     // F
   ],
 
   "harmonicas" : [

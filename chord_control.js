@@ -2,8 +2,8 @@
 // -------------------- ChordControl
 // --------------------
 class ChordControl extends BaseControl{
-    constructor(chordTypeName) {
-        super();
+    constructor(controlId, chordTypeName) {
+        super(controlId);
         this.ChordToneId = 1;
         this.Tuning = this.DBC.findTuningByName('equal-tempered');
         this.ChordType = this.DBC.findChordByName(chordTypeName);
@@ -18,7 +18,7 @@ class ChordControl extends BaseControl{
             tone
         ));
 
-        return this.printChordTable(chordsInType, this.ChordType);
+        this.setHtml(this.printChordTable(chordsInType, this.ChordType));
     }  
 
 
@@ -38,11 +38,26 @@ class ChordControl extends BaseControl{
     
     // @chord
     printChord(chord) {
-        return "<tr>" +
-            chord.tones.reduce((html, tone) => {
-                this.ChordToneId = this.ChordToneId + 1;
-                return html + `<td id="chordTone_${this.ChordToneId}">${this.formatHtmlTone(tone)}</td>`;
-            }, "") +
-        "</tr>";
+        let html = "<tr>";
+
+        for(let i=0; i<chord.tones.length; i++)
+        {
+            let tone = chord.tones[i];
+            if(i == 0)
+            {
+                html += `<td id="chordTone_${this.ChordToneId}">${this.formatHtmlTone(tone)}</td>`;
+            }else{
+                html += `<td id="chordTone_${this.ChordToneId}">${this.formatHtmlTone(tone)}</td>`;
+            }
+            this.ChordToneId++;
+        }
+
+        return html + "</tr>";
     }
+
+    renderChordButton(chord){
+        let script = `displayCharChords('${tone.name}', '${tone.octave}')`;
+        return `<a class="btn btn-primary btn-block" href="javascript:none" onclick="${script}; return false;" role="button">${this.formatPlainTone(tone)}</a>`;
+    }
+
 }

@@ -2,8 +2,8 @@
 // -------------------- ScaleControl
 // --------------------
 class ScaleControl extends BaseControl{
-    constructor(rootToneName, scaleName, appendControlId) {
-        super();
+    constructor(controlId, rootToneName, scaleName, appendControlId) {
+        super(controlId);
         this.RootTone = this.DBC.findToneByName(rootToneName);
         this.Scale = this.DBC.findScaleByName(scaleName);
         this.AppendControlId = appendControlId;
@@ -18,7 +18,7 @@ class ScaleControl extends BaseControl{
         for(let i=0; i<this.Scale.distances.length; i++){
             html += this.renderSingleScale(i);
         }
-        return html;        
+        this.setHtml(html);
     }
 
     renderSingleScale(i){

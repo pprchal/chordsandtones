@@ -73,6 +73,10 @@ class ChordGen {
         return scaleTones;
     }
 
+    findCharChords(){
+        
+    }
+
     parseTones(rawToneNames){
         let tones = new Array();
         let split = rawToneNames.split(" ");

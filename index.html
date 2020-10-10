@@ -8,13 +8,13 @@
     <title>Chords and tones</title>
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
     <script src="raphael.min.js" type="text/javascript" charset="utf-8"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script> -->
 
     <style>
         table {
@@ -128,7 +128,7 @@
                 <div id="metronomeHolder"></div>                
 
                 <script>
-                    this.P_SOUND = new SoundControl(new DBCore().findTuningByName('equal-tempered'));
+                    this.P_SOUND = new SoundControl('sctl');
                     let P_METRONOME = new MetronomeControl(
                         "metronomeHolder", 
                         getSelectedValue('cbMetroA'), 
@@ -168,11 +168,12 @@
 
         function generateSelectedChord() {
             let chordTypeName = getSelectedValue('cbChordTypes');
-            document.getElementById('divOutput').innerHTML = new ChordControl(chordTypeName).render();
+            new ChordControl('divOutput', chordTypeName).render();
         }
 
         function generateSelectedScale() {
-            document.getElementById('divOutputScale').innerHTML = new ScaleControl(
+            new ScaleControl(
+                'divOutputScale',
                 getSelectedValue('cbTones'),
                 getSelectedValue('cbScales'),
                 'tbOutputScale'
@@ -180,21 +181,21 @@
         }
 
         function fillChordsReview(){
-            document.getElementById('divChordReview').innerHTML = new ChordReviewControl('tableChordsReview').render();
-            $('#tableChordsReview').DataTable( {
-                searching: false,
-                paging: false,
-                info: false
-            } );
+             new ChordReviewControl('divChordReview', 'tableChordsReview').render();
+            // $('#tableChordsReview').DataTable( {
+            //     searching: false,
+            //     paging: false,
+            //     info: false
+            // } );
         }
 
         function fillScalesReview(){
-            document.getElementById('divScaleReview').innerHTML = new ScaleReviewControl('tableScalesReview').render();
-            $('#tableScalesReview').DataTable( {
-                searching: false,
-                paging: false,
-                info: false
-            } );
+            new ScaleReviewControl('divScaleReview', 'tableScalesReview').render();
+            // $('#tableScalesReview').DataTable( {
+            //     searching: false,
+            //     paging: false,
+            //     info: false
+            // } );
         }
         
         function refreshAll() {
@@ -215,12 +216,12 @@
             window.console.debug(`Harp in key: [${harpKey}] colorize scale: [${playKey}${playScale}]`);
 
             // render scale
-            let scaleCtl = new ScaleControl(playKey, playScale, 'tbOutputScaleHarp')
-            document.getElementById('divOutputScaleHarp').innerHTML = scaleCtl.render();
+            let scaleCtl = new ScaleControl('divOutputScaleHarp', playKey, playScale, 'tbOutputScaleHarp')
+            scaleCtl.render();
 
             // render harp
-            let harpCtl = new HarmonicaControl(harpKey);
-            document.getElementById('divHarmonica').innerHTML = harpCtl.render();
+            let harpCtl = new HarmonicaControl('divHarmonica', harpKey);
+            harpCtl.render();
 
             // do coloring
             harpCtl.colorKeyTones(scaleCtl);
@@ -235,6 +236,9 @@
             this.P_SOUND.playToneWithOctave(toneName, toneOctave, tuningName);
         }
 
+        function shiftScale(direction, sender){
+            window.alert(sender.id + "    " + direction);
+        }
 
         // fill tones
         function fillTones(cbTones) {
