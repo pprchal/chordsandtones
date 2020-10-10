@@ -5,15 +5,13 @@ class ChordControl extends BaseControl{
     constructor(controlId, chordTypeName) {
         super(controlId);
         this.ChordToneId = 1;
-        this.Tuning = this.ChordGen.findTuningByName('equal-tempered');
         this.ChordType = this.ChordGen.findChordByName(chordTypeName);
     }
 
     // @chordTypeName (maj7)
     render() {
-        window.console.debug(`Rendering chord table: [${this.ChordType.name}]`);
-        let chordGen = new ChordGen();
-        let chordsInType = DB.tones.map(tone => chordGen.generateChordTableForTone(
+        // window.console.debug(`Rendering chord table: [${this.ChordType.name}]`);
+        let chordsInType = DB.tones.map(tone => this.ChordGen.generateChordTableForTone(
             this.ChordType,
             tone
         ));

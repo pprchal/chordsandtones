@@ -4,7 +4,6 @@
 class ScaleReviewControl extends BaseControl{
     constructor(controlId) {
         super(controlId);
-        this.Tuning = this.ChordGen.findTuningByName('equal-tempered');
         this.ScalesMap = []
     }
 

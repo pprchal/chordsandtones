@@ -16,6 +16,7 @@ class BaseControl{
     constructor(controlId) {
         this.ControlId = controlId;
         this.ChordGen = new ChordGen();
+        this.Tuning = this.ChordGen.findTuningByName('equal-tempered');
     }
 
     setHtml(html){
@@ -23,7 +24,7 @@ class BaseControl{
     }
 
     debug(msg){
-        window.console.debug(msg);
+        // window.console.debug(msg);
     }
 
     // @chord

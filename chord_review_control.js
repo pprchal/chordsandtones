@@ -5,7 +5,6 @@ class ChordReviewControl extends BaseControl{
     constructor(controlId, tableId) {
         super(controlId);
         this.ChordToneId = 1;
-        this.Tuning = this.ChordGen.findTuningByName('equal-tempered');
         this.TableId = tableId;
     }
 

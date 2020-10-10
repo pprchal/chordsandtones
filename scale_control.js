@@ -8,7 +8,6 @@ class ScaleControl extends BaseControl{
         this.Scale = this.ChordGen.findScaleByName(scaleName);
         this.AppendControlId = appendControlId;
         this.TonesInScale = new ChordGen().generateScaleTablesForTone(this.RootTone, this.Scale);
-        this.Tuning = this.ChordGen.findTuningByName('equal-tempered');
     }
 
     // @rootToneName (C)

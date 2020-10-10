@@ -5,8 +5,6 @@
 class SoundControl  extends BaseControl{ 
     constructor(controlId){
         super(controlId);
-        this.ChordGen = new ChordGen();
-        this.Tuning = this.ChordGen.findTuningByName('equal-tempered');
         this.audioCtx = new(window.AudioContext || window.webkitAudioContext)();
     }
     
