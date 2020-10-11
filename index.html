@@ -8,13 +8,13 @@
     <title>Chords and tones</title>
 
     <!-- Bootstrap CSS -->
-    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
     <script src="raphael.min.js" type="text/javascript" charset="utf-8"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script> -->
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
 
     <style>
         table {
@@ -83,6 +83,8 @@
                 <div id="divOutput"></div>
                 <br />
         
+                <div id="divCharChords"></div>
+
                 <h3>Stupnice <select id="cbTones" onchange="refreshChords()"></select>
                     <select id="cbScales" onchange="refreshChords()"></select>
                 </h3>
@@ -91,8 +93,6 @@
                     <div id="divOutputScale"></div>
                     <input id="tbOutputScale" type="text" />
                 </div>
-
-                <div id="divCharChords"></div>
             </div>
 
             <div class="tab-pane fade" id="pills-chordsdef" role="tabpanel" aria-labelledby="pills-chordsdef-tab">
@@ -185,20 +185,20 @@
 
         function fillChordsReview(){
              new ChordReviewControl('divChordReview', 'tableChordsReview').render();
-            // $('#tableChordsReview').DataTable( {
-            //     searching: false,
-            //     paging: false,
-            //     info: false
-            // } );
+            $('#tableChordsReview').DataTable( {
+                searching: false,
+                paging: false,
+                info: false
+            } );
         }
 
         function fillScalesReview(){
             new ScaleReviewControl('divScaleReview', 'tableScalesReview').render();
-            // $('#tableScalesReview').DataTable( {
-            //     searching: false,
-            //     paging: false,
-            //     info: false
-            // } );
+            $('#tableScalesReview').DataTable( {
+                searching: false,
+                paging: false,
+                info: false
+            } );
         }
         
         function refreshAll() {
