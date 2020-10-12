@@ -1,14 +1,10 @@
 // Pavel Prchal 2020
 // -------------------- MetronomeControl
 // --------------------
-class MetronomeControl extends BaseControl{
+class MetronomeControl extends MetronomeControlBase{
     constructor(controlId, holderId, metroA, metroB, bpm, sound) {
-        super(controlId);
+        super(controlId, metroA, metroB, bpm);
         this.r = Raphael(holderId, 640, 480);
-        this.A = metroA;
-        this.B = metroB;
-        this.running = false;
-        this.bpm = bpm;
         this.sound = sound;
     }
 

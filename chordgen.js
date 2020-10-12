@@ -1,6 +1,7 @@
 // Pavel Prchal 2019
 // -------------------- PossibleChord
 // --------------------
+
 class PossibleChord {
     constructor(chord){
         this.Chord = chord;
@@ -241,3 +242,6 @@ class ChordGen {
     }
 }
 
+// const math = {};
+// math.ChordGen = () => new ChordGen();
+// module.exports = math;

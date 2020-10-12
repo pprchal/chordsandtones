@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html lang="cz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+    <title>t</title>
+
+    <script src="shared.js"></script>
+    <script src="database.js"></script>
+    <script src="chordgen.js"></script>
+
+    <script src="mb.js"></script>
+    <!-- <script src="metronome_control.js"></script> -->
+
+
+    <script>
+        function getSelectedValue(id){
+            return document.getElementById(id).selectedOptions[0].value;
+        }        
+
+        function getSelectedValue2(id){
+            return document.getElementById(id).value;
+        }        
+
+    </script>
+
+    <style>
+        .metroTable {
+        border-collapse: collapse;
+        }
+        .table, td, th {
+  border: 1px solid black;
+}
+
+    </style>
+</head>
+
+<body>
+    <select id="cbMetroA" onchange="refreshMetronome()">
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+        <option>6</option>
+    </select>
+    <select id="cbMetroB" onchange="refreshMetronome()">
+        <option>4</option>
+        <option>3</option>
+    </select>
+    <input id="tbBPM" type="text" value="40"></input>
+    <a id="btStartStop" class="btn btn-primary btn-block" href="javascript:none" onclick="toggleMetronome(); return false;" role="button">Start</a>   
+    <br>
+
+    <br>
+    <br>
+
+
+    <div id="metronomeHolder"></div>                
+
+    <script>
+        let P_METRONOME = new MetronomeControlBase(
+            "metronomeHolder", 
+            getSelectedValue('cbMetroA'), 
+            getSelectedValue('cbMetroB'),
+            getSelectedValue2('tbBPM')
+        );
+        P_METRONOME.render();
+    </script>
+
+    <script>
+        function toggleMetronome() {
+            let running = P_METRONOME.toggleStartStop();
+            document.getElementById('btStartStop').innerText = running ? "Stop" : "Start";
+        }
+
+        function refreshMetronome(){
+            let a = getSelectedValue('cbMetroA');
+            let b = getSelectedValue('cbMetroB');
+            let bpm = getSelectedValue2('tbBPM')
+            P_METRONOME.update(a, b, bpm);
+        }
+    </script>
+</body>
+
+</html>

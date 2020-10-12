@@ -30,13 +30,10 @@
         .note-on {
             background-color: yellow;
         }
-        .harp_tr_blow{
-            background-color: lightskyblue;
-        }
 
-        .harp_tr_draw{
-            background-color: lightpink;
-        }        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
     </style>
 
 
@@ -50,6 +47,7 @@
     <script src="chord_review_control.js"></script>
     <script src="harmonica_control.js"></script>
     <script src="sound_control.js"></script>
+    <script src="metronome_control_base.js"></script>
     <script src="metronome_control.js"></script>
 
 
@@ -230,8 +228,7 @@
             harpCtl.render();
 
             // do coloring
-            let harpTones = harpCtl.colorKeyTones(scaleCtl);
-            scaleCtl.disableTones(harpCtl.TonesAvail);
+            harpCtl.colorKeyTones(scaleCtl);
         }
 
         function refreshMetronome(){
