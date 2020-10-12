@@ -30,10 +30,13 @@
         .note-on {
             background-color: yellow;
         }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
+        .harp_tr_blow{
+            background-color: lightskyblue;
         }
+
+        .harp_tr_draw{
+            background-color: lightpink;
+        }        
     </style>
 
 
@@ -227,7 +230,8 @@
             harpCtl.render();
 
             // do coloring
-            harpCtl.colorKeyTones(scaleCtl);
+            let harpTones = harpCtl.colorKeyTones(scaleCtl);
+            scaleCtl.disableTones(harpCtl.TonesAvail);
         }
 
         function refreshMetronome(){

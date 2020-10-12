@@ -9,6 +9,7 @@ class HarmonicaControl extends BaseControl {
         this.ToneMap = [];
         this.HarpRootTone = this.ChordGen.findToneByName(harpKey);
         this.Harmonica = this.ChordGen.findHarmonicaByName('Richter diatonická');
+        this.TonesAvail = new Set();
     }
 
     render() {
@@ -23,7 +24,6 @@ class HarmonicaControl extends BaseControl {
             html += this.renderRow(this.HarpRootTone, this.Harmonica.template[i], i);
         }
 
-        this.uniqueTones = new Set(this.ToneMap.map(r => r.Tone.name));
         this.setHtml(html + "</table>");
     }        
     
@@ -38,13 +38,13 @@ class HarmonicaControl extends BaseControl {
         else if(row.name === "1 1/2"){
             htmlName = "<span>1 &#189;</span>";
         }
-        return `${row.type}${htmlName}`;
+        return `${row.direction}${htmlName}`;
     }
 
     renderRow(rootTone, row, rowNumber){
-        return "<tr>" +
+        return `<tr class="${(row.direction == "+" ? "harp_tr_blow" : "harp_tr_draw")}">` +
             `<td>${this.formatHarmonicaRowTitle(row)}</td>` +
-            `<td>${row.type}</td>` +
+            `<td>${row.direction}</td>` +
             row.offsets.reduce((html, offset) => {
                 if(isNaN(offset)){
                     return html + "<td>&nbsp;</td>";
@@ -55,6 +55,7 @@ class HarmonicaControl extends BaseControl {
                     harmonicaTone.octave = this.getOctaveForHarmonicaTone(rowNumber, 1);
                     let harmonicaToneId = `harmonicaTone_${harmonicaTone.name}_${this.HarmonicaToneId}`;
                     this.ToneMap.push(new ToneMapRecord(harmonicaToneId, harmonicaTone));
+                    this.TonesAvail.add(harmonicaTone.name);
                     this.debug(`${harmonicaTone.name} - ${harmonicaToneId}`);
                     return html + `<td id="${harmonicaToneId}">${this.formatHtmlTone(harmonicaTone)}</td>`;
                 }
@@ -102,11 +103,14 @@ class HarmonicaControl extends BaseControl {
     colorHarpTonesBy(tone) {
         this
             .findToneControlIdsByTone(tone)
-            .forEach(row => this.setColor(row.ControlId, true));
+            .forEach(row => this.setColor(row.ControlId, true, tone));
     }
 
-    setColor(toneControlId, on) {
+    setColor(toneControlId, on, tone) {
         // window.console.debug(`${toneControlId}: [${(on ? "ON" : "OFF")}]`);
+        if(on){
+            this.TonesAvail.add(tone.name);
+        }
         setCssClass(
             document.getElementById(toneControlId), 
             'note-on',

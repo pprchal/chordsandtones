@@ -27,6 +27,16 @@ class ScaleControl extends BaseControl{
         "</table>";
     }
 
+    disableTones(harpTones){
+        let ttt = this.TonesInScale[0];
+        for(let i=0; i< ttt.length; i++){
+            let scaleTone = ttt[i];
+            if(!harpTones.has(scaleTone.name)){
+                console.debug("disable " + scaleTone.name);
+            }
+        }
+    }
+    
 
     printTonesHeader(){
         return "<tr><td>&nbsp;</td>" +
@@ -43,7 +53,9 @@ class ScaleControl extends BaseControl{
 
     renderScaleButton(tone){
         let script = `playToneWithOctave('${tone.name}', '${tone.octave}', '${this.Tuning.name}', '${this.AppendControlId}')`;
-        return `<a class="btn btn-primary btn-block" href="javascript:none" onclick="${script}; return false;" role="button">${this.formatPlainTone(tone)}</a>`;
+        let btId = `bt_${this.ControlId}_${tone.name}`;
+        //this.ToneSet[
+        return `<a id="${btId}" class="btn btn-primary btn-block" href="javascript:none" onclick="${script}; return false;" role="button">${this.formatPlainTone(tone)}</a>`;
     }
 
 
