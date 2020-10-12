@@ -6,7 +6,6 @@ class MetronomeControlBase extends BaseControl{
         super(controlId);
         this.A = metroA;
         this.B = metroB;
-        this.idxA = 0;
         this.idxB = 0;
         this.running = false;
         this.bpm = parseInt(bpm);
@@ -17,67 +16,45 @@ class MetronomeControlBase extends BaseControl{
 
 
     render() {
-        this.update(this.A, this.B, this.bpm);
         this.setHtml(this.r());
     }  
 
     start(){
-        let beatTime = (60 / this.bpm / this.A) * 1000;
-        this.tstepB = beatTime / this.B;
+        let stepA = (60 / this.bpm) * 1000;
+        this.tstepB = stepA / this.B;
         window.console.debug(`BPM(${this.bpm}) - ${this.tstepB}ms `);
 
-
-        let a = new Array();
-        // for(let xx in this.controlsA)
-        // {
-        //     a.push(document.getElementById(xx));
-        // }
-        // let b = new Array();
-        // for(let xx in this.controlsB)
-        // {
-        //     b.push(document.getElementById(xx));
-        // }
-        // this.controlsA =a;
-        // this.controlsB =b;
-        setInterval(this.beat, this);
+        this.threadId = setInterval(this.beat, this.tstepB, this);
     }
 
     beat(th)
     {
-        P_METRONOME.idxB++;
-        if(P_METRONOME.idxB >= P_METRONOME.B){
-            P_METRONOME.idxB = 0;
-            P_METRONOME.idxA++;
+        let t = P_METRONOME;
 
+        let idxA = Math.floor(t.idxB / t.B);
 
+        let ctrB = document.getElementById(t.controlsB[t.idxB]); 
+        // ctrA.style["background-color"] = "red";
+        ctrB.innerText = t.idxB + ' - ' + new Date().getMilliseconds();
+
+        let ctrA = document.getElementById(t.controlsA[idxA]); 
+        ctrA.innerText = (idxA + 1);
+
+        t.idxB++;
+        if(t.idxB >= (t.A*t.B)){
+            t.idxB = 0;
         }
 
-        if(P_METRONOME.idxA === 0){
-            window.console.debug(`${P_METRONOME.idxA} / ${P_METRONOME.idxB}`);
-        }
-
-        if(P_METRONOME.idxA >= P_METRONOME.A){
-            P_METRONOME.idxA = 0;
-        }
 
 
-        for(let posB = 0; posB < P_METRONOME.controlsB.length; posB++)
-        {
-            let Bct = document.getElementById(P_METRONOME.controlsB[posB]);
-            if(posB == P_METRONOME.idxB){
-                Bct.innerText = "*";
-            }
-            else{
-                Bct.innerText = "";
-            }
-        }
 
-        // window.console.debug(`* - ${P_METRONOME.idxB}`);
-        // window.console.debug(`* - ${P_METRONOME.idxB}`);
+        // let ctrB = document.getElementById(t.controlsB[t.idxB]); 
+        // //ctrB.style["background-color"] = "red";
+        // ctrB.innerText = new Date().getSeconds();
     }
 
     stop(){
-        window.clearInterval();
+        window.clearInterval(this.threadId);
     }
     
     toggleStartStop(){
@@ -109,10 +86,10 @@ class MetronomeControlBase extends BaseControl{
 
     renderARow(){
         let row = "<tr>";
-        let ctId_A = this.getControlId();
-        this.controlsA.push(ctId_A);
 
         for(let a=0; a<this.A; a++){
+            let ctId_A = this.getControlId();
+            this.controlsA.push(ctId_A);
             row += `<td id="${ctId_A}" style="">${(a + 1)}</td>`;
         }
 
@@ -133,7 +110,7 @@ class MetronomeControlBase extends BaseControl{
 
 
         for(let b=0; b<this.B; b++){
-            let ctId_B = `B_ctl_${b}`;
+            let ctId_B = `B_ctl_${this.getControlId()}`;
             this.controlsB.push(ctId_B);
             html += `<td id="${ctId_B}">${this.B}</td>`;
         }
