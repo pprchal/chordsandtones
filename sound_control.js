@@ -36,10 +36,10 @@ class SoundControl  extends BaseControl{
         return tuning.frequencies[index];
     }
     
-    playToneWithOctave(toneName, toneOctave, tuningName){
-        let index = DB.tones.indexOf(this.ChordGen.findToneByName(toneName)) + (DB.tones.length * (toneOctave + 3));
+    playToneWithOctave(toneName, toneOctave, tuningName, duration){
+        let index = DB.tones.indexOf(this.ChordGen.findToneByName(toneName)) + (DB.tones.length * toneOctave);
         let freq = this.ChordGen.findTuningByName(tuningName).frequencies[index];
-        this.playNote(freq, 300);
+        this.playNote(freq, duration);
         return index;
     }
 }

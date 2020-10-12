@@ -11,9 +11,8 @@
     <script src="database.js"></script>
     <script src="chordgen.js"></script>
 
+    <script src="sound_control.js"></script>
     <script src="metronome_control_base.js"></script>
-    <!-- <script src="metronome_control.js"></script> -->
-
 
     <script>
         function getSelectedValue(id){
@@ -59,11 +58,13 @@
     <div id="metronomeHolder"></div>                
 
     <script>
+        this.P_SOUND = new SoundControl('sctl');
         let P_METRONOME = new MetronomeControlBase(
             "metronomeHolder", 
             getSelectedValue('cbMetroA'), 
             getSelectedValue('cbMetroB'),
-            getSelectedValue2('tbBPM')
+            getSelectedValue2('tbBPM'),
+            P_SOUND
         );
         P_METRONOME.render();
     </script>
