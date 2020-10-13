@@ -136,9 +136,4 @@ class MetronomeControlBase extends BaseControl{
         }
         return html + "</tr></table>";
     }
-
-    getControlId(){
-        this.CtID++;
-        return `mct_${this.CtID}`;
-    }
 }

@@ -51,7 +51,7 @@ class HarmonicaControl extends BaseControl {
                 }
                 else{
                     this.HarmonicaToneId = this.HarmonicaToneId + 1;
-                    var harmonicaTone = this.ChordGen.plusTone(rootTone, offset);
+                    var harmonicaTone = this.ChordGen.shiftTone(rootTone, offset);
                     harmonicaTone.octave = this.getOctaveForHarmonicaTone(rowNumber, 1);
                     let harmonicaToneId = `harmonicaTone_${harmonicaTone.name}_${this.HarmonicaToneId}`;
                     this.ToneMap.push(new ToneMapRecord(harmonicaToneId, harmonicaTone));

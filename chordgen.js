@@ -80,7 +80,7 @@ class ChordGen {
                 continue;
             }
 
-            let t = this.plusTone(chordRootTone, qr.n);
+            let t = this.shiftTone(chordRootTone, qr.n);
             res2 += `${qr.name} - ${t.name}${qr.chord}\n`;
         }
 
@@ -153,13 +153,17 @@ class ChordGen {
         return dist;
     }
 
-    plusTone(rootTone, halfToneOffset){
+    shiftTone(rootTone, halfToneOffset){
         let n = DB.tones.indexOf(rootTone) + halfToneOffset;
         let octave = 0;
 
         if(n >= DB.tones.length) {
             octave++;
             n = n - DB.tones.length;
+        }
+        if( n < 0){
+            octave--;
+            n  = DB.tones.length - 1;
         }
 
         let clonedTone = clone(DB.tones[n]);

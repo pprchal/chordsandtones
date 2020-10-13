@@ -89,7 +89,7 @@
 
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-chords" role="tabpanel" aria-labelledby="pills-chords-tab">
-                <h1 class="bd-title">Tabulka akordů <select id="cbChordTypes" onchange="refreshChords()"></select></h1>
+                <h3 class="bd-title">Tabulka akordů <select id="cbChordTypes" onchange="refreshChords()"></select></h3>
                 <div id="divOutput"></div>
                 <br />
         
@@ -192,8 +192,10 @@
             } );
         }
 
+        let P_SCALE_REVIEW = undefined;
         function fillScalesReview(){
-            new ScaleReviewControl('divScaleReview', 'tableScalesReview').render();
+            P_SCALE_REVIEW = new ScaleReviewControl('divScaleReview', 'tableScalesReview');
+            P_SCALE_REVIEW.render();
             $('#tableScalesReview').DataTable( {
                 searching: false,
                 paging: false,
@@ -259,8 +261,8 @@
             P_SOUND.playToneWithOctave(toneName, toneOctave, tuningName);
         }
 
-        function shiftScale(direction, sender){
-            window.alert(sender.id + "    " + direction);
+        function shiftScale(direction, sender, n){
+            P_SCALE_REVIEW.shiftScale(direction, n);
         }
 
         // fill tones

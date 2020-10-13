@@ -21,7 +21,7 @@ class ChordControl extends BaseControl{
 
 
     printChordTable(chordsInType, chordType) {
-        return "<table class=\"table table-hover\">" + 
+        return "<table class=\"table table-hover table-sm\">" + 
             this.printChordHeader(chordType.distances) + 
             chordsInType.reduce((html, chord) => html + this.printChord(chord), "") +
         "</table>";

@@ -17,7 +17,8 @@ class ScaleReviewControl extends BaseControl{
     renderScale(scale){
         let scaleMap = {
             name: scale.name,
-            tones: []
+            tones: [],
+            ids: []
         };
         this.ScalesMap.push(scaleMap);
 
@@ -29,16 +30,24 @@ class ScaleReviewControl extends BaseControl{
             if(i < scaleDistance.length){
                 let tone = DB.tones[scaleDistance[i]];
                 arr[scaleDistance[i]] = tone.name;
+                scaleMap.tones.push(tone);
             }
             else{
                 this.debug('???');
             }
         }
 
-        arr = [`${(this.button('-'))}${(this.button('+'))}`, ...arr]
+        let n = this.ScalesMap.length-1;
+        arr = [`${(this.shiftButton('-', n))}${(this.shiftButton('+', n))}`, ...arr]
         return `<tr><td>${scale.name}</td>` + 
-            arr.reduce((a, x) =>  a + `<td>${x}</td>`, "") +
+            arr.reduce((a, x) =>  a + this.createToneControl(x, scaleMap), "") +
             "</tr>";
+    }
+
+    createToneControl(x, scaleMap){
+        let ctid = this.getControlId("tn");
+        scaleMap.ids.push(ctid);
+        return `<td id="${ctid}">${x}</td>`;
     }
 
     prepareArrByTones() {
@@ -49,8 +58,18 @@ class ScaleReviewControl extends BaseControl{
         return arr;
     }
 
-    button(direction){
-        return `<a id="btShiftScale_${this.ControlId}" class="btn btn-primary btn-block" href="javascript:none" onclick="shiftScale('${direction}', this); return false;" role="button">${direction}</a>`;   
+    shiftButton(direction, n){
+        return `<a id="btShiftScale_${this.ControlId}" class="btn btn-primary btn-block btn-small" href="javascript:none" onclick="shiftScale('${direction}', this, ${n}); return false;" role="button">${direction}</a>`;   
+    }
+
+    shiftScale(direction, n){
+        let dir = direction === "+" ? 1 : -1;
+        let scale = this.ScalesMap[n];
+
+        for(let i=0; i<scale.tones.length; i++){
+            scale.tones[i] = this.ChordGen.shiftTone(scale.tones[i], dir);
+            document.getElementById(scale.ids[i]).innerText = scale.tones[i].name;
+        }
     }
 
     printHeader(){
