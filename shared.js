@@ -4,6 +4,13 @@ function clone(src) {
     return {...src};
 }
 
+function getSelectedValue(id){
+    return document.getElementById(id).selectedOptions[0].value;
+}       
+
+function getSelectedValue2(id){
+    return document.getElementById(id).value;
+} 
 
 class ToneMapRecord {
     constructor(controlId, tone){

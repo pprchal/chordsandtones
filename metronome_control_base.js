@@ -19,6 +19,10 @@ class MetronomeControlBase extends BaseControl{
         this.threadId = setInterval(this.beat, this.tstepB, this);
     }
 
+    isRunning(){
+        return this.threadId != undefined;
+    }
+
     beat(metro)
     {
         let t = metro;
