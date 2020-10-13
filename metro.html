@@ -28,28 +28,51 @@
     <style>
         .metroTable {
         border-collapse: collapse;
+        text-align: center;
         }
         .table, td, th {
         border: 1px solid black;
+        }
+
+        .tickA{
+            background-color: rgb(241, 80, 80);
+        }
+
+        .tickB{
+            background-color: rgb(255, 194, 199);
         }
 
     </style>
 </head>
 
 <body>
+    <span>A:</span>
     <select id="cbMetroA" onchange="refreshMetronome()">
         <option>3</option>
         <option>4</option>
+        <option>2</option>
         <option>5</option>
         <option>6</option>
     </select>
+    <span>B:</span>
     <select id="cbMetroB" onchange="refreshMetronome()">
         <option>4</option>
         <option>3</option>
+        <option>8</option>
     </select>
+    <span>BPM:</span>
     <input id="tbBPM" type="text" value="40"></input>
     <a id="btStartStop" class="btn btn-primary btn-block" href="javascript:none" onclick="toggleMetronome(); return false;" role="button">Start</a>   
     <br>
+    <span>syncopation:</span>
+    <select id="cbMetroS" onchange="refreshMetronome()">
+        <option>1</option>
+        <option>2</option>
+        <option>4</option>
+        <option>8</option>
+        <option>16</option>
+    </select>
+
 
     <br>
     <br>
@@ -58,15 +81,18 @@
     <div id="metronomeHolder"></div>                
 
     <script>
+        function refreshMetronome(){
+            let a = parseInt(getSelectedValue('cbMetroA'));
+            let b = parseInt(getSelectedValue('cbMetroB'));
+            let s = parseInt(getSelectedValue('cbMetroS'));
+            let bpm = parseInt(getSelectedValue2('tbBPM'));
+            P_METRONOME.update(a, b, bpm, s);
+        }
+
         this.P_SOUND = new SoundControl('sctl');
-        let P_METRONOME = new MetronomeControlBase(
-            "metronomeHolder", 
-            getSelectedValue('cbMetroA'), 
-            getSelectedValue('cbMetroB'),
-            getSelectedValue2('tbBPM'),
-            P_SOUND
-        );
+        let P_METRONOME = new MetronomeControlBase("metronomeHolder", P_SOUND);
         P_METRONOME.render();
+        refreshMetronome();
     </script>
 
     <script>
@@ -75,13 +101,10 @@
             document.getElementById('btStartStop').innerText = running ? "Stop" : "Start";
         }
 
-        function refreshMetronome(){
-            let a = getSelectedValue('cbMetroA');
-            let b = getSelectedValue('cbMetroB');
-            let bpm = getSelectedValue2('tbBPM')
-            P_METRONOME.update(a, b, bpm);
-        }
     </script>
+
+
+
 </body>
 
 </html>

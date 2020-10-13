@@ -46,4 +46,18 @@ class BaseControl{
     formatDistance(distance) {
         return `${(distance + 1)} - ${this.ChordGen.findInterval(distance).name}`;
     }    
+ 
+}
+
+function setCssClass(control, cssClass, on) {
+    let contains = control.classList.contains(cssClass);
+
+    if (on) {
+        if (!contains)
+            control.classList.add(cssClass);
+    }
+    else {
+        if (contains)
+            control.classList.remove(cssClass);
+    }
 }

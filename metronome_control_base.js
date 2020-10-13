@@ -2,76 +2,67 @@
 // -------------------- MetronomeControl
 // --------------------
 class MetronomeControlBase extends BaseControl{
-    constructor(controlId, metroA, metroB, bpm, sound) {
+    constructor(controlId, sound) {
         super(controlId);
-        this.A = metroA;
-        this.B = metroB;
-        this.idxB = 0;
-        this.running = false;
-        this.bpm = parseInt(bpm);
-        this.controlsA = [];
-        this.controlsB = [];
-        this.CtID = 0;
         this.Sound = sound;
-        this.doba = 0;
     }
 
-
     render() {
+        if(this.A == undefined) {
+            return;
+        }
+
         this.setHtml(this.r());
     }  
 
     start(){
-        let stepA = (60 / this.bpm) * 1000;
-        this.tstepB = stepA / this.B;
-        window.console.debug(`BPM(${this.bpm}) - tick:${stepA}ms - subtick:${this.tstepB}ms`);
-
+        // this.X = 0;
         this.threadId = setInterval(this.beat, this.tstepB, this);
     }
 
     beat(metro)
     {
         let t = metro;
-        let idxA = Math.floor(t.idxB / t.B);
-
+        let synco = Math.min(t.B, t.S);
+        let idxA = Math.floor(t.idxB / synco);
+        let x = t.idxB % synco;
 
         let ctrB = document.getElementById(t.controlsB[t.idxB]); 
-        ctrB.style["background-color"] = "red";
-        ctrB.innerText = t.idxB + ' - ' + new Date().getMilliseconds();
+        // ctrB.style["background-color"] = ;
+        setCssClass(ctrB, 'tickB', true);
+
+
 
         let ctrA = document.getElementById(t.controlsA[idxA]); 
-        ctrA.style["background-color"] = "red";
-        ctrA.innerText = (idxA + 1);
+        if(x === 0){
+            ctrA.style["background-color"] = "red";
+        }
+
+        // idea: fire abstract events here to catch in rendereds (gl, svg,...)
+        // window.console.debug(`A:${idxA}, B:${t.idxB}  =>  X:(${x})`);
 
         t.idxB++;
-        if(t.idxB >= (t.A*t.B)){
+        if(t.idxB >= (t.A * t.S)){
             t.idxB = 0;
         }
 
         // prev B
         if(t.ctrBPrev != null){
-            t.ctrBPrev.style["background-color"] = "";
+            setCssClass(t.ctrBPrev, 'tickB', false);
+            // t.ctrBPrev.style["background-color"] = "";
         }
         t.ctrBPrev = ctrB;
 
         // prev A
-        if(t.ctrAPrev != null){
+        if(t.ctrAPrev != null && x === 0){
             t.ctrAPrev.style["background-color"] = "";
         }
         t.ctrAPrev = ctrA;
-
-        if(t.doba >= t.B)
-        {
-            // bum !
-            t.Sound.playToneWithOctave('G', 4, 'equal-tempered', 400);
-
-            t.doba = 0;
-        }
-        t.doba++;
     }
 
     stop(){
         window.clearInterval(this.threadId);
+        this.threadId = undefined;
     }
     
     toggleStartStop(){
@@ -86,50 +77,75 @@ class MetronomeControlBase extends BaseControl{
     }
 
 
-    update(metroA, metroB, bpm){
-        this.A = parseInt(metroA);
-        this.B = parseInt(metroB);
-        this.bpm = parseInt(bpm);
+    update(metroA, metroB, bpm, metroS){
+        this.bpm = bpm;
+        this.idxB = 0;
+
+        let bigUpdate = false;
+        if((this.A != metroA) || (this.B != metroB) || (this.S != metroS)) {
+            // big update
+            this.CtID = 0;
+            this.controlsA = [];
+            this.controlsB = [];
+            bigUpdate = true;
+        }
+
+        this.A = metroA;
+        this.B = metroB;
+        this.S = metroS;
+        let stepA = (60 / this.bpm) * 1000;
+        this.tstepB = stepA / this.B;
         this.debug(`Updating to: ${metroA}/${metroB} bpm: ${bpm}`);
-        this.setHtml(this.r());
+        window.console.debug(`BPM(${this.bpm}) - tick:${stepA}ms - synco-subtick:${this.tstepB}ms`);
+
+        if(bigUpdate) {
+            this.setHtml(this.r());
+        }
     }
 
     r(){
         return `<table class="metroTable">` +
         `<tr>${this.renderARow()}</tr>` +
-        this.renderBRow() +
+        `<tr>${this.renderBRow()}</tr>` +
         "</table>";
     }
 
     renderARow(){
-        let row = "<tr>";
+        let row = "";
 
         for(let a=0; a<this.A; a++){
             let ctId_A = this.getControlId();
             this.controlsA.push(ctId_A);
-            row += `<td id="${ctId_A}" style="">${(a + 1)}</td>`;
+            row += `<td id="${ctId_A}">${(a + 1)}.</td>`;
         }
 
-        return row + "</tr>";
+        return row;
     }
 
     renderBRow(){
-        let row = "<tr>";
+        let bRow = "";
         for(let a=0; a<this.A; a++){
-            let mini = this.renderSubB();
-            row += `<td>${mini}</td>`;
+            bRow += `<td>${this.renderSubB()}</td>`;
         }
-        return row + "</tr>";
+        return bRow;
     }
 
     renderSubB(){
-        let html = `<table><tr>`;
-
-
-        for(let b=0; b<this.B; b++){
+        if(this.S === 1){
+            // default - no syncopation
             let ctId_B = `B_ctl_${this.getControlId()}`;
             this.controlsB.push(ctId_B);
-            html += `<td id="${ctId_B}">${this.B}</td>`;
+            return `<div id="${ctId_B}">${this.B}</div>`;
+        }
+
+        // subdivide... (1/4), S(2) =>  2 * 1/8 
+        let html = `<table><tr>`;
+        for(let s=0; s<this.S; s++){
+            let ctId_B = `B_ctl_${this.getControlId()}`;
+            this.controlsB.push(ctId_B);
+            let frac = `1/${(this.B * this.S)}<input type="checkbox" name="vehicle1" value="">`;
+
+            html += `<td id="${ctId_B}">${frac}</td>`;
         }
         return html + "</tr></table>";
     }

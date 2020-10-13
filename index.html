@@ -155,18 +155,6 @@
             let running = P_METRONOME.toggleStartStop();
             document.getElementById('btStartStop').innerText = running ? "Stop" : "Start";
         }
-        function setCssClass(control, cssClass, isOn) {
-            let contains = control.classList.contains(cssClass);
-
-            if (isOn) {
-                if (!contains)
-                    control.classList.add(cssClass);
-            }
-            else {
-                if (contains)
-                    control.classList.remove(cssClass);
-            }
-        }
 
         let P_CHORD = undefined;
         function generateSelectedChord() {
