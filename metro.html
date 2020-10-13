@@ -68,6 +68,7 @@
     <select id="cbMetroS" onchange="refreshMetronome()">
         <option>1</option>
         <option>2</option>
+        <option>3</option>
         <option>4</option>
         <option>8</option>
         <option>16</option>
@@ -97,14 +98,15 @@
 
     <script>
         function toggleMetronome() {
-            let running = P_METRONOME.toggleStartStop();
-            document.getElementById('btStartStop').innerText = running ? "Stop" : "Start";
+            if(P_METRONOME.running){
+                P_METRONOME.stop();
+            }else{
+                refreshMetronome();
+                P_METRONOME.start();
+            }
+            document.getElementById('btStartStop').innerText = P_METRONOME.running ? "Stop" : "Start";
         }
-
     </script>
-
-
-
 </body>
 
 </html>

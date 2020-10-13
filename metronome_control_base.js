@@ -16,7 +16,6 @@ class MetronomeControlBase extends BaseControl{
     }  
 
     start(){
-        // this.X = 0;
         this.threadId = setInterval(this.beat, this.tstepB, this);
     }
 
@@ -28,10 +27,7 @@ class MetronomeControlBase extends BaseControl{
         let x = t.idxB % synco;
 
         let ctrB = document.getElementById(t.controlsB[t.idxB]); 
-        // ctrB.style["background-color"] = ;
         setCssClass(ctrB, 'tickB', true);
-
-
 
         let ctrA = document.getElementById(t.controlsA[idxA]); 
         if(x === 0){
@@ -49,7 +45,6 @@ class MetronomeControlBase extends BaseControl{
         // prev B
         if(t.ctrBPrev != null){
             setCssClass(t.ctrBPrev, 'tickB', false);
-            // t.ctrBPrev.style["background-color"] = "";
         }
         t.ctrBPrev = ctrB;
 
@@ -64,18 +59,6 @@ class MetronomeControlBase extends BaseControl{
         window.clearInterval(this.threadId);
         this.threadId = undefined;
     }
-    
-    toggleStartStop(){
-        this.running = !this.running;
-        if(!this.running){
-            this.stop();
-        }
-        else{
-            this.start();
-        }
-        return this.running;
-    }
-
 
     update(metroA, metroB, bpm, metroS){
         this.bpm = bpm;
@@ -135,7 +118,7 @@ class MetronomeControlBase extends BaseControl{
             // default - no syncopation
             let ctId_B = `B_ctl_${this.getControlId()}`;
             this.controlsB.push(ctId_B);
-            return `<div id="${ctId_B}">${this.B}</div>`;
+            return `<div id="${ctId_B}">1/${this.B}</div>`;
         }
 
         // subdivide... (1/4), S(2) =>  2 * 1/8 
@@ -143,7 +126,7 @@ class MetronomeControlBase extends BaseControl{
         for(let s=0; s<this.S; s++){
             let ctId_B = `B_ctl_${this.getControlId()}`;
             this.controlsB.push(ctId_B);
-            let frac = `1/${(this.B * this.S)}<input type="checkbox" name="vehicle1" value="">`;
+            let frac = `1/${(this.B * this.S)}<input type="checkbox" name="n1" value="">`;
 
             html += `<td id="${ctId_B}">${frac}</td>`;
         }
