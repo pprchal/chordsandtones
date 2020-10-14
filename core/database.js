@@ -1,4 +1,4 @@
-// Pavel Prchal 2019
+// Pavel Prchal 2019, 2020
 
 const DB = {
   "chords": [
@@ -203,6 +203,7 @@ const DB = {
   ]
 }
 
-function getDB(){
+function getDB()
+{
   return DB;
 }

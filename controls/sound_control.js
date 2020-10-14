@@ -2,7 +2,7 @@
 
 // -------------------- Sound
 // --------------------
-class SoundControl  extends BaseControl{ 
+class SoundControl extends BaseControl{ 
     constructor(controlId){
         super(controlId);
         this.audioCtx = new(window.AudioContext || window.webkitAudioContext)();

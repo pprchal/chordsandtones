@@ -12,23 +12,36 @@ class PossibleChord {
 // -------------------- ChordGen
 // --------------------
 class ChordGen {
+    constructor(container){
+        // vanila
+        if(container != undefined){
+            this.DB = container.DB;
+        }
+        else{
+            if(window != undefined){
+                this.DB = window.getContainer().DB;
+            }
+    
+        }
+
+    }
     // @chordTemplate
     // @rootTone
     generateChordTableForTone(chordTemplate, rootTone) {
         let chord = clone(chordTemplate);
 
         chord.tones = new Array();
-        let rootIndex = DB.tones.indexOf(rootTone);
+        let rootIndex = this.DB.tones.indexOf(rootTone);
 
         for (let i = 0; i < chord.distances.length; i++) {
             let toneIndex = chord.distances[i] + rootIndex;
             let octave = 0;
-            while(toneIndex >= DB.tones.length) {
+            while(toneIndex >= this.DB.tones.length) {
                 octave++;
-                toneIndex = toneIndex - DB.tones.length;
+                toneIndex = toneIndex - this.DB.tones.length;
             }
 
-            let chordTone = clone(DB.tones[toneIndex]);
+            let chordTone = clone(this.DB.tones[toneIndex]);
             chordTone.octave = octave;
             chord.tones.push(chordTone);
         }
@@ -52,17 +65,17 @@ class ChordGen {
     // @distances[]
     generateScaleTableForDistance(rootTone, distances){
         let scaleTones = new Array();
-        let rootIndex = DB.tones.indexOf(rootTone);            
+        let rootIndex = this.DB.tones.indexOf(rootTone);            
 
         for (let i = 0; i < distances.length; i++) {
             let n = distances[i] + rootIndex;
             let octave = 0;
-            while(n >= DB.tones.length) {
+            while(n >= this.DB.tones.length) {
                 octave++;
-                n = n - DB.tones.length;
+                n = n - this.DB.tones.length;
             }
 
-            let scaleTone = clone(DB.tones[n]);
+            let scaleTone = clone(this.DB.tones[n]);
             scaleTone.octave = octave;
             scaleTones.push(scaleTone);
         }
@@ -74,8 +87,8 @@ class ChordGen {
         let chordRootTone = this.findToneByName(rootTone);
         let res2 = "";
 
-        for(let i=0; i < DB.qround.length; i++){
-            let qr = DB.qround[i];
+        for(let i=0; i < this.DB.qround.length; i++){
+            let qr = this.DB.qround[i];
             if(qr.chord === ""){
                 continue;
             }
@@ -125,9 +138,9 @@ class ChordGen {
         }
 
         let possibleChords = new Array();
-        for(let j =0; j<DB.chords.length; j++){
-            if(this.isMatchingChordDistance(DB.chords[j], distances)){
-                possibleChords.push(DB.chords[j]);
+        for(let j =0; j<this.DB.chords.length; j++){
+            if(this.isMatchingChordDistance(this.DB.chords[j], distances)){
+                possibleChords.push(this.DB.chords[j]);
             }
         }
         return possibleChords;
@@ -138,35 +151,35 @@ class ChordGen {
             return 0;
         }
 
-        let i = DB.tones.indexOf(toneA);
+        let i = this.DB.tones.indexOf(toneA);
         let dist = 0;
 
         do{
             i++;
-            if(i >= DB.tones.length){
+            if(i >= this.DB.tones.length){
                 i = 0;
             }
             dist++;
 
-        }while(!this.isMatchingToneName(DB.tones[i], toneB.name));
+        }while(!this.isMatchingToneName(this.DB.tones[i], toneB.name));
 
         return dist;
     }
 
     shiftTone(rootTone, halfToneOffset){
-        let n = DB.tones.indexOf(rootTone) + halfToneOffset;
+        let n = this.DB.tones.indexOf(rootTone) + halfToneOffset;
         let octave = 0;
 
-        if(n >= DB.tones.length) {
+        if(n >= this.DB.tones.length) {
             octave++;
-            n = n - DB.tones.length;
+            n = n - this.DB.tones.length;
         }
         if( n < 0){
             octave--;
-            n  = DB.tones.length - 1;
+            n  = this.DB.tones.length - 1;
         }
 
-        let clonedTone = clone(DB.tones[n]);
+        let clonedTone = clone(this.DB.tones[n]);
         clonedTone.octave = octave;
         return clonedTone;
     }
@@ -188,24 +201,24 @@ class ChordGen {
 
         let dists = new Array();
         for(let i=0; i < tones.length; i++){
-            dists.push(DB.tones.indexOf(tones[i]));
+            dists.push(this.DB.tones.indexOf(tones[i]));
         }
         
         return dists.join();
     } 
     // @chordName
     findChordByName(chordName) {
-        return DB.chords.find(chord => this.isMatchingChordName(chord, chordName));
+        return this.DB.chords.find(chord => this.isMatchingChordName(chord, chordName));
     }
 
     // @scaleName
     findScaleByName(scaleName) {
-        return DB.scales.find(scale => scale.name === scaleName);
+        return this.DB.scales.find(scale => scale.name === scaleName);
     }
 
     // @harmonicaName
     findHarmonicaByName(harmonicaName) {
-        return DB.harmonicas.find(harmonica => harmonica.name === harmonicaName);
+        return this.DB.harmonicas.find(harmonica => harmonica.name === harmonicaName);
     }
 
     // @chord
@@ -216,12 +229,12 @@ class ChordGen {
 
     // @toneName
     findToneByName(toneName) {
-        return DB.tones.find(tone => ChordGen.isMatchingToneName(tone, toneName));
+        return this.DB.tones.find(tone => ChordGen.isMatchingToneName(tone, toneName));
     }
 
     // @tuningName
     findTuningByName(tuningName) {
-        return DB.tunings.find(tuning => ChordGen.isMatchingToneName(tuning, tuningName));
+        return this.DB.tunings.find(tuning => ChordGen.isMatchingToneName(tuning, tuningName));
     }
 
     // @tone
@@ -236,20 +249,24 @@ class ChordGen {
     
     // @distance
     findInterval(distance) {
-        for (let i=0; i<DB.intervals.length; i++){
-            if(DB.intervals[i].distance == distance){
-                return DB.intervals[i];
+        for (let i=0; i<this.DB.intervals.length; i++){
+            if(this.DB.intervals[i].distance == distance){
+                return this.DB.intervals[i];
             }
         }
 
-        return DB.intervals[0];
+        return this.DB.intervals[0];
     }
 }
 
-if(this != undefined){
-    this.register(ChordGen);
-}
+// if(this != undefined){
+//     this.register(ChordGen);
+// }
 
-function createCho(){
-    return new ChordGen();
+// this.setBean("a", new ChordGen(this));
+function createCho(t){
+    console.debug(t);
+    let chg  = new ChordGen(this);
+    chg.DB = this.DB;
+    return chg;
 }

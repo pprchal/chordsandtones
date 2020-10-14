@@ -53,6 +53,7 @@
     </style>
 
 
+    <script src="core/container.js"></script>
     <script src="core/shared.js"></script>
     <script src="core/database.js"></script>
     <script src="core/chordgen.js"></script>
@@ -250,15 +251,19 @@
             }
         }
 
-        let P_SOUND = new SoundControl('sctl');
+        let P_CONTAINER = new Container();
+        this.getContainer = () => P_CONTAINER;
         
-        let P_METRONOME = new MetronomeControlBase("metronomeHolder", P_SOUND);
+        P_CONTAINER.DB = DB;
+        P_CONTAINER.SOUND = new SoundControl('sctl');
+        
+        let P_METRONOME = new MetronomeControlBase("metronomeHolder", P_CONTAINER.SOUND);
         P_METRONOME.render();
         refreshMetronome();
 
         function playToneWithOctave(toneName, toneOctave, tuningName, appendControlId) {
             document.getElementById(appendControlId).value += toneName;
-            P_SOUND.playToneWithOctave(toneName, toneOctave, tuningName);
+            P_CONTAINER.SOUND.playToneWithOctave(toneName, toneOctave, tuningName);
         }
 
         function shiftScale(direction, sender, n){
