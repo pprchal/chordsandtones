@@ -203,7 +203,6 @@ const DB = {
   ]
 }
 
-
-// const dbm = {};
-// dbm.DB = () => this.DB;
-// module.exports = dbm;
+function getDB(){
+  return DB;
+}

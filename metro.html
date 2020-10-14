@@ -7,12 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
     <title>t</title>
 
-    <script src="shared.js"></script>
-    <script src="database.js"></script>
-    <script src="chordgen.js"></script>
+    <script src="core/shared.js"></script>
+    <script src="core/database.js"></script>
+    <script src="core/chordgen.js"></script>
 
-    <script src="sound_control.js"></script>
-    <script src="metronome_control_base.js"></script>
+    <script src="controls/sound_control.js"></script>
+    <script src="controls/metronome_control_base.js"></script>
 
     <script>
         function getSelectedValue(id){
@@ -94,9 +94,7 @@
         let P_METRONOME = new MetronomeControlBase("metronomeHolder", P_SOUND);
         P_METRONOME.render();
         refreshMetronome();
-    </script>
 
-    <script>
         function toggleMetronome() {
             if(P_METRONOME.running){
                 P_METRONOME.stop();

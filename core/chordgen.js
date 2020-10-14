@@ -246,6 +246,10 @@ class ChordGen {
     }
 }
 
-// const math = {};
-// math.ChordGen = () => new ChordGen();
-// module.exports = math;
+if(this != undefined){
+    this.register(ChordGen);
+}
+
+function createCho(){
+    return new ChordGen();
+}
