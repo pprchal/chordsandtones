@@ -10,9 +10,9 @@ describe('Database consistency', () => {
         assert.equal(12, container.DB.qround.length);
     });
 
-    it('chordgen ok', () => {
-        let b = execfile("core/chordgen.js", container).createCho();
-        let ccc = b.findTuningByName('equal-tempered');
+    it('find tuning ok', () => {
+        let logic = execfile("core/chordgen.js", container).createCho();
+        assert.equal(108, logic.findTuningByName('equal-tempered').frequencies.length);
     });
 });
 

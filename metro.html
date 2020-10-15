@@ -87,22 +87,22 @@
             let b = parseInt(getSelectedValue('cbMetroB'));
             let s = parseInt(getSelectedValue('cbMetroS'));
             let bpm = parseInt(getSelectedValue2('tbBPM'));
-            P_METRONOME.update(a, b, bpm, s);
+            P_CONTAINER.METRONOME.update(a, b, bpm, s);
         }
 
         this.P_SOUND = new SoundControl('sctl');
-        let P_METRONOME = new MetronomeControlBase("metronomeHolder", P_SOUND);
-        P_METRONOME.render();
+        let METRONOME = new MetronomeControlBase("metronomeHolder", P_SOUND);
+        METRONOME.render();
         refreshMetronome();
 
         function toggleMetronome() {
-            if(P_METRONOME.running){
-                P_METRONOME.stop();
+            if(METRONOME.running){
+                METRONOME.stop();
             }else{
                 refreshMetronome();
-                P_METRONOME.start();
+                METRONOME.start();
             }
-            document.getElementById('btStartStop').innerText = P_METRONOME.running ? "Stop" : "Start";
+            document.getElementById('btStartStop').innerText = METRONOME.running ? "Stop" : "Start";
         }
     </script>
 </body>

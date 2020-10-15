@@ -164,15 +164,14 @@
 
     <script>
         function toggleMetronome() {
-            let running = P_METRONOME.toggleStartStop();
+            let running = P_CONTAINER.METRONOME.toggleStartStop();
             document.getElementById('btStartStop').innerText = running ? "Stop" : "Start";
         }
 
-        let P_CHORD = undefined;
         function generateSelectedChord() {
             let chordTypeName = getSelectedValue('cbChordTypes');
-            P_CHORD = new ChordControl('divOutput', chordTypeName)
-            P_CHORD.render();
+            P_CONTAINER.CHORD = new ChordControl('divOutput', chordTypeName)
+            P_CONTAINER.CHORD.render();
         }
 
         function generateSelectedScale() {
@@ -193,10 +192,9 @@
             } );
         }
 
-        let P_SCALE_REVIEW = undefined;
         function fillScalesReview(){
-            P_SCALE_REVIEW = new ScaleReviewControl('divScaleReview', 'tableScalesReview');
-            P_SCALE_REVIEW.render();
+            P_CONTAINER.SCALE_REVIEW = new ScaleReviewControl('divScaleReview', 'tableScalesReview');
+            P_CONTAINER.SCALE_REVIEW.render();
             $('#tableScalesReview').DataTable( {
                 searching: false,
                 paging: false,
@@ -238,27 +236,26 @@
             let b = parseInt(getSelectedValue('cbMetroB'));
             let s = parseInt(getSelectedValue('cbMetroS'));
             let bpm = parseInt(getSelectedValue2('tbBPM'));
-            P_METRONOME.update(a, b, bpm, s);
+            P_CONTAINER.METRONOME.update(a, b, bpm, s);
         }
 
         function toggleMetronome() {
-            document.getElementById('btStartStop').innerText = P_METRONOME.isRunning() ? "Start" : "Stop";
-            if(P_METRONOME.isRunning()){
-                P_METRONOME.stop();
+            document.getElementById('btStartStop').innerText = P_CONTAINER.METRONOME.isRunning() ? "Start" : "Stop";
+            if(P_CONTAINER.METRONOME.isRunning()){
+                P_CONTAINER.METRONOME.stop();
             }else{
                 refreshMetronome();
-                P_METRONOME.start();
+                P_CONTAINER.METRONOME.start();
             }
         }
 
         let P_CONTAINER = new Container();
         this.getContainer = () => P_CONTAINER;
-        
+
         P_CONTAINER.DB = DB;
         P_CONTAINER.SOUND = new SoundControl('sctl');
-        
-        let P_METRONOME = new MetronomeControlBase("metronomeHolder", P_CONTAINER.SOUND);
-        P_METRONOME.render();
+        P_CONTAINER.METRONOME = new MetronomeControlBase("metronomeHolder", P_CONTAINER.SOUND);
+        P_CONTAINER.METRONOME.render();
         refreshMetronome();
 
         function playToneWithOctave(toneName, toneOctave, tuningName, appendControlId) {
