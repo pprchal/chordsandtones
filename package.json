@@ -2,7 +2,6 @@
   "name": "chordsandtones",
   "version": "1.0.0",
   "description": "Learning app for chords, tones and scales",
-  "main": "execfile.js",
   "directories": {
     "test": "test"
   },
@@ -15,7 +14,7 @@
     "type": "git",
     "url": "git+https://github.com/pprchal/chordsandtones.git"
   },
-  "author": "",
+  "author": "Pavel Prchal",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/pprchal/chordsandtones/issues"
