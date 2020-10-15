@@ -67,7 +67,7 @@ class ScaleReviewControl extends BaseControl{
         let scale = this.ScalesMap[n];
 
         for(let i=0; i<scale.tones.length; i++){
-            scale.tones[i] = this.ChordGen.shiftTone(scale.tones[i], dir);
+            scale.tones[i] = this.Core.shiftTone(scale.tones[i], dir);
             document.getElementById(scale.ids[i]).innerText = scale.tones[i].name;
         }
     }

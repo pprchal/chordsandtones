@@ -7,8 +7,8 @@ class HarmonicaControl extends BaseControl {
         super(controlId);
         this.HarmonicaToneId = 1;
         this.ToneMap = [];
-        this.HarpRootTone = this.ChordGen.findToneByName(harpKey);
-        this.Harmonica = this.ChordGen.findHarmonicaByName('Richter diatonická');
+        this.HarpRootTone = this.Core.findToneByName(harpKey);
+        this.Harmonica = this.Core.findHarmonicaByName('Richter diatonická');
     }
 
     render() {
@@ -51,7 +51,7 @@ class HarmonicaControl extends BaseControl {
                 }
                 else{
                     this.HarmonicaToneId = this.HarmonicaToneId + 1;
-                    var harmonicaTone = this.ChordGen.shiftTone(rootTone, offset);
+                    var harmonicaTone = this.Core.shiftTone(rootTone, offset);
                     harmonicaTone.octave = this.getOctaveForHarmonicaTone(rowNumber, 1);
                     let harmonicaToneId = `harmonicaTone_${harmonicaTone.name}_${this.HarmonicaToneId}`;
                     this.ToneMap.push(new ToneMapRecord(harmonicaToneId, harmonicaTone));
@@ -120,6 +120,6 @@ class HarmonicaControl extends BaseControl {
 
     findToneControlIdsByTone(tone) {
         return this.ToneMap
-            .filter(tr => ChordGen.isToneEqual(tr.Tone, tone));
+            .filter(tr => MCore.isToneEqual(tr.Tone, tone));
     }
 }

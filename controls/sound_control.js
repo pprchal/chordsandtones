@@ -22,10 +22,10 @@ class SoundControl extends BaseControl{
     }
 
     playChord(rootNoteName, chordTypeName){
-        let rootNote = this.ChordGen.findToneByName(rootNoteName);
-        let chordType = this.ChordGen.findChordByName(chordTypeName);
+        let rootNote = this.Core.findToneByName(rootNoteName);
+        let chordType = this.Core.findChordByName(chordTypeName);
 
-        let chord = this.ChordGen.generateChordTableForTone(chordType, rootNote);
+        let chord = this.Core.generateChordTableForTone(chordType, rootNote);
         for(let tone of chord.tones){
             this.playNote(this.getFrequency(tone, this.Tuning), 200);
         };
@@ -37,8 +37,8 @@ class SoundControl extends BaseControl{
     }
     
     playToneWithOctave(toneName, toneOctave, tuningName, duration){
-        let index = DB.tones.indexOf(this.ChordGen.findToneByName(toneName)) + (DB.tones.length * toneOctave);
-        let freq = this.ChordGen.findTuningByName(tuningName).frequencies[index];
+        let index = DB.tones.indexOf(this.Core.findToneByName(toneName)) + (DB.tones.length * toneOctave);
+        let freq = this.Core.findTuningByName(tuningName).frequencies[index];
         this.playNote(freq, duration);
         return index;
     }

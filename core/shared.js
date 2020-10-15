@@ -22,8 +22,8 @@ class ToneMapRecord {
 class BaseControl{
     constructor(controlId) {
         this.ControlId = controlId;
-        this.ChordGen = new ChordGen();
-        this.Tuning = this.ChordGen.findTuningByName('equal-tempered');
+        this.Core = new MCore();
+        this.Tuning = this.Core.findTuningByName('equal-tempered');
         this.CtID = 0;
     }
 
@@ -62,7 +62,7 @@ class BaseControl{
     
     // @distance
     formatDistance(distance) {
-        return `${(distance + 1)} - ${this.ChordGen.findInterval(distance).name}`;
+        return `${(distance + 1)} - ${this.Core.findInterval(distance).name}`;
     }    
  
 }

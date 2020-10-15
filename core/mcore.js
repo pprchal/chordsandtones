@@ -1,17 +1,8 @@
-// Pavel Prchal 2019
-// -------------------- PossibleChord
+// Pavel Prchal 2019,209
+// -------------------- MCore
 // --------------------
 
-class PossibleChord {
-    constructor(chord){
-        this.Chord = chord;
-        this.Percent = 0;
-    }
-}
-
-// -------------------- ChordGen
-// --------------------
-class ChordGen {
+class MCore {
     constructor(container){
         // vanila
         if(container != undefined){
@@ -129,23 +120,6 @@ class ChordGen {
         return true;
     }
 
-    findAllPossibleChords(tones){
-        let distances = new Array();
-
-        for(let i = 0; i<tones.length; i++){
-            let distance = this.distanceBetween(tones[0], tones[i]);
-            distances.push(distance);
-        }
-
-        let possibleChords = new Array();
-        for(let j =0; j<this.DB.chords.length; j++){
-            if(this.isMatchingChordDistance(this.DB.chords[j], distances)){
-                possibleChords.push(this.DB.chords[j]);
-            }
-        }
-        return possibleChords;
-    }
-
     distanceBetween(toneA, toneB){
         if(toneA.name == toneB.name){
             return 0;
@@ -184,31 +158,9 @@ class ChordGen {
         return clonedTone;
     }
 
-    guessChordsByTones(rawToneNames){
-        let tones = this.parseTones(rawToneNames);
-        let possibleChords = this.findAllPossibleChords(tones);
-        let textResult = "";
-
-        for(let i=0; i<possibleChords.length; i++){
-            textResult += possibleChords[i].name + "  ";
-        }
-        
-        return textResult;
-    }    
-
-    guessScalesByTones(rawToneNames){
-        let tones = this.parseTones(rawToneNames);
-
-        let dists = new Array();
-        for(let i=0; i < tones.length; i++){
-            dists.push(this.DB.tones.indexOf(tones[i]));
-        }
-        
-        return dists.join();
-    } 
     // @chordName
     findChordByName(chordName) {
-        return this.DB.chords.find(chord => this.isMatchingChordName(chord, chordName));
+        return this.DB.chords.find(chord => MCore.isMatchingChordName(chord, chordName));
     }
 
     // @scaleName
@@ -223,18 +175,18 @@ class ChordGen {
 
     // @chord
     // @chordName
-    isMatchingChordName(chord, chordName) {
+    static isMatchingChordName(chord, chordName) {
         return chord.name === chordName;
     }        
 
     // @toneName
     findToneByName(toneName) {
-        return this.DB.tones.find(tone => ChordGen.isMatchingToneName(tone, toneName));
+        return this.DB.tones.find(tone => MCore.isMatchingToneName(tone, toneName));
     }
 
     // @tuningName
     findTuningByName(tuningName) {
-        return this.DB.tunings.find(tuning => ChordGen.isMatchingToneName(tuning, tuningName));
+        return this.DB.tunings.find(tuning => MCore.isMatchingToneName(tuning, tuningName));
     }
 
     // @tone
@@ -259,14 +211,9 @@ class ChordGen {
     }
 }
 
-// if(this != undefined){
-//     this.register(ChordGen);
-// }
-
-// this.setBean("a", new ChordGen(this));
-function createCho(t){
+function createMCore(t){
     console.debug(t);
-    let chg  = new ChordGen(this);
-    chg.DB = this.DB;
-    return chg;
+    let core = new MCore(this);
+    core.DB = this.DB;
+    return core;
 }

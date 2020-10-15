@@ -56,7 +56,7 @@
     <script src="core/container.js"></script>
     <script src="core/shared.js"></script>
     <script src="core/database.js"></script>
-    <script src="core/chordgen.js"></script>
+    <script src="core/mcore.js"></script>
 
     <script src="controls/scale_control.js"></script>
     <script src="controls/scale_review_control.js"></script>
@@ -308,7 +308,7 @@
         }
 
         function displayCharChords(rootTone, chordType){
-            document.getElementById('divCharChords').innerText = new ChordGen().findCharChords(rootTone);
+            document.getElementById('divCharChords').innerText = new MCore().findCharChords(rootTone);
         }
 
         // -- init ui

@@ -5,13 +5,13 @@ class ChordControl extends BaseControl{
     constructor(controlId, chordTypeName) {
         super(controlId);
         this.ChordToneId = 1;
-        this.ChordType = this.ChordGen.findChordByName(chordTypeName);
+        this.ChordType = this.Core.findChordByName(chordTypeName);
     }
 
     // @chordTypeName (maj7)
     render() {
         // window.console.debug(`Rendering chord table: [${this.ChordType.name}]`);
-        let chordsInType = DB.tones.map(tone => this.ChordGen.generateChordTableForTone(
+        let chordsInType = DB.tones.map(tone => this.Core.generateChordTableForTone(
             this.ChordType,
             tone
         ));

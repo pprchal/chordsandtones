@@ -4,10 +4,10 @@
 class ScaleControl extends BaseControl{
     constructor(controlId, rootToneName, scaleName, appendControlId) {
         super(controlId);
-        this.RootTone = this.ChordGen.findToneByName(rootToneName);
-        this.Scale = this.ChordGen.findScaleByName(scaleName);
+        this.RootTone = this.Core.findToneByName(rootToneName);
+        this.Scale = this.Core.findScaleByName(scaleName);
         this.AppendControlId = appendControlId;
-        this.TonesInScale = new ChordGen().generateScaleTablesForTone(this.RootTone, this.Scale);
+        this.TonesInScale = this.Core.generateScaleTablesForTone(this.RootTone, this.Scale);
     }
 
     // @rootToneName (C)
