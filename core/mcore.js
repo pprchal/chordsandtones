@@ -14,12 +14,16 @@ class MCore {
             }
     
         }
-
     }
+
+    clone(src) {
+        return {...src};
+    }
+    
     // @chordTemplate
     // @rootTone
     generateChordTableForTone(chordTemplate, rootTone) {
-        let chord = clone(chordTemplate);
+        let chord = this.clone(chordTemplate);
 
         chord.tones = new Array();
         let rootIndex = this.DB.tones.indexOf(rootTone);
@@ -32,7 +36,7 @@ class MCore {
                 toneIndex = toneIndex - this.DB.tones.length;
             }
 
-            let chordTone = clone(this.DB.tones[toneIndex]);
+            let chordTone = this.clone(this.DB.tones[toneIndex]);
             chordTone.octave = octave;
             chord.tones.push(chordTone);
         }
@@ -66,7 +70,7 @@ class MCore {
                 n = n - this.DB.tones.length;
             }
 
-            let scaleTone = clone(this.DB.tones[n]);
+            let scaleTone = this.clone(this.DB.tones[n]);
             scaleTone.octave = octave;
             scaleTones.push(scaleTone);
         }
@@ -153,7 +157,7 @@ class MCore {
             n  = this.DB.tones.length - 1;
         }
 
-        let clonedTone = clone(this.DB.tones[n]);
+        let clonedTone = this.clone(this.DB.tones[n]);
         clonedTone.octave = octave;
         return clonedTone;
     }

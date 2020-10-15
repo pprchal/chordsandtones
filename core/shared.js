@@ -1,9 +1,5 @@
 // Pavel Prchal 2019, 2020
 
-function clone(src) {
-    return {...src};
-}
-
 function getSelectedValue(id){
     return document.getElementById(id).selectedOptions[0].value;
 }       
