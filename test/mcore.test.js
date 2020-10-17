@@ -29,6 +29,12 @@ describe('Music math', () => {
         assert.strictEqual("H", tone.name);
     });
 
+    it('shift copied tone down', () => {
+        let clone = mcore.clone(mcore.findToneByName("C#"));
+        let tone = mcore.shiftTone(clone, -1);
+        assert.strictEqual("C", tone.name);
+    });
+
     it('generate scale', () => {
         let rootTone = mcore.findToneByName("C");
         let scale = mcore.findScaleByName("dur");

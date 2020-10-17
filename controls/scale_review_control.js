@@ -30,6 +30,7 @@ class ScaleReviewControl extends BaseControl{
             if(k == i){
                 // render tone
                 let tone = DB.tones[k];
+                scaleRow.tones.push(this.Core.clone(tone));
                 let toneControl = this.createToneControl(tone, scaleRow);
                 arr.push(toneControl);
                 if(j < scaleDistance.length){
@@ -37,7 +38,7 @@ class ScaleReviewControl extends BaseControl{
                 }
             }else{
                 // empty space
-                arr.push("&nbsp");
+                arr.push("&nbsp;");
             }
         }
 
@@ -69,11 +70,17 @@ class ScaleReviewControl extends BaseControl{
 
     shiftScale(direction, n){
         let dir = direction === "+" ? 1 : -1;
-        let scale = this.ScaleRows[n];
+        let scaleRow = this.ScaleRows[n];
 
-        for(let i=0; i<scale.tones.length; i++){
-            scale.tones[i] = this.Core.shiftTone(scale.tones[i], dir);
-            document.getElementById(scale.ids[i]).innerText = scale.tones[i].name;
+        for(let i=0; i<scaleRow.tones.length; i++){
+            let tone = scaleRow.tones[i];
+            tone.octave = 4;
+            let shiftedTone = this.Core.shiftTone(tone, dir);
+            scaleRow.tones[i] = shiftedTone;
+            let control = document.getElementById(scaleRow.ids[i]);
+            tone.octave = 4;
+        
+            control.innerText = shiftedTone.name;
         }
     }
 

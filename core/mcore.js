@@ -143,14 +143,14 @@ class MCore {
     }
 
     shiftTone(rootTone, halfToneOffset){
-        let n = this.DB.tones.indexOf(rootTone) + halfToneOffset;
+        let n = this.findIndex(rootTone) + halfToneOffset;
         let octave = 0;
 
         if(n >= this.DB.tones.length) {
             octave++;
             n = n - this.DB.tones.length;
         }
-        if( n < 0){
+        if(n < 0){
             octave--;
             n  = this.DB.tones.length - 1;
         }
@@ -158,6 +158,17 @@ class MCore {
         let clonedTone = this.clone(this.DB.tones[n]);
         clonedTone.octave = octave;
         return clonedTone;
+    }
+
+    findIndex(tone){
+        for(let i=0; i < this.DB.tones.length; i++)
+        {
+            if(MCore.isToneEqual(this.DB.tones[i], tone)){
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     // @chordName
