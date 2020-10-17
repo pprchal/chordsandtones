@@ -4,7 +4,7 @@
 class ScaleReviewControl extends BaseControl{
     constructor(controlId) {
         super(controlId);
-        this.ScalesMap = []
+        this.ScaleRows = []
     }
 
     render(){
@@ -15,39 +15,44 @@ class ScaleReviewControl extends BaseControl{
     }
 
     renderScale(scale){
-        let scaleMap = {
+        let scaleRow = {
             name: scale.name,
             tones: [],
             ids: []
         };
-        this.ScalesMap.push(scaleMap);
-
-
-        let arr = this.prepareArrByTones();
+        this.ScaleRows.push(scaleRow);
         let scaleDistance = scale.distances[0];
 
-        for(let i = 0; i<arr.length; i++){
-            if(i < scaleDistance.length){
-                let tone = DB.tones[scaleDistance[i]];
-                arr[scaleDistance[i]] = tone.name;
-                scaleMap.tones.push(tone);
-            }
-            else{
-                this.debug('???');
+        let arr = [];
+        let j = 0;
+        for(let i=0; i<DB.tones.length; i++){
+            let k = scaleDistance[j];
+            if(k == i){
+                // render tone
+                let tone = DB.tones[k];
+                let toneControl = this.createToneControl(tone, scaleRow);
+                arr.push(toneControl);
+                if(j < scaleDistance.length){
+                    j++;
+                }
+            }else{
+                // empty space
+                arr.push("&nbsp");
             }
         }
 
-        let n = this.ScalesMap.length-1;
-        arr = [`${(this.shiftButton('-', n))}${(this.shiftButton('+', n))}`, ...arr]
-        return `<tr><td>${scale.name}</td>` + 
-            arr.reduce((a, x) =>  a + this.createToneControl(x, scaleMap), "") +
-            "</tr>";
+        let n = this.ScaleRows.length-1;
+        arr = [`${(this.shiftButton('&lt;', n))}&nbsp;&nbsp;${(this.shiftButton('&gt;', n))}`, ...arr]
+        return "<tr>" +
+            `<td>${scale.name}</td>` + 
+            arr.reduce((html, x) =>  html + `<td>${x}</td>`, "") +
+        "</tr>";
     }
 
-    createToneControl(x, scaleMap){
+    createToneControl(tone, scaleRow){
         let ctid = this.getControlId("tn");
-        scaleMap.ids.push(ctid);
-        return `<td id="${ctid}">${x}</td>`;
+        scaleRow.ids.push(ctid);
+        return `<td id="${ctid}">${tone.name}</td>`;
     }
 
     prepareArrByTones() {
@@ -59,12 +64,12 @@ class ScaleReviewControl extends BaseControl{
     }
 
     shiftButton(direction, n){
-        return `<a id="btShiftScale_${this.ControlId}" class="btn btn-primary btn-block btn-small" href="javascript:none" onclick="shiftScale('${direction}', this, ${n}); return false;" role="button">${direction}</a>`;   
+        return `<a id="btShiftScale_${this.ControlId}"  href="javascript:none" onclick="shiftScale('${direction}', this, ${n}); return false;" role="button">${direction}</a>`;   
     }
 
     shiftScale(direction, n){
         let dir = direction === "+" ? 1 : -1;
-        let scale = this.ScalesMap[n];
+        let scale = this.ScaleRows[n];
 
         for(let i=0; i<scale.tones.length; i++){
             scale.tones[i] = this.Core.shiftTone(scale.tones[i], dir);

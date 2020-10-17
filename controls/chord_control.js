@@ -1,6 +1,6 @@
 // Pavel Prchal 2019, 2020
 // -------------------- ChordControl
-// --------------------
+
 class ChordControl extends BaseControl{
     constructor(controlId, chordTypeName) {
         super(controlId);
@@ -11,10 +11,9 @@ class ChordControl extends BaseControl{
     // @chordTypeName (maj7)
     render() {
         // window.console.debug(`Rendering chord table: [${this.ChordType.name}]`);
-        let chordsInType = DB.tones.map(tone => this.Core.generateChordTableForTone(
-            this.ChordType,
-            tone
-        ));
+        let chordsInType = DB.tones.map(tone => 
+            this.Core.generateChordTableForTone(this.ChordType, tone)
+        );
 
         this.setHtml(this.printChordTable(chordsInType, this.ChordType));
     }  

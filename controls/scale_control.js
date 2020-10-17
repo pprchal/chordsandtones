@@ -4,9 +4,9 @@
 class ScaleControl extends BaseControl{
     constructor(controlId, rootToneName, scaleName, appendControlId) {
         super(controlId);
-        this.RootTone = this.Core.findToneByName(rootToneName);
         this.Scale = this.Core.findScaleByName(scaleName);
         this.AppendControlId = appendControlId;
+        this.RootTone = this.Core.findToneByName(rootToneName);
         this.TonesInScale = this.Core.generateScaleTablesForTone(this.RootTone, this.Scale);
     }
 

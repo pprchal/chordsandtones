@@ -6,13 +6,13 @@ container.DB = execfile("core/database.js", { container }).getDB();
 
 describe('Database consistency', () => {
     it('load ok', () => {
-        assert.equal(12, container.DB.tones.length);
-        assert.equal(12, container.DB.qround.length);
+        assert.strictEqual(12, container.DB.tones.length);
+        assert.strictEqual(12, container.DB.qround.length);
     });
 
     it('find tuning ok', () => {
         let mcore = execfile("core/mcore.js", container).createMCore();
-        assert.equal(108, mcore.findTuningByName('equal-tempered').frequencies.length);
+        assert.strictEqual(108, mcore.findTuningByName('equal-tempered').frequencies.length);
     });
 });
 

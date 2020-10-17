@@ -1,6 +1,5 @@
 // Pavel Prchal 2019,209
 // -------------------- MCore
-// --------------------
 
 class MCore {
     constructor(container){
@@ -12,7 +11,6 @@ class MCore {
             if(window != undefined){
                 this.DB = window.getContainer().DB;
             }
-    
         }
     }
 
