@@ -15,7 +15,13 @@ class MCore {
     }
 
     clone(src) {
-        return {...src};
+        let obj = {...src};
+        return obj;
+    }
+
+    toneAsHtml(tone){
+        // D♯
+        return tone.name.replace('#', '<sup>&#9839;</sup>');
     }
     
     // @chordTemplate
@@ -77,7 +83,7 @@ class MCore {
     }
 
     findCharChords(rootTone){
-        let chordRootTone = this.findToneByName(rootTone);
+        let chordRootTone = this.tone(rootTone);
         let res2 = "";
 
         for(let i=0; i < this.DB.qround.length; i++){
@@ -91,19 +97,6 @@ class MCore {
         }
 
         return res2;
-    }
-
-    parseTones(rawToneNames){
-        let tones = new Array();
-        let split = rawToneNames.split(" ");
-
-        for(let i = 0; i < split.length; i++){
-            let tone = this.findToneByName(split[i]);
-            if(tone != null){
-                tones.push(tone);
-            }
-        }
-        return tones;        
     }
 
     // @chord
@@ -122,28 +115,8 @@ class MCore {
         return true;
     }
 
-    distanceBetween(toneA, toneB){
-        if(toneA.name == toneB.name){
-            return 0;
-        }
-
-        let i = this.DB.tones.indexOf(toneA);
-        let dist = 0;
-
-        do{
-            i++;
-            if(i >= this.DB.tones.length){
-                i = 0;
-            }
-            dist++;
-
-        }while(!this.isMatchingToneName(this.DB.tones[i], toneB.name));
-
-        return dist;
-    }
-
-    shiftTone(rootTone, halfToneOffset){
-        let n = this.findIndex(rootTone) + halfToneOffset;
+    shiftTone(rootTone, distance){
+        let n = this.indexOfTone(rootTone) + distance;
         let octave = 0;
 
         if(n >= this.DB.tones.length) {
@@ -160,7 +133,7 @@ class MCore {
         return clonedTone;
     }
 
-    findIndex(tone){
+    indexOfTone(tone){
         for(let i=0; i < this.DB.tones.length; i++)
         {
             if(MCore.isToneEqual(this.DB.tones[i], tone)){
@@ -171,19 +144,30 @@ class MCore {
         return -1;
     }
 
+    // =================================  FIND 
     // @chordName
-    findChordByName(chordName) {
+    chord(chordName) {
         return this.DB.chords.find(chord => MCore.isMatchingChordName(chord, chordName));
     }
 
     // @scaleName
-    findScaleByName(scaleName) {
-        return this.DB.scales.find(scale => scale.name === scaleName);
+    scale(scaleName) {
+        return this.DB.scales.find(scale => MCore.isMatchingScaleName(scale, scaleName));
     }
 
+    // @toneName
+    tone(toneName) {
+        return this.clone(this.DB.tones.find(tone => MCore.isMatchingToneName(tone, toneName)));
+    }
+
+    // @tuningName
+    tuning(tuningName) {
+        return this.DB.tunings.find(tuning => MCore.isMatchingTuningName(tuning, tuningName));
+    }
+    
     // @harmonicaName
-    findHarmonicaByName(harmonicaName) {
-        return this.DB.harmonicas.find(harmonica => harmonica.name === harmonicaName);
+    harmonica(harmonicaName) {
+        return this.DB.harmonicas.find(harmonica => MCore.isMatchingHarmonicaName(harmonica, harmonicaName));
     }
 
     // @chord
@@ -192,21 +176,29 @@ class MCore {
         return chord.name === chordName;
     }        
 
-    // @toneName
-    findToneByName(toneName) {
-        return this.DB.tones.find(tone => MCore.isMatchingToneName(tone, toneName));
-    }
-
-    // @tuningName
-    findTuningByName(tuningName) {
-        return this.DB.tunings.find(tuning => MCore.isMatchingToneName(tuning, tuningName));
-    }
-
     // @tone
     // @toneName
     static isMatchingToneName(tone, toneName) {
         return tone.name === toneName;
-    }     
+    }    
+    
+    // @tuning
+    // @tuningName
+    static isMatchingTuningName(tuning, tuningName) {
+        return tuning.name === tuningName;
+    } 
+
+    // @scale
+    // @scaleName
+    static isMatchingScaleName(scale, scaleName) {
+        return scale.name === scaleName;
+    }  
+    
+    // @harmonica
+    // @harmonicaName
+    static isMatchingHarmonicaName(harmonica, harmonicaName) {
+        return harmonica.name === harmonicaName;
+    }  
 
     static isToneEqual(tone1, tone2) {
         return tone1.name === tone2.name;

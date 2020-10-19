@@ -4,9 +4,9 @@
 class ScaleControl extends BaseControl{
     constructor(controlId, rootToneName, scaleName, appendControlId) {
         super(controlId);
-        this.Scale = this.Core.findScaleByName(scaleName);
+        this.Scale = this.Core.scale(scaleName);
         this.AppendControlId = appendControlId;
-        this.RootTone = this.Core.findToneByName(rootToneName);
+        this.RootTone = this.Core.tone(rootToneName);
         this.TonesInScale = this.Core.generateScaleTablesForTone(this.RootTone, this.Scale);
     }
 
@@ -30,7 +30,7 @@ class ScaleControl extends BaseControl{
 
     printTonesHeader(){
         return "<tr><td>&nbsp;</td>" +
-            DB.tones.reduce((html, tone) => html + `<th>${this.formatHtmlTone(tone)}</th>`, "") +
+            DB.tones.reduce((html, tone) => html + `<th>${this.Core.toneAsHtml(tone)}</th>`, "") +
         "</tr>";
     }
 

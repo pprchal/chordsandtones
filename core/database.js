@@ -191,13 +191,13 @@ const DB = {
           "name": "Richter diatonická",
           "startOctave": 3,
           "template" : [
-             { "name": "1",         "type": "+", "offsets": [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 10 ] },
-             { "name": "1/2",       "type": "+", "offsets": [NaN, NaN, NaN, NaN, NaN, NaN, NaN, 3,   6,   11 ] },
-             { "name": "výdech",    "type": "+", "offsets": [0,   4,   7,   0,   4,   7,   0,   4,   7,   0  ] },
-             { "name": "nádech",    "type": "-", "offsets": [2,   7,   11,  2,   5,   9,   11,  2,   5,   9  ] },
-             { "name": "1/2",       "type": "-", "offsets": [1,   6,   10,  1,   NaN, 8  , NaN, NaN, NaN, NaN] },
-             { "name": "1",         "type": "-", "offsets": [NaN, 5,   9,   NaN, NaN, NaN, NaN, NaN, NaN, NaN] },
-             { "name": "1 1/2",     "type": "-", "offsets": [NaN, NaN, 8,   NaN, NaN, NaN, NaN, NaN, NaN, NaN] }
+             { "name": "1",         "type": "+", "distances": [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 10 ] },
+             { "name": "1/2",       "type": "+", "distances": [NaN, NaN, NaN, NaN, NaN, NaN, NaN, 3,   6,   11 ] },
+             { "name": "výdech",    "type": "+", "distances": [0,   4,   7,   0,   4,   7,   0,   4,   7,   0  ] },
+             { "name": "nádech",    "type": "-", "distances": [2,   7,   11,  2,   5,   9,   11,  2,   5,   9  ] },
+             { "name": "1/2",       "type": "-", "distances": [1,   6,   10,  1,   NaN, 8  , NaN, NaN, NaN, NaN] },
+             { "name": "1",         "type": "-", "distances": [NaN, 5,   9,   NaN, NaN, NaN, NaN, NaN, NaN, NaN] },
+             { "name": "1 1/2",     "type": "-", "distances": [NaN, NaN, 8,   NaN, NaN, NaN, NaN, NaN, NaN, NaN] }
           ]
       }
   ]

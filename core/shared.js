@@ -19,7 +19,7 @@ class BaseControl{
     constructor(controlId) {
         this.ControlId = controlId;
         this.Core = new MCore();
-        this.Tuning = this.Core.findTuningByName('equal-tempered');
+        this.Tuning = this.Core.tuning('equal-tempered');
         this.CtID = 0;
     }
 
@@ -41,21 +41,11 @@ class BaseControl{
         // window.console.debug(msg);
     }
 
-    // @chord
-    formatChordName(chord) {
-        return this.formatHtmlTone(chord.rootTone);
-    }       
-
     // @tone
     formatPlainTone(tone) {
         return tone.name;
     }     
 
-    formatHtmlTone(tone){
-        // D♯
-        return tone.name.replace('#', '<sup>&#9839;</sup>');
-    }
-    
     // @distance
     formatDistance(distance) {
         return `${(distance + 1)} - ${this.Core.findInterval(distance).name}`;

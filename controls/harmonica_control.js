@@ -7,8 +7,8 @@ class HarmonicaControl extends BaseControl {
         super(controlId);
         this.HarmonicaToneId = 1;
         this.ToneMap = [];
-        this.HarpRootTone = this.Core.findToneByName(harpKey);
-        this.Harmonica = this.Core.findHarmonicaByName('Richter diatonická');
+        this.HarpRootTone = this.Core.tone(harpKey);
+        this.Harmonica = this.Core.harmonica('Richter diatonická');
     }
 
     render() {
@@ -45,18 +45,18 @@ class HarmonicaControl extends BaseControl {
         return "<tr>" +
             `<td>${this.formatHarmonicaRowTitle(row)}</td>` +
             `<td>${row.type}</td>` +
-            row.offsets.reduce((html, offset) => {
-                if(isNaN(offset)){
+            row.distances.reduce((html, distance) => {
+                if(isNaN(distance)){
                     return html + "<td>&nbsp;</td>";
                 }
                 else{
                     this.HarmonicaToneId = this.HarmonicaToneId + 1;
-                    var harmonicaTone = this.Core.shiftTone(rootTone, offset);
+                    var harmonicaTone = this.Core.shiftTone(rootTone, distance);
                     harmonicaTone.octave = this.getOctaveForHarmonicaTone(rowNumber, 1);
                     let harmonicaToneId = `harmonicaTone_${harmonicaTone.name}_${this.HarmonicaToneId}`;
                     this.ToneMap.push(new ToneMapRecord(harmonicaToneId, harmonicaTone));
                     this.debug(`${harmonicaTone.name} - ${harmonicaToneId}`);
-                    return html + `<td id="${harmonicaToneId}">${this.formatHtmlTone(harmonicaTone)}</td>`;
+                    return html + `<td id="${harmonicaToneId}">${this.Core.toneAsHtml(harmonicaTone)}</td>`;
                 }
             }, "") +
         "</tr>";
@@ -81,7 +81,7 @@ class HarmonicaControl extends BaseControl {
         let html = "<tr>" +
             "<td></td><td></td>";
 
-        for (let i =0; i<harmonica.template[0].offsets.length; i++) {
+        for (let i =0; i<harmonica.template[0].distances.length; i++) {
             html += `<th>${(i+1)}</th>`;
         }
 

@@ -5,7 +5,7 @@ class ChordControl extends BaseControl{
     constructor(controlId, chordTypeName) {
         super(controlId);
         this.ChordToneId = 1;
-        this.ChordType = this.Core.findChordByName(chordTypeName);
+        this.ChordType = this.Core.chord(chordTypeName);
     }
 
     // @chordTypeName (maj7)
@@ -44,7 +44,7 @@ class ChordControl extends BaseControl{
             {
                 html += `<td>${this.renderChordButton(chord)}</td>`;
             }else{
-                html += `<td id="chordTone_${this.ChordToneId}">${this.formatHtmlTone(tone)}</td>`;
+                html += `<td id="chordTone_${this.ChordToneId}">${this.Core.toneAsHtml(tone)}</td>`;
             }
             this.ChordToneId++;
         }

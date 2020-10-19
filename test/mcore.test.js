@@ -10,8 +10,8 @@ let mcore = execfile("core/mcore.js", container).createMCore();
 
 describe('Music math', () => {
     it('generate chord', () => {
-        let tone = mcore.findToneByName('F#');
-        let chordType = mcore.findChordByName('dur');
+        let tone = mcore.tone('F#');
+        let chordType = mcore.chord('dur');
         let chord = mcore.generateChordTableForTone(chordType, tone);
         
         assert.strictEqual("F#", chord.tones[0].name);
@@ -20,26 +20,34 @@ describe('Music math', () => {
     });
 
     it('shift tone up', () => {
-        let tone = mcore.shiftTone(mcore.findToneByName("C"), 12);
+        let tone = mcore.shiftTone(mcore.tone("C"), 12);
         assert.strictEqual("C", tone.name);
     });
 
     it('shift tone down', () => {
-        let tone = mcore.shiftTone(mcore.findToneByName("C"), -1);
+        let tone = mcore.shiftTone(mcore.tone("C"), -1);
         assert.strictEqual("H", tone.name);
     });
 
     it('shift copied tone down', () => {
-        let clone = mcore.clone(mcore.findToneByName("C#"));
+        let clone = mcore.clone(mcore.tone("C#"));
         let tone = mcore.shiftTone(clone, -1);
         assert.strictEqual("C", tone.name);
     });
 
     it('generate scale', () => {
-        let rootTone = mcore.findToneByName("C");
-        let scale = mcore.findScaleByName("dur");
-        let tonesInScale = mcore.generateScaleTablesForTone(rootTone, scale)[0].map(tone => tone.name);
-        assert.notStrictEqual(["C", "D", "E", "F","G","A","H"], tonesInScale);
+        let scale = mcore.scale("dur");
+        let tonesInScale = mcore.generateScaleTablesForTone(mcore.tone("C"), scale)[0].reduce((tones, tone) => tones + tone.name, "");
+        assert.strictEqual("CDEFGAH", tonesInScale);
     });
+
+//     it('format ok', () => {
+//         let tone = mcore.tone("C#");
+
+//         let ht = tone.asHtml();
+//         console.debug(ht);
+// //        assert.strictEqual("CDEFGAH", tonesInScale);
+//     });
+
 });
 

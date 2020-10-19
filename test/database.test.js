@@ -12,7 +12,7 @@ describe('Database consistency', () => {
 
     it('find tuning ok', () => {
         let mcore = execfile("core/mcore.js", container).createMCore();
-        assert.strictEqual(108, mcore.findTuningByName('equal-tempered').frequencies.length);
+        assert.strictEqual(108, mcore.tuning('equal-tempered').frequencies.length);
     });
 });
 
