@@ -54,7 +54,7 @@ class ChordControl extends BaseControl{
 
     renderChordButton(chord){
         let script = `displayCharChords('${chord.rootTone.name}', '${chord.name}')`;
-        return `<a class="btn btn-primary btn-block" href="javascript:none" onclick="${script}; return false;" role="button">${this.formatPlainTone(chord.rootTone)}</a>`;
+        return `<a class="btn btn-primary btn-block" href="javascript:none" onclick="${script}; return false;" role="button">${this.Core.toneAsText(chord.rootTone)}</a>`;
     }
 
 }

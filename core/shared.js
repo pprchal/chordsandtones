@@ -41,11 +41,6 @@ class BaseControl{
         // window.console.debug(msg);
     }
 
-    // @tone
-    formatPlainTone(tone) {
-        return tone.name;
-    }     
-
     // @distance
     formatDistance(distance) {
         return `${(distance + 1)} - ${this.Core.findInterval(distance).name}`;

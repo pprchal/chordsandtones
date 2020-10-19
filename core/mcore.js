@@ -23,6 +23,11 @@ class MCore {
         // D♯
         return tone.name.replace('#', '<sup>&#9839;</sup>');
     }
+
+    // @tone
+    toneAsText(tone) {
+        return tone.name;
+    } 
     
     // @chordTemplate
     // @rootTone
@@ -30,7 +35,7 @@ class MCore {
         let chord = this.clone(chordTemplate);
 
         chord.tones = new Array();
-        let rootIndex = this.DB.tones.indexOf(rootTone);
+        let rootIndex = this.indexOfTone(rootTone);
 
         for (let i = 0; i < chord.distances.length; i++) {
             let toneIndex = chord.distances[i] + rootIndex;
@@ -64,7 +69,7 @@ class MCore {
     // @distances[]
     generateScaleTableForDistance(rootTone, distances){
         let scaleTones = new Array();
-        let rootIndex = this.DB.tones.indexOf(rootTone);            
+        let rootIndex = this.indexOfTone(rootTone);            
 
         for (let i = 0; i < distances.length; i++) {
             let n = distances[i] + rootIndex;
