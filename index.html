@@ -264,8 +264,9 @@
         P_CONTAINER.METRONOME.render();
         refreshMetronome();
 
-        function playToneWithOctave(toneName, toneOctave, tuningName, appendControlId) {
-            document.getElementById(appendControlId).value += toneName;
+        function playToneWithOctave(toneName, toneOctave, tuningName, appendControlId, tt) {
+            // document.getElementById(appendControlId).value += toneName;
+            console.debug("*** " + tt);
             P_CONTAINER.SOUND.playToneWithOctave(toneName, toneOctave, tuningName);
         }
 

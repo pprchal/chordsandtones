@@ -44,7 +44,7 @@ export class ScaleControl extends BaseControl{
     } 
 
     renderScaleButton(tone){
-        let script = `playToneWithOctave('${tone.name}', '${tone.octave}', '${this.Tuning.name}', '${this.AppendControlId}')`;
+        let script = `playToneWithOctave('${tone.name}', '${tone.octave}', '${this.Tuning.name}', '${this.AppendControlId}', event)`;
         return `<a class="btn btn-primary btn-block" href="javascript:none" onclick="${script}; return false;" role="button">${this.Core.toneAsText(tone)}</a>`;
     }
 

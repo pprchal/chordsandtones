@@ -1,22 +1,11 @@
 // Pavel Prchal 2019,209
 // -------------------- MCore
 
-import {DB} from './leaflet.js'
+import {DB} from "./leaflet.js"
 
 export class MCore {
-    // constructor(container){
     constructor(){
         this.DB = DB;
-        console.debug(`MCore using leaflet: ${DB.version}`);
-        // // vanila
-        // if(container != undefined){
-        //     this.DB = container.DB;
-        // }
-        // else{
-        //     if(window != undefined){
-        //         this.DB = window.getContainer().DB;
-        //     }
-        // }
     }
 
     clone(src) {
@@ -226,9 +215,9 @@ export class MCore {
     }
 }
 
-function createMCore(t){
-    console.debug(t);
-    let core = new MCore(this);
-    core.DB = this.DB;
-    return core;
-}
+// function createMCore(t){
+//     console.debug(t);
+//     let core = new MCore(this);
+//     core.DB = this.DB;
+//     return core;
+// }
