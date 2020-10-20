@@ -151,21 +151,30 @@
     </script>
 
     <script type="module">
-        import {Container} from './core/container.js'
+        import { Container } from './core/container.js'
         P_CONTAINER = new Container();
-        import {getSelectedValue, getSelectedValue2} from './core/shared.js'
-        import {DB} from './core/leaflet.js'
-        import {MCore} from './core/mcore.js'
+        import { getSelectedValue, getSelectedValue2, setCssClass } from './core/shared.js'
+        import { DB } from './core/leaflet.js'
+        import { MCore } from './core/mcore.js'
         P_CONTAINER.MCore = MCore;
 
-        import {ChordControl} from './controls/chord_control.js'
-        import {ChordReviewControl} from './controls/chord_review_control.js'
-        import {ScaleControl} from './controls/scale_control.js'
-        import {ScaleReviewControl} from './controls/scale_review_control.js'
-        import {MetronomeControlBase} from './controls/metronome_control_base.js'
-        import {MetronomeControl} from './controls/metronome_control.js'
-        import {HarmonicaControl} from './controls/harmonica_control.js'
-        import {SoundControl} from './controls/sound_control.js'
+        import { ChordControl } from './controls/chord_control.js'
+        import { ChordReviewControl } from './controls/chord_review_control.js'
+        import { ScaleControl } from './controls/scale_control.js'
+        import { ScaleReviewControl } from './controls/scale_review_control.js'
+        import { MetronomeControlBase } from './controls/metronome_control_base.js'
+        import { MetronomeControl } from './controls/metronome_control.js'
+        import { HarmonicaControl } from './controls/harmonica_control.js'
+        import { SoundControl } from './controls/sound_control.js'
+
+        window.displayCharChords = displayCharChords;
+        window.playToneWithOctave = playToneWithOctave;
+        window.refreshHarp = refreshHarp;
+        window.toggleMetronome = toggleMetronome;
+        window.refreshMetronome = refreshMetronome;
+        window.shiftScale = shiftScale;
+        window.refreshChords = refreshChords;
+        window.setCssClass = setCssClass;
 
         function toggleMetronome() {
             document.getElementById('btStartStop').innerText = P_CONTAINER.METRONOME.isRunning() ? "Start" : "Stop";
@@ -305,7 +314,7 @@
         }
 
         function displayCharChords(rootTone, chordType){
-            document.getElementById('divCharChords').innerText = P_CONTAINER.MCore().findCharChords(rootTone);
+            document.getElementById('divCharChords').innerText = new MCore().findCharChords(rootTone);
         }
 
         // -- init ui
