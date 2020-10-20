@@ -1,6 +1,6 @@
 // Pavel Prchal 2019, 2020
 
-const DB = {
+export const DB = {
   version: "1.3",
   chords: [
     { name: "dur",  distances: [ 0, 4, 7 ], families: ["dur"] },
@@ -104,9 +104,4 @@ const DB = {
       ]
     }
   ]
-}
-
-function getDB()
-{
-  return DB;
 }

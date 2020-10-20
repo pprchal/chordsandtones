@@ -45,7 +45,7 @@ class HarmonicaControl extends BaseControl {
         return "<tr>" +
             `<td>${this.formatHarmonicaRowTitle(row)}</td>` +
             `<td>${row.type}</td>` +
-            row.distances.reduce((html, distance) => {
+            row.offsets.reduce((html, distance) => {
                 if(isNaN(distance)){
                     return html + "<td>&nbsp;</td>";
                 }
@@ -81,7 +81,7 @@ class HarmonicaControl extends BaseControl {
         let html = "<tr>" +
             "<td></td><td></td>";
 
-        for (let i =0; i<harmonica.template[0].distances.length; i++) {
+        for (let i =0; i<harmonica.template[0].offsets.length; i++) {
             html += `<th>${(i+1)}</th>`;
         }
 
