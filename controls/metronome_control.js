@@ -1,7 +1,9 @@
 // Pavel Prchal 2020
 // -------------------- MetronomeControl
 // --------------------
-class MetronomeControl extends MetronomeControlBase{
+import {MetronomeControlBase} from "./metronome_control_base.js"
+
+export class MetronomeControl extends MetronomeControlBase{
     constructor(controlId, holderId, metroA, metroB, bpm, sound) {
         super(controlId, metroA, metroB, bpm);
         this.r = Raphael(holderId, 640, 480);

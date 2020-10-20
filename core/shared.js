@@ -1,21 +1,24 @@
 // Pavel Prchal 2019, 2020
 
-function getSelectedValue(id){
+import {MCore} from "./mcore.js"
+
+
+export function getSelectedValue(id){
     return document.getElementById(id).selectedOptions[0].value;
 }       
 
-function getSelectedValue2(id){
+export function getSelectedValue2(id){
     return document.getElementById(id).value;
 } 
 
-class ToneMapRecord {
+export class ToneMapRecord {
     constructor(controlId, tone){
         this.ControlId = controlId;
         this.Tone = tone;
     }
 }
 
-class BaseControl{
+export class BaseControl{
     constructor(controlId) {
         this.ControlId = controlId;
         this.Core = new MCore();
@@ -48,7 +51,7 @@ class BaseControl{
  
 }
 
-function setCssClass(control, cssClass, on) {
+export function setCssClass(control, cssClass, on) {
     let contains = control.classList.contains(cssClass);
 
     if (on) {

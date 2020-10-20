@@ -2,7 +2,12 @@
 
 // -------------------- HarmonicaControl
 // --------------------
-class HarmonicaControl extends BaseControl {
+import {MCore} from "../core/mcore.js"
+import {BaseControl} from "../core/shared.js"
+import {ToneMapRecord, setCssClass} from "../core/shared.js"
+
+
+export class HarmonicaControl extends BaseControl {
     constructor(controlId, harpKey) {
         super(controlId);
         this.HarmonicaToneId = 1;

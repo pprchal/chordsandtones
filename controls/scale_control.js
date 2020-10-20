@@ -1,7 +1,9 @@
 // Pavel Prchal 2020
 // -------------------- ScaleControl
 // --------------------
-class ScaleControl extends BaseControl{
+import {BaseControl} from "../core/shared.js"
+
+export class ScaleControl extends BaseControl{
     constructor(controlId, rootToneName, scaleName, appendControlId) {
         super(controlId);
         this.Scale = this.Core.scale(scaleName);

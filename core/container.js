@@ -1,4 +1,4 @@
-class Container
+export class Container
 {
     constructor(){
         this.beans = new Map();
@@ -19,9 +19,8 @@ class Container
 }
 
 
-function createContainer(){
+export function createContainer(){
     let c = new Container();
-    // c.beans['x'] = this;
     return c;
 }
 

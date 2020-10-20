@@ -2,7 +2,9 @@
 
 // -------------------- Sound
 // --------------------
-class SoundControl extends BaseControl{ 
+import {BaseControl} from "../core/shared.js"
+
+export class SoundControl extends BaseControl{ 
     constructor(controlId){
         super(controlId);
         this.audioCtx = new(window.AudioContext || window.webkitAudioContext)();
