@@ -152,22 +152,22 @@
     </script>
 
     <script type="module">
-        import { Container } from "./core/container.mjs"
+        import { Container } from "./core/container.mjs";
         P_CONTAINER = new Container();
-        import { getSelectedValue, getSelectedValue2, setCssClass } from "./core/shared.mjs"
-        import { DB } from "./core/leaflet.mjs"
-        import { MCore } from "./core/mcore.mjs"
+        import { getSelectedValue, getSelectedValue2, setCssClass } from "./core/shared.mjs";
+        import { DB } from "./core/leaflet.mjs";
+        import { MCore } from "./core/mcore.mjs";
         P_CONTAINER.MCore = MCore;
 
-        import { ChordControl } from './controls/chord.mjs'
-        import { ChordReviewControl } from './controls/chord_review.mjs'
-        import { ScaleSelectControl } from './controls/scale_select.mjs'
-        import { ScaleControl } from './controls/scale.mjs'
-        import { ScaleReviewControl } from './controls/scale_review.mjs'
-        import { MetronomeControlBase } from './controls/metronome_base.mjs'
-        import { MetronomeControl } from './controls/metronome.mjs'
-        import { HarmonicaControl } from './controls/harmonica.mjs'
-        import { SoundControl } from './controls/sound.mjs'
+        import { ChordControl } from './controls/chord.mjs';
+        import { ChordReviewControl } from './controls/chord_review.mjs';
+        import { ScaleSelectControl } from './controls/scale_select.mjs';
+        import { ScaleControl } from './controls/scale.mjs';
+        import { ScaleReviewControl } from './controls/scale_review.mjs';
+        import { MetronomeControlBase } from './controls/metronome_base.mjs';
+        import { MetronomeControl } from './controls/metronome.mjs';
+        import { HarmonicaControl } from './controls/harmonica.mjs';
+        import { SoundControl } from './sound/sound.mjs';
 
         window.displayCharChords = displayCharChords;
         window.playToneWithOctave = playToneWithOctave;
