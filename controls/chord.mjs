@@ -1,7 +1,7 @@
 // Pavel Prchal 2019, 2020
 // -------------------- ChordControl
-import {BaseControl} from "../core/shared.js"
-import {DB} from "../core/leaflet.js"
+import {BaseControl} from "./control.mjs"
+import {DB} from "../core/leaflet.mjs"
 
 export class ChordControl extends BaseControl{
     constructor(controlId, chordTypeName) {

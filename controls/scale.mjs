@@ -1,7 +1,7 @@
 // Pavel Prchal 2020
 // -------------------- ScaleControl
 // --------------------
-import {BaseControl} from "../core/shared.js"
+import {BaseControl} from "./control.mjs"
 
 export class ScaleControl extends BaseControl{
     constructor(controlId, rootToneName, scaleName, appendControlId) {
@@ -29,7 +29,6 @@ export class ScaleControl extends BaseControl{
         "</table>";
     }
 
-
     printTonesHeader(){
         return "<tr><td>&nbsp;</td>" +
             DB.tones.reduce((html, tone) => html + `<th>${this.Core.toneAsHtml(tone)}</th>`, "") +
@@ -44,8 +43,11 @@ export class ScaleControl extends BaseControl{
     } 
 
     renderScaleButton(tone){
-        let script = `playToneWithOctave('${tone.name}', '${tone.octave}', '${this.Tuning.name}', '${this.AppendControlId}', event)`;
-        return `<a class="btn btn-primary btn-block" href="javascript:none" onclick="${script}; return false;" role="button">${this.Core.toneAsText(tone)}</a>`;
+        return `<a class="btn btn-primary btn-block" href="javascript:none" onclick="${this.toneClickScript(tone)}; return false;" role="button">${this.Core.toneAsText(tone)}</a>`;
+    }
+
+    toneClickScript(tone){
+        return `playToneWithOctave('${tone.name}', '${tone.octave}', '${this.Tuning.name}', '${this.AppendControlId}', event)`;
     }
 
 
@@ -53,5 +55,5 @@ export class ScaleControl extends BaseControl{
         return "<tr>" +
             distances.reduce((html, distance) => html + `<th>${this.formatDistance(distance)}</th>`, "") +
         "</tr>";
-    }        
+    } 
 }

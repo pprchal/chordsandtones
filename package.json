@@ -5,7 +5,9 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {},
+  "dependencies": {
+    "jsdom": "^16.4.0"
+  },
   "devDependencies": {
     "mocha": "^8.1.3"
   },

@@ -1,22 +1,6 @@
-// Pavel Prchal 2019, 2020
+// Pavel Prchal 2020
 
-import {MCore} from "./mcore.js"
-
-
-export function getSelectedValue(id){
-    return document.getElementById(id).selectedOptions[0].value;
-}       
-
-export function getSelectedValue2(id){
-    return document.getElementById(id).value;
-} 
-
-export class ToneMapRecord {
-    constructor(controlId, tone){
-        this.ControlId = controlId;
-        this.Tone = tone;
-    }
-}
+import {MCore} from "../core/mcore.mjs"
 
 export class BaseControl{
     constructor(controlId) {
@@ -48,18 +32,4 @@ export class BaseControl{
     formatDistance(distance) {
         return `${(distance + 1)} - ${this.Core.findInterval(distance).name}`;
     }    
- 
-}
-
-export function setCssClass(control, cssClass, on) {
-    let contains = control.classList.contains(cssClass);
-
-    if (on) {
-        if (!contains)
-            control.classList.add(cssClass);
-    }
-    else {
-        if (contains)
-            control.classList.remove(cssClass);
-    }
 }

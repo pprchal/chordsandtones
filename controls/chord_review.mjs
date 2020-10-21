@@ -1,8 +1,8 @@
 // Pavel Prchal  2020
 // -------------------- ChordReviewControl
 // --------------------
-import {BaseControl} from "../core/shared.js"
-import {DB} from "../core/leaflet.js"
+import {BaseControl} from "./control.mjs"
+import {DB} from "../core/leaflet.mjs"
 
 export class ChordReviewControl extends BaseControl{
     constructor(controlId, tableId) {

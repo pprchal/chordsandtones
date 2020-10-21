@@ -1,7 +1,7 @@
 // Pavel Prchal 2020
 // -------------------- MetronomeControl
 // --------------------
-import {BaseControl} from "../core/shared.js"
+import {BaseControl} from "./control.mjs"
 
 export class MetronomeControlBase extends BaseControl{
     constructor(controlId, sound) {

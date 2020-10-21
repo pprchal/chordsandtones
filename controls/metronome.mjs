@@ -1,7 +1,7 @@
 // Pavel Prchal 2020
 // -------------------- MetronomeControl
 // --------------------
-import {MetronomeControlBase} from "./metronome_control_base.js"
+import {MetronomeControlBase} from "./metronome_base.mjs"
 
 export class MetronomeControl extends MetronomeControlBase{
     constructor(controlId, holderId, metroA, metroB, bpm, sound) {

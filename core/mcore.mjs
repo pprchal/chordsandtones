@@ -1,7 +1,7 @@
 // Pavel Prchal 2019,209
 // -------------------- MCore
 
-import {DB} from "./leaflet.js"
+import {DB} from "./leaflet.mjs"
 
 export class MCore {
     constructor(){
@@ -214,10 +214,3 @@ export class MCore {
         return this.DB.intervals[0];
     }
 }
-
-// function createMCore(t){
-//     console.debug(t);
-//     let core = new MCore(this);
-//     core.DB = this.DB;
-//     return core;
-// }

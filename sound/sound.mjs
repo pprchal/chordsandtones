@@ -2,8 +2,8 @@
 
 // -------------------- SoundControl
 // --------------------
-import {BaseControl} from "../core/shared.js"
-import {DB} from "../core/leaflet.js"
+import {BaseControl} from "../core/shared.mjs"
+import {DB} from "../core/leaflet.mjs"
 
 export class SoundControl extends BaseControl{ 
     constructor(controlId){
