@@ -128,6 +128,7 @@
         window.refreshChords = refreshChords;
         window.setCssClass = setCssClass;
         window.P_CONTAINER = new Container();
+        window.playToneWithOctave = playToneWithOctave;
 
         new ScaleSelectControl("cbScales").render(document, generateSelectedScale);
         new ScaleSelectControl("cbScalesHarp").render(document, refreshHarp);
@@ -139,14 +140,14 @@
         }
 
         function generateSelectedScale() {
-            // new ScaleControl(
-            //     "divOutputScale",
-            //     getSelectedValue("cbTones"),
-            //     getSelectedValue("cbScales"),
-            //     "tbOutputScale",
-            //     true,
-            //     3
-            // ).render();
+            new ScaleControl(
+                "divOutputScale",
+                getSelectedValue("cbTones"),
+                getSelectedValue("cbScales"),
+                "tbOutputScale",
+                false,
+                3
+            ).render();
         }
 
         // function fillChordsReview(){

@@ -132,6 +132,12 @@ export class MCore {
         return tone;
     }
 
+    toneFreq(toneName, octave){
+        let tone = this.tone(toneName, octave);
+        let n = this.indexOfTone(tone);
+        return DB.tunings[0].frequencies[n + (tone.octave * 12)];        
+    }
+
     // @guitarName
     guitar(guitarName) {
         return this.clone(DB.guitars.find(guitar => MCore.isMatchingGuitarName(guitar, guitarName)));

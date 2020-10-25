@@ -66,6 +66,10 @@ describe('Music math', () => {
         checkGuitarTuning("DADGHE");
     });
 
+    it('toneFreq(F) = 21.83Hz', () => {
+        strictEqual(21.83, mcore.toneFreq('F', 0));
+    });
+
     function debugPrint(tuning, frets){
         let rootStrings = mcore.guitarRootStrings(tuning);
         let results = rootStrings.map((rootNote) => {

@@ -2,11 +2,13 @@
 
 // -------------------- SoundControl
 // --------------------
-import {DB} from "../core/leaflet.mjs"
+// import {DB} from "../core/leaflet.mjs"
+import {MCore} from "../core/mcore.mjs"
 
 export class SoundControl { 
     constructor(){
         this.audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+        this.Core = new MCore();
     }
     
     playNote(frequency, duration) {
@@ -37,11 +39,12 @@ export class SoundControl {
         return tuning.frequencies[index];
     }
     
-    playToneWithOctave(toneName, toneOctave, tuningName, duration){
-        console.debug('play....');
-        // let index = DB.tones.indexOf(this.Core.tone(toneName)) + (DB.tones.length * toneOctave);
-        // let freq = this.Core.tuning(tuningName).frequencies[index];
-        // this.playNote(freq, duration);
-        // return index;
+    // C, 3, 
+    playToneWithOctave(tone, octave, tuningName, duration){
+        if(duration == undefined){
+            duration = 200;
+        }
+        let freq = this.Core.toneFreq(tone, octave);
+        this.playNote(freq, duration);
     }
 }
