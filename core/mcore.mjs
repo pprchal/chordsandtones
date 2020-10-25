@@ -22,10 +22,23 @@ export class MCore {
     // @chordTemplate
     // @rootTone
     generateChordTableForTone(chordTemplate, rootTone) {
+        // let chord = this.clone(chordTemplate);
+        // chord.rootTone = this.clone(rootTone);
+        // chord.tones = chord.distances.map((distance) => this.shiftTone(chord.rootTone, distance));
+        // return chord;
+
         let chord = this.clone(chordTemplate);
         chord.rootTone = this.clone(rootTone);
-        chord.tones = chord.distances.map((distance) => this.shiftTone(chord.rootTone, distance));
-        return chord;
+        chord.tones = chord
+            .distances
+            .reduce((tones, distance, n) => {
+                if(n == 0) {
+                    return tones;
+                }else{
+                    return [...tones, this.shiftTone(tones[n - 1], distance)];
+                }
+            }, [chord.rootTone]);       
+        return chord; 
     }  
 
     // @rootTone

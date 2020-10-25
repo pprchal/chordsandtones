@@ -81,6 +81,31 @@ describe('Music math', () => {
         strictEqual(name, gts);
     }
 
+    it('all chords C', () => {
+        chordIs("C", "dur", "C3 E3 G3 ");
+        chordIs("C", "aug", "C3 E3 G#3 ");
+        chordIs("C", "7", "C3 E3 G3 B3 ");
+        chordIs("C", "7/6", "C3 E3 G3 A3 B3 ");
+        chordIs("C", "maj7", "C3 E3 G3 H3 ");
+        chordIs("C", "6/9", "C3 D3 E3 G3 H3 ");
+        chordIs("C", "6", "C3 E3 G3 A3 ");
+        chordIs("C", "9", "C3 E3 B3 D4 ");
+        chordIs("C", "11", "C3 F3 B3 D4 G4 ");
+        chordIs("C", "m11", "C3 F3 B3 D4 F4 ");
+        chordIs("C", "13", "C3 E3 B3 D4 A4 ");
+        chordIs("C", "m13", "C3 G3 B3 D#4 A4 ");
+        chordIs("C", "aug7", "C3 E3 G3 B3 ");
+        chordIs("C", "5", "C3 G3 ");
+        chordIs("C", "mol", "C3 D#3 G3 ");
+        chordIs("C", "dim", "C3 D#3 F#3 A3 ");
+        chordIs("C", "sus", "C3 F3 G3 ");
+    });
+    
+    function chordIs(rootNote, chordName, is){
+        let tones = mcore.generateChordTableForTone(mcore.chord(chordName), mcore.tone(rootNote)).tones;
+        strictEqual(is, tones.reduce((acc, t) => acc += `${t.name}${t.octave} `, ''), `Chord ${rootNote}${chordName} is wrong`);
+    }
+
     it('all scales', () => {
         scaleIs("C", "dur", "C3 D3 E3 F3 G3 A3 H3 ");
         scaleIs("D", "mol", "D3 E3 F3 G3 A3 B3 C4 ");
@@ -98,7 +123,7 @@ describe('Music math', () => {
         strictEqual(is, scale.reduce((acc, t) => acc += `${t.name}${t.octave} `, ''), `Scale ${rootNote}${scaleName} is wrong`);
     }
 
-    it('allindex of D#', () => {
+    it('indexOfTone D#', () => {
         let Dis = mcore.tone("D#");
         strictEqual(3, mcore.indexOfTone(Dis));
     });
