@@ -2,12 +2,10 @@
 
 // -------------------- SoundControl
 // --------------------
-import {BaseControl} from "../core/shared.mjs"
 import {DB} from "../core/leaflet.mjs"
 
-export class SoundControl extends BaseControl{ 
-    constructor(controlId){
-        super(controlId);
+export class SoundControl { 
+    constructor(){
         this.audioCtx = new(window.AudioContext || window.webkitAudioContext)();
     }
     

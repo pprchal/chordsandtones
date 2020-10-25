@@ -1,7 +1,7 @@
 // Pavel Prchal 2019, 2020
 
 export const DB = {
-  version: "1.3",
+  version: "1.4",
   chords: [
     { name: "dur",  distances: [ 0, 4, 7 ], families: ["dur"] },
     { name: "aug",  distances: [ 0, 4, 8 ], families: ["aug"] },
@@ -23,16 +23,16 @@ export const DB = {
   ],
 
   scales: [
-    { name: "dur", distances: [ [ 0, 2, 4, 5, 7, 9, 11 ] ] },
-    { name: "mol", distances: [ [ 0, 2, 3, 5, 7, 8, 10 ] ] },
-    { name: "penta-mol", distances: [ [ 0, 3, 5, 7, 10 ] ] },
-    { name: "penta-dur", distances: [ [ 0, 2 ,4, 7, 9 ] ] },
-    { name: "lydic", distances: [ [ 0, 2, 4, 6, 7, 9, 11 ] ] },    
-    { name: "mixolydic", distances: [ [ 0, 2, 4, 5, 7, 9, 10 ] ] },
-    { name: "locrian", distances: [ [ 0, 1, 3, 5, 6, 8, 10 ] ] },
-    { name: "dorian", distances: [ [ 0, 2, 3, 5, 7, 9, 10 ] ] },
-    { name: "hexa-blues", distances: [ [ 0, 3, 5, 6, 7, 10 ] ] },
-    { name: "melodic-mol", distances: [ [ 0, 2, 4, 5, 7, 9, 11 ], [ 0, 2, 3, 5, 7, 9, 11 ] ] } 
+    { name: "dur", distances: [ [ 0, 2, 2, 1, 2, 2, 2 ] ] },  
+    { name: "mol", distances: [ [ 0, 2, 1, 2, 2, 1, 2 ] ] },  
+    { name: "penta-mol", distances: [ [ 0, 3, 2, 2, 3 ] ] },  
+    { name: "penta-dur", distances: [ [ 0, 2, 2, 3, 2 ] ] }, 
+    { name: "lydic", distances: [ [ 0, 2, 2, 2, 1, 2, 2 ] ] },  
+    { name: "mixolydic", distances: [ [ 0, 2, 2, 1, 2, 2, 1 ] ] },
+    { name: "locrian", distances: [ [ 0, 1, 2, 2, 1, 2, 2 ] ] },
+    { name: "dorian", distances: [ [ 0, 2, 1, 2, 2, 2, 1 ] ] },
+    { name: "hexa-blues", distances: [ [ 0, 3, 2, 1, 1, 3 ] ] },
+    { name: "melodic-mol", distances: [ [ 0, 2, 2, 1, 2, 2, 2 ], [ 0, 2, 1, 2, 2, 2, 2 ] ] }
   ],
 
   tones: [
@@ -50,7 +50,7 @@ export const DB = {
     { name: "H",  octave: 1 }
   ],
 
-  "intervals":[
+  intervals:[
     { name: "???", distance: -1 },
     { name: "čistá prima", distance: 0 },
     { name: "malá sekunda", distance: 1 },
@@ -92,7 +92,7 @@ export const DB = {
   harmonicas : [
     { 
       name: "Richter diatonická",
-      startOctave: 3,
+      octave: 4,
       template : [
           { name: "1",         type: "+", offsets: [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 10 ] },
           { name: "1/2",       type: "+", offsets: [NaN, NaN, NaN, NaN, NaN, NaN, NaN, 3,   6,   11 ] },
@@ -103,5 +103,10 @@ export const DB = {
           { name: "1 1/2",     type: "-", offsets: [NaN, NaN, 8,   NaN, NaN, NaN, NaN, NaN, NaN, NaN] }
       ]
     }
+  ],
+
+  guitars: [
+    { name: "EADGHE", octave: 3, template: { offsets: [4, 5, 5, 5, 4, 5] } },
+    { name: "DADGHE", octave: 3, template: { offsets: [2, 7, 5, 5, 4, 5] } }
   ]
 }

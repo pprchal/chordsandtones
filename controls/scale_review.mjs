@@ -87,6 +87,10 @@ export class ScaleReviewControl extends BaseControl{
         }
     }
 
+    // function shiftScale(direction, sender, n){
+    //     P_CONTAINER.SCALE_REVIEW.shiftScale(direction, n);
+    // }
+
     printHeader(){
         let html = '<thead><tr><td>&nbsp;</td>' +
             `<td>&nbsp;</td>`;

@@ -59,4 +59,7 @@ export class ChordControl extends BaseControl{
         return `<a class="btn btn-primary btn-block" href="javascript:none" onclick="${script}; return false;" role="button">${this.Core.toneAsText(chord.rootTone)}</a>`;
     }
 
+    displayCharChords(rootTone, chordType){
+        document.getElementById('divCharChords').innerText = this.Core.findCharChords(rootTone);
+    }    
 }

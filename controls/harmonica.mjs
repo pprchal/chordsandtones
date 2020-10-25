@@ -18,8 +18,8 @@ export class HarmonicaControl extends BaseControl {
         super(controlId);
         this.HarmonicaToneId = 1;
         this.ToneMap = [];
-        this.HarpRootTone = this.Core.tone(harpKey);
         this.Harmonica = this.Core.harmonica('Richter diatonická');
+        this.HarpRootTone = this.Core.tone(harpKey.name, this.Harmonica.octave);
     }
 
     render() {
@@ -62,29 +62,17 @@ export class HarmonicaControl extends BaseControl {
                 }
                 else{
                     this.HarmonicaToneId = this.HarmonicaToneId + 1;
-                    var harmonicaTone = this.Core.shiftTone(rootTone, distance);
-                    harmonicaTone.octave = this.getOctaveForHarmonicaTone(rowNumber, 1);
-                    let harmonicaToneId = `harmonicaTone_${harmonicaTone.name}_${this.HarmonicaToneId}`;
-                    this.ToneMap.push(new ToneMapRecord(harmonicaToneId, harmonicaTone));
-                    this.debug(`${harmonicaTone.name} - ${harmonicaToneId}`);
-                    return html + `<td id="${harmonicaToneId}">${this.Core.toneAsHtml(harmonicaTone)}</td>`;
+                    let tone = this.Core.shiftTone(rootTone, distance);
+                    let toneId = `harmonicaTone_${tone.name}_${this.HarmonicaToneId}`;
+                    this.ToneMap.push(new ToneMapRecord(toneId, tone));
+                    return html + this.formatHarpTone(tone, toneId);
                 }
             }, "") +
         "</tr>";
     }
 
-    getOctaveForHarmonicaTone(col){
-        // TODO: need this octave? ....
-        if(col >= 9)
-            return 4;
-    
-        if(col >= 6)
-            return 3;
-
-        if(col >= 3)
-            return 2;
-    
-        return 1;
+    formatHarpTone(tone, toneId){
+        return `<td id="${toneId}">${this.Core.toneAsHtml(tone)}${tone.octave}</td>`;
     }
 
     // @harmonica
@@ -117,7 +105,6 @@ export class HarmonicaControl extends BaseControl {
     }
 
     setColor(toneControlId, on) {
-        // window.console.debug(`${toneControlId}: [${(on ? "ON" : "OFF")}]`);
         setCssClass(
             document.getElementById(toneControlId), 
             'note-on',

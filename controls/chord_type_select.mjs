@@ -1,10 +1,10 @@
 // Pavel Prchal 2020
-// -------------------- ScaleSelectControl
+// -------------------- ChordTypeSelectControl
 // --------------------
 import {BaseControl} from "./control.mjs"
 import {DB} from "../core/leaflet.mjs"
 
-export class ScaleSelectControl extends BaseControl{
+export class ChordTypeSelectControl extends BaseControl{
     constructor(controlId) {
         super(controlId);
     }
@@ -12,15 +12,14 @@ export class ScaleSelectControl extends BaseControl{
     render(document, onRefresh) {
         let to = document.getElementById(this.ControlId);
         to.addEventListener("change", onRefresh);
-        this.fillScales(to, document);
+        this.fillChordTypes(to, document);
     }
     
-    fillScales(cbScales, document) {
-        for (let i = 0; i < DB.scales.length; i++) {
-            let scale = DB.scales[i];
+    fillChordTypes(cbChordTypes) {
+        DB.chords.forEach((chord) => {
             let option = document.createElement("option");
-            option.text = scale.name;
-            cbScales.add(option);
-        }
+            option.text = chord.name;
+            cbChordTypes.add(option);
+        });
     }
 }

@@ -15,5 +15,11 @@ or - little bit experimental on
 * 03-03-2020 small touches to be up-to date with ES-6
 * 10-17-2019 working on better find chord-by-notes
 
+# development notes
+settings.json
+```
+"mochaExplorer.files": "test/**/*.mjs"
+```
+
 
 Pavel Prchal

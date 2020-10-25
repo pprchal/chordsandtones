@@ -4,10 +4,6 @@
 import {DB} from "./leaflet.mjs"
 
 export class MCore {
-    constructor(){
-        this.DB = DB;
-    }
-
     clone(src) {
         let obj = {...src};
         return obj;
@@ -27,66 +23,38 @@ export class MCore {
     // @rootTone
     generateChordTableForTone(chordTemplate, rootTone) {
         let chord = this.clone(chordTemplate);
-
-        chord.tones = new Array();
-        let rootIndex = this.indexOfTone(rootTone);
-
-        for (let i = 0; i < chord.distances.length; i++) {
-            let toneIndex = chord.distances[i] + rootIndex;
-            let octave = 0;
-            while(toneIndex >= this.DB.tones.length) {
-                octave++;
-                toneIndex = toneIndex - this.DB.tones.length;
-            }
-
-            let chordTone = this.clone(this.DB.tones[toneIndex]);
-            chordTone.octave = octave;
-            chord.tones.push(chordTone);
-        }
-
-        // window.console.debug(`Chord ${rootTone}${chordTemplate} generated: ${chord.tones}`);
-        chord.rootTone = rootTone;
+        chord.rootTone = this.clone(rootTone);
+        chord.tones = chord.distances.map((distance) => this.shiftTone(chord.rootTone, distance));
         return chord;
     }  
 
     // @rootTone
     // @scale
     generateScaleTablesForTone(rootTone, scale) {
-        let scaleTonesAll = new Array();
-        for(let i = 0; i < scale.distances.length; i++){
-            scaleTonesAll.push(this.generateScaleTableForDistance(rootTone, scale.distances[i]));
-        }
-        return scaleTonesAll;
+        return scale
+            .distances
+            .map((scaleDistance) => this.generateScaleTableForDistance(rootTone, scaleDistance));
     }          
 
     // @rootTone
     // @distances[]
     generateScaleTableForDistance(rootTone, distances){
-        let scaleTones = new Array();
-        let rootIndex = this.indexOfTone(rootTone);            
-
-        for (let i = 0; i < distances.length; i++) {
-            let n = distances[i] + rootIndex;
-            let octave = 0;
-            while(n >= this.DB.tones.length) {
-                octave++;
-                n = n - this.DB.tones.length;
-            }
-
-            let scaleTone = this.clone(this.DB.tones[n]);
-            scaleTone.octave = octave;
-            scaleTones.push(scaleTone);
-        }
-
-        return scaleTones;
+        return distances
+            .reduce((tones, distance, n) => {
+                if(n == 0) {
+                    return tones;
+                }else{
+                    return [...tones, this.shiftTone(tones[n - 1], distance)];
+                }
+            }, [this.clone(rootTone)]);
     }
 
     findCharChords(rootTone){
         let chordRootTone = this.tone(rootTone);
         let res2 = "";
 
-        for(let i=0; i < this.DB.qround.length; i++){
-            let qr = this.DB.qround[i];
+        for(let i=0; i < DB.qround.length; i++){
+            let qr = DB.qround[i];
             if(qr.chord === ""){
                 continue;
             }
@@ -101,73 +69,76 @@ export class MCore {
     // @chord
     // @distance
     isMatchingChordDistance(chord, distance){
-        if(chord.distances.length != distance.length){
-            return false;
-        }
-
-        for(let i = 0; i < chord.distances.length; i++){
-            if(chord.distances[i] != distance[i]){
-                return false;
-            }
-        }
-
-        return true;
+        return chord.distances.every((dist, n) => dist === distance[n]);
     }
 
     shiftTone(rootTone, distance){
         let n = this.indexOfTone(rootTone) + distance;
-        let octave = 0;
+        let octave = rootTone.octave;
 
-        if(n >= this.DB.tones.length) {
-            octave++;
-            n = n - this.DB.tones.length;
-        }
-        if(n < 0){
-            octave--;
-            n  = this.DB.tones.length - 1;
+        while( (n < 0) || (n >= DB.tones.length) ) {
+            if(n >= DB.tones.length) {
+                octave++;
+                n -= DB.tones.length;
+            }else if(n < 0){
+                octave--;
+                n += DB.tones.length;
+            }
         }
 
-        let clonedTone = this.clone(this.DB.tones[n]);
+        let clonedTone = this.clone(DB.tones[n]);
         clonedTone.octave = octave;
         return clonedTone;
     }
 
     indexOfTone(tone){
-        for(let i=0; i < this.DB.tones.length; i++)
-        {
-            if(MCore.isToneEqual(this.DB.tones[i], tone)){
-                return i;
-            }
-        }
-
-        return -1;
+        return DB.tones.findIndex((t) => MCore.isToneEqual(t, tone));
     }
+
+    static isToneEqual(tone1, tone2) {
+        return tone1.name === tone2.name;
+    }  
 
     // =================================  FIND 
     // @chordName
     chord(chordName) {
-        return this.DB.chords.find(chord => MCore.isMatchingChordName(chord, chordName));
+        return DB.chords.find(chord => MCore.isMatchingChordName(chord, chordName));
     }
 
     // @scaleName
     scale(scaleName) {
-        return this.DB.scales.find(scale => MCore.isMatchingScaleName(scale, scaleName));
+        return DB.scales.find(scale => MCore.isMatchingScaleName(scale, scaleName));
     }
 
     // @toneName
-    tone(toneName) {
-        return this.clone(this.DB.tones.find(tone => MCore.isMatchingToneName(tone, toneName)));
+    tone(toneName, octave) {
+        let tone = this.clone(DB.tones.find(tone => MCore.isMatchingToneName(tone, toneName)));
+        if(octave != undefined){
+            tone.octave = octave;
+        }
+        return tone;
+    }
+
+    // @guitarName
+    guitar(guitarName) {
+        return this.clone(DB.guitars.find(guitar => MCore.isMatchingGuitarName(guitar, guitarName)));
     }
 
     // @tuningName
     tuning(tuningName) {
-        return this.DB.tunings.find(tuning => MCore.isMatchingTuningName(tuning, tuningName));
+        return DB.tunings.find(tuning => MCore.isMatchingTuningName(tuning, tuningName));
     }
     
     // @harmonicaName
     harmonica(harmonicaName) {
-        return this.DB.harmonicas.find(harmonica => MCore.isMatchingHarmonicaName(harmonica, harmonicaName));
+        return DB.harmonicas.find(harmonica => MCore.isMatchingHarmonicaName(harmonica, harmonicaName));
     }
+
+    // @guitar
+    // @guitarName
+    static isMatchingGuitarName(guitar, guitarName) {
+        return guitar.name === guitarName;
+    }        
 
     // @chord
     // @chordName
@@ -199,18 +170,39 @@ export class MCore {
         return harmonica.name === harmonicaName;
     }  
 
-    static isToneEqual(tone1, tone2) {
-        return tone1.name === tone2.name;
-    }  
     
     // @distance
     findInterval(distance) {
-        for (let i=0; i<this.DB.intervals.length; i++){
-            if(this.DB.intervals[i].distance == distance){
-                return this.DB.intervals[i];
+        for (let i=0; i<DB.intervals.length; i++){
+            if(DB.intervals[i].distance == distance){
+                return DB.intervals[i];
             }
         }
 
-        return this.DB.intervals[0];
+        return DB.intervals[0];
+    }
+
+    guitarRootStrings(guitarName){
+        let guitar = this.guitar(guitarName);
+        return guitar
+            .template
+            .offsets
+            .reduce((tones, offset, n) => {
+                if(n == 0) {
+                    return tones;
+                }else{
+                    return [...tones, this.shiftTone(tones[n - 1], offset)];
+                }
+            }, [this.guitarRootTone(guitar)]);
+    }
+
+    guitarRootTone(guitar){
+        let tone = this.clone(DB.tones[guitar.template.offsets[0]]);
+        tone.octave = guitar.octave;
+        return tone;
+    }
+
+    unwindGuitarString(tone, frets){
+        return Array.from(Array(frets), (x, fret) => this.shiftTone(tone, fret));
     }
 }

@@ -1,5 +1,5 @@
 // Pavel Prchal, 2020
-
+import 'cache-require-paths';
 import { strictEqual } from "assert";
 import { ScaleSelectControl } from "../controls/scale_select.mjs";
 import jsdom from "jsdom";

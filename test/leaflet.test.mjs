@@ -1,9 +1,12 @@
+import 'cache-require-paths';
+
+
 import { strictEqual } from 'assert';
 import {DB} from "../core/leaflet.mjs"
 import { MCore } from "../core/mcore.mjs"
 let mcore = new MCore();
 
-describe('Database consistency', () => {
+describe('leaflet', () => {
     it('load ok', () => {
         strictEqual(12, DB.tones.length);
         strictEqual(12, DB.qround.length);

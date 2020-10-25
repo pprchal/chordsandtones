@@ -4,12 +4,14 @@
 import {BaseControl} from "./control.mjs"
 
 export class ScaleControl extends BaseControl{
-    constructor(controlId, rootToneName, scaleName, appendControlId) {
+    constructor(controlId, rootToneName, scaleName, appendControlId, showOctaves, octave) {
         super(controlId);
         this.Scale = this.Core.scale(scaleName);
         this.AppendControlId = appendControlId;
         this.RootTone = this.Core.tone(rootToneName);
         this.TonesInScale = this.Core.generateScaleTablesForTone(this.RootTone, this.Scale);
+        this.ShowOctaves = showOctaves == undefined ? false : showOctaves;
+        this.Octave = octave == undefined ? 4 : octave;
     }
 
     // @rootToneName (C)
@@ -43,7 +45,12 @@ export class ScaleControl extends BaseControl{
     } 
 
     renderScaleButton(tone){
-        return `<a class="btn btn-primary btn-block" href="javascript:none" onclick="${this.toneClickScript(tone)}; return false;" role="button">${this.Core.toneAsText(tone)}</a>`;
+        let button = `<a class="btn btn-primary btn-block" href="javascript:none" onclick="${this.toneClickScript(tone)}; return false;" role="button">${this.fromatScaleTone(tone)}</a>`;
+        return button;
+    }
+
+    fromatScaleTone(tone){
+        return this.Core.toneAsText(tone) + (this.ShowOctaves ? tone.octave : '');
     }
 
     toneClickScript(tone){
