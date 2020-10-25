@@ -149,8 +149,14 @@ export class MCore {
     }
     
     // @harmonicaName
-    harmonica(harmonicaName) {
-        return DB.harmonicas.find(harmonica => MCore.isMatchingHarmonicaName(harmonica, harmonicaName));
+    harmonica(harmonicaName, key) {
+        let harp = DB.harmonicas.find(harmonica => MCore.isMatchingHarmonicaName(harmonica, harmonicaName));
+        harp.octave = harp.octaves[key];
+        if(harp.octave == undefined){
+            console.error("TODO: harp key is not defined");
+            harp.octave = 4;
+        }
+        return harp;
     }
 
     // @guitar

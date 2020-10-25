@@ -8,10 +8,10 @@ export class ScaleControl extends BaseControl{
         super(controlId);
         this.Scale = this.Core.scale(scaleName);
         this.AppendControlId = appendControlId;
-        this.RootTone = this.Core.tone(rootToneName);
+        this.Octave = octave == undefined ? 4 : octave;
+        this.RootTone = this.Core.tone(rootToneName, this.Octave);
         this.TonesInScale = this.Core.generateScaleTablesForTone(this.RootTone, this.Scale);
         this.ShowOctaves = showOctaves == undefined ? false : showOctaves;
-        this.Octave = octave == undefined ? 4 : octave;
     }
 
     // @rootToneName (C)

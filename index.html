@@ -145,7 +145,7 @@
                 getSelectedValue("cbTones"),
                 getSelectedValue("cbScales"),
                 "tbOutputScale",
-                false,
+                true,
                 3
             ).render();
         }
@@ -189,12 +189,18 @@
             P_CONTAINER.HARP.render();
 
             // render scale
-            P_CONTAINER.SCALE = new ScaleControl('divOutputScaleHarp', playKey, playScale, 'tbOutputScaleHarp', true);
-            P_CONTAINER.SCALE.Octave =  P_CONTAINER.HARP.Harmonica.octave;
-            P_CONTAINER.SCALE.render();
+            P_CONTAINER.HARP_SCALE = new ScaleControl(
+                'divOutputScaleHarp', 
+                playKey, 
+                playScale, 
+                'tbOutputScaleHarp', 
+                true, 
+                P_CONTAINER.HARP.Harmonica.octave
+            );
+            P_CONTAINER.HARP_SCALE.render();
 
             // do coloring
-            P_CONTAINER.HARP.colorKeyTones(P_CONTAINER.SCALE);
+            P_CONTAINER.HARP.colorKeyTones(P_CONTAINER.HARP_SCALE);
         }
 
         P_CONTAINER.SOUND = new SoundControl();

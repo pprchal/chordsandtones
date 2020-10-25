@@ -28,6 +28,7 @@ export class ToneSelectControl extends BaseControl{
         DB.tones.forEach((tone) => {
             let option = document.createElement("option");
             option.text = tone.name;
+            option.setAttribute("octave", tone.octave);
             cbTones.add(option);            
         });
     }

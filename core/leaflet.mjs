@@ -101,7 +101,6 @@ export const DB = {
   harmonicas : [
     { 
       name: "Richter diatonická",
-      octave: 4,
       template : [
           { name: "1",         type: "+", offsets: [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 10 ] },
           { name: "1/2",       type: "+", offsets: [NaN, NaN, NaN, NaN, NaN, NaN, NaN, 3,   6,   11 ] },
@@ -110,7 +109,11 @@ export const DB = {
           { name: "1/2",       type: "-", offsets: [1,   6,   10,  1,   NaN, 8  , NaN, NaN, NaN, NaN] },
           { name: "1",         type: "-", offsets: [NaN, 5,   9,   NaN, NaN, NaN, NaN, NaN, NaN, NaN] },
           { name: "1 1/2",     type: "-", offsets: [NaN, NaN, 8,   NaN, NaN, NaN, NaN, NaN, NaN, NaN] }
-      ]
+      ],
+      octaves :{
+        "C": 4,
+        "G": 3
+      }
     }
   ],
 
