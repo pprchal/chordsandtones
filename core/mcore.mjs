@@ -1,17 +1,11 @@
 // Pavel Prchal 2019,209
 // -------------------- MCore
 
-class MCore {
-    constructor(container){
-        // vanila
-        if(container != undefined){
-            this.DB = container.DB;
-        }
-        else{
-            if(window != undefined){
-                this.DB = window.getContainer().DB;
-            }
-        }
+import {DB} from "./leaflet.mjs"
+
+export class MCore {
+    constructor(){
+        this.DB = DB;
     }
 
     clone(src) {
@@ -219,11 +213,4 @@ class MCore {
 
         return this.DB.intervals[0];
     }
-}
-
-function createMCore(t){
-    console.debug(t);
-    let core = new MCore(this);
-    core.DB = this.DB;
-    return core;
 }

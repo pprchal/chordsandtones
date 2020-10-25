@@ -1,8 +1,11 @@
-// Pavel Prchal 2019
+// Pavel Prchal 2019, 2020
 
-// -------------------- Sound
+// -------------------- SoundControl
 // --------------------
-class SoundControl extends BaseControl{ 
+import {BaseControl} from "../core/shared.mjs"
+import {DB} from "../core/leaflet.mjs"
+
+export class SoundControl extends BaseControl{ 
     constructor(controlId){
         super(controlId);
         this.audioCtx = new(window.AudioContext || window.webkitAudioContext)();
@@ -37,9 +40,10 @@ class SoundControl extends BaseControl{
     }
     
     playToneWithOctave(toneName, toneOctave, tuningName, duration){
-        let index = DB.tones.indexOf(this.Core.tone(toneName)) + (DB.tones.length * toneOctave);
-        let freq = this.Core.tuning(tuningName).frequencies[index];
-        this.playNote(freq, duration);
-        return index;
+        console.debug('play....');
+        // let index = DB.tones.indexOf(this.Core.tone(toneName)) + (DB.tones.length * toneOctave);
+        // let freq = this.Core.tuning(tuningName).frequencies[index];
+        // this.playNote(freq, duration);
+        // return index;
     }
 }

@@ -5,6 +5,25 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "args": [
+                "-u",
+                "tdd",
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceFolder}/test"
+            ],
+            "internalConsoleOptions": "openOnSessionStart",
+            "name": "Mocha Tests",
+            "program": "npm run test",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "pwa-node"
+        },
+        
+        {
             "type": "pwa-msedge",
             "request": "launch",
             "name": "Open index.html",

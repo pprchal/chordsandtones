@@ -1,7 +1,10 @@
 // Pavel Prchal  2020
 // -------------------- ScaleReviewControl
 // --------------------
-class ScaleReviewControl extends BaseControl{
+import {BaseControl} from "./control.mjs"
+import {DB} from "../core/leaflet.mjs"
+
+export class ScaleReviewControl extends BaseControl{
     constructor(controlId) {
         super(controlId);
         this.ScaleRows = []

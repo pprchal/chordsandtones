@@ -51,6 +51,7 @@
             background-color: rgb(255, 194, 199);
         }        
     </style>
+<<<<<<< HEAD
 
 
     <script src="core/container.js"></script>
@@ -83,6 +84,8 @@
       </script>
       
 
+=======
+>>>>>>> e9c985900b164398bba0c43db19fe15d1ddc2b77
 </head>
 
 <body>
@@ -114,7 +117,8 @@
                 <div id="divCharChords"></div>
 
                 <h3>Stupnice <select id="cbTones" onchange="refreshChords()"></select>
-                    <select id="cbScales" onchange="refreshChords()"></select>
+                    <select id="cbScales"></select>
+                    <!-- <select id="cbScales" onchange="refreshChords()"></select> -->
                 </h3>
 
                 <div>
@@ -178,30 +182,68 @@
         </div>
     </div>
 
-
     <script>
+        let P_CONTAINER = undefined;
+    </script>
+
+    <script type="module">
+        import { Container } from "./core/container.mjs";
+        P_CONTAINER = new Container();
+        import { getSelectedValue, getSelectedValue2, setCssClass } from "./core/shared.mjs";
+        import { DB } from "./core/leaflet.mjs";
+        import { MCore } from "./core/mcore.mjs";
+        P_CONTAINER.MCore = MCore;
+
+        import { ChordControl } from './controls/chord.mjs';
+        import { ChordReviewControl } from './controls/chord_review.mjs';
+        import { ScaleSelectControl } from './controls/scale_select.mjs';
+        import { ScaleControl } from './controls/scale.mjs';
+        import { ScaleReviewControl } from './controls/scale_review.mjs';
+        import { MetronomeControlBase } from './controls/metronome_base.mjs';
+        import { MetronomeControl } from './controls/metronome.mjs';
+        import { HarmonicaControl } from './controls/harmonica.mjs';
+        import { SoundControl } from './sound/sound.mjs';
+
+        window.displayCharChords = displayCharChords;
+        window.playToneWithOctave = playToneWithOctave;
+        window.refreshHarp = refreshHarp;
+        window.toggleMetronome = toggleMetronome;
+        window.refreshMetronome = refreshMetronome;
+        window.shiftScale = shiftScale;
+        window.refreshChords = refreshChords;
+        window.setCssClass = setCssClass;
+
+
+        new ScaleSelectControl("cbScales");
+        new ScaleSelectControl("cbScalesHarp");
+
         function toggleMetronome() {
-            let running = P_CONTAINER.METRONOME.toggleStartStop();
-            document.getElementById('btStartStop').innerText = running ? "Stop" : "Start";
+            document.getElementById("btStartStop").innerText = P_CONTAINER.METRONOME.isRunning() ? "Start" : "Stop";
+            if(P_CONTAINER.METRONOME.isRunning()){
+                P_CONTAINER.METRONOME.stop();
+            }else{
+                refreshMetronome();
+                P_CONTAINER.METRONOME.start();
+            }
         }
 
         function generateSelectedChord() {
-            let chordTypeName = getSelectedValue('cbChordTypes');
-            P_CONTAINER.CHORD = new ChordControl('divOutput', chordTypeName)
+            let chordTypeName = getSelectedValue("bChordTypes");
+            P_CONTAINER.CHORD = new ChordControl("divOutput", chordTypeName)
             P_CONTAINER.CHORD.render();
         }
 
         function generateSelectedScale() {
             new ScaleControl(
-                'divOutputScale',
-                getSelectedValue('cbTones'),
-                getSelectedValue('cbScales'),
-                'tbOutputScale'
+                "divOutputScale",
+                getSelectedValue("cbTones"),
+                getSelectedValue("cbScales"),
+                "tbOutputScale"
             ).render();
         }
 
         function fillChordsReview(){
-             new ChordReviewControl('divChordReview', 'tableChordsReview').render();
+            new ChordReviewControl('divChordReview', 'tableChordsReview').render();
             $('#tableChordsReview').DataTable( {
                 searching: false,
                 paging: false,
@@ -249,34 +291,23 @@
         }
 
         function refreshMetronome(){
-            let a = parseInt(getSelectedValue('cbMetroA'));
-            let b = parseInt(getSelectedValue('cbMetroB'));
-            let s = parseInt(getSelectedValue('cbMetroS'));
-            let bpm = parseInt(getSelectedValue2('tbBPM'));
+            let a = parseInt(getSelectedValue("cbMetroA"));
+            let b = parseInt(getSelectedValue("cbMetroB"));
+            let s = parseInt(getSelectedValue("cbMetroS"));
+            let bpm = parseInt(getSelectedValue2("tbBPM"));
             P_CONTAINER.METRONOME.update(a, b, bpm, s);
         }
 
-        function toggleMetronome() {
-            document.getElementById('btStartStop').innerText = P_CONTAINER.METRONOME.isRunning() ? "Start" : "Stop";
-            if(P_CONTAINER.METRONOME.isRunning()){
-                P_CONTAINER.METRONOME.stop();
-            }else{
-                refreshMetronome();
-                P_CONTAINER.METRONOME.start();
-            }
-        }
 
-        let P_CONTAINER = new Container();
-        this.getContainer = () => P_CONTAINER;
-
-        P_CONTAINER.DB = DB;
+        // P_CONTAINER.DB = DB;
         P_CONTAINER.SOUND = new SoundControl('sctl');
         P_CONTAINER.METRONOME = new MetronomeControlBase("metronomeHolder", P_CONTAINER.SOUND);
         P_CONTAINER.METRONOME.render();
         refreshMetronome();
 
-        function playToneWithOctave(toneName, toneOctave, tuningName, appendControlId) {
-            document.getElementById(appendControlId).value += toneName;
+        function playToneWithOctave(toneName, toneOctave, tuningName, appendControlId, tt) {
+            // document.getElementById(appendControlId).value += toneName;
+            console.debug("*** " + tt);
             P_CONTAINER.SOUND.playToneWithOctave(toneName, toneOctave, tuningName);
         }
 
@@ -304,16 +335,6 @@
             }
         }
 
-        // fill scales
-        function fillScales(cbScales) {
-            for (let i = 0; i < DB.scales.length; i++) {
-                let scale = DB.scales[i];
-                let option = document.createElement("option");
-                option.text = scale.name;
-                cbScales.add(option);
-            }
-        }
-
         // fill tunings
         function fillTunings(cbTunings) {
             for (let i = 0; i < DB.tunings.length; i++) {
@@ -331,9 +352,7 @@
         // -- init ui
         fillChordTypes(document.getElementById('cbChordTypes'));
         fillTones(document.getElementById('cbTones'));
-        fillScales(document.getElementById('cbScales'));
         fillTones(document.getElementById('cbTonesHarp'));
-        fillScales(document.getElementById('cbScalesHarp'));
         fillTones(document.getElementById('cbHarmonicaKeys'));
         fillTunings(document.getElementById('cbTunings'));
         fillChordsReview();
