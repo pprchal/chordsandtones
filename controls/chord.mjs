@@ -4,10 +4,10 @@ import {BaseControl} from "./control.mjs"
 import {DB} from "../core/leaflet.mjs"
 
 export class ChordControl extends BaseControl{
-    constructor(controlId, chordTypeName) {
+    constructor(controlId, chordTypeControl) {
         super(controlId);
         this.ChordToneId = 1;
-        this.ChordType = this.Core.chord(chordTypeName);
+        this.ChordType = chordTypeControl.chordType;
     }
 
     // @chordTypeName (maj7)

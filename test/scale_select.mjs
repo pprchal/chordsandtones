@@ -8,8 +8,8 @@ const dom = new JSDOM(`<body><select id="cbTest"></select></body>`, { runScripts
 const { document } = dom.window;
 
 
-describe('Scale select control', () => {
-    it('load ok', () => {
+describe('👁 Scale select', () => {
+    it('👁 render', () => {
         let ctl = new ScaleSelectControl("cbTest");
         ctl.render(document);
     });

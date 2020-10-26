@@ -5,9 +5,10 @@ import {BaseControl} from "./control.mjs"
 import {DB} from "../core/leaflet.mjs"
 
 export class ScaleReviewControl extends BaseControl{
-    constructor(controlId) {
+    constructor(controlId, tableId) {
         super(controlId);
-        this.ScaleRows = []
+        this.ScaleRows = [];
+        this.TableId = tableId;
     }
 
     render(){
@@ -15,6 +16,7 @@ export class ScaleReviewControl extends BaseControl{
             this.printHeader() +
             DB.scales.reduce((html, scale) => html + this.renderScale(scale), "") +
         "</table>");
+        $(`#${this.TableId}`).DataTable( { searching: false, paging: false, info: false } );
     }
 
     renderScale(scale){

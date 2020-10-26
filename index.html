@@ -24,9 +24,9 @@
             <li class="nav-item">
                 <a class="nav-link active" id="pills-chords-tab" data-toggle="pill" href="#pills-chords" role="tab" aria-controls="pills-chords" aria-selected="true">Akordy</a>
             </li>
-            <!-- <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link" id="pills-chordsdef-tab" data-toggle="pill" href="#pills-chordsdef" role="tab" aria-controls="pills-chordsdef" aria-selected="true">Katalog</a>
-            </li> -->
+            </li>
             <li class="nav-item">
                 <a class="nav-link" id="pills-harp-tab" data-toggle="pill" href="#pills-harp" role="tab" aria-controls="pillsharp" aria-selected="false">Harmonika</a>
             </li>
@@ -56,13 +56,13 @@
                 </div>
             </div>
 
-            <!-- <div class="tab-pane fade" id="pills-chordsdef" role="tabpanel" aria-labelledby="pills-chordsdef-tab">
+            <div class="tab-pane fade" id="pills-chordsdef" role="tabpanel" aria-labelledby="pills-chordsdef-tab">
                 <h3>Akordy - přehled</h3>
                 <div id="divChordReview"></div>
 
                 <h3>Stupnice - přehled</h3>
                 <div id="divScaleReview"></div>
-            </div>             -->
+            </div>             
 
             <div class="tab-pane fade" id="pills-harp" role="tabpanel" aria-labelledby="pills-harp-tab">
                 <h3>Harmonika, klíč: <select id="cbHarmonicaKeys"></select></h3>
@@ -125,53 +125,13 @@
         import { HarmonicaControl } from './controls/harmonica.mjs';
         import { SoundControl } from './sound/sound.mjs';
 
-        window.refreshChords = refreshChords;
+        // window.refreshChords = refreshChords;
         window.setCssClass = setCssClass;
         window.P_CONTAINER = new Container();
         window.playToneWithOctave = playToneWithOctave;
 
         new ScaleSelectControl("cbScales").render(document, generateSelectedScale);
         new ScaleSelectControl("cbScalesHarp").render(document, refreshHarp);
-
-        function generateSelectedChord() {
-            let chordTypeName = getSelectedValue("cbChordTypes");
-            P_CONTAINER.CHORD = new ChordControl("divOutput", chordTypeName)
-            P_CONTAINER.CHORD.render();
-        }
-
-        function generateSelectedScale() {
-            new ScaleControl(
-                "divOutputScale",
-                getSelectedValue("cbTones"),
-                getSelectedValue("cbScales"),
-                "tbOutputScale",
-                true,
-                3
-            ).render();
-        }
-
-        // function fillChordsReview(){
-        //     new ChordReviewControl('divChordReview', 'tableChordsReview').render();
-        //     $('#tableChordsReview').DataTable( {
-        //         searching: false,
-        //         paging: false,
-        //         info: false
-        //     } );
-        // }
-
-        // function fillScalesReview(){
-        //     P_CONTAINER.SCALE_REVIEW = new ScaleReviewControl('divScaleReview', 'tableScalesReview');
-        //     P_CONTAINER.SCALE_REVIEW.render();
-        //     $('#tableScalesReview').DataTable( {
-        //         searching: false,
-        //         paging: false,
-        //         info: false
-        //     } );
-        // }
-        function refreshAll() {
-            refreshChords();
-            refreshHarp();
-        }
 
         function refreshChords() {
             generateSelectedChord();
@@ -210,15 +170,34 @@
         }
 
         // -- init ui
-        new ChordTypeSelectControl('cbChordTypes').render(document, refreshChords);
+        P_CONTAINER.CHORD_TYPES = new ChordTypeSelectControl('cbChordTypes');
+        P_CONTAINER.CHORD_TYPES.render(document, refreshChords);
+        
+        P_CONTAINER.CHORD = new ChordControl("divOutput", P_CONTAINER.CHORD_TYPES)
+        P_CONTAINER.CHORD.render();
+
+
         new ToneSelectControl('cbTones').render(document, generateSelectedScale);
         new ToneSelectControl('cbTonesHarp').render(document, refreshHarp);
         P_CONTAINER.HARP_KEY = new ToneSelectControl('cbHarmonicaKeys');
         P_CONTAINER.HARP_KEY.render(document, refreshHarp);
-        // fillChordsReview();
-        // fillScalesReview();
-        refreshAll();
-        generateSelectedScale();
+
+        P_CONTAINER.CHORD_REVIEW = new ChordReviewControl('divChordReview', 'tableChordsReview');
+        P_CONTAINER.CHORD_REVIEW.render();
+
+        P_CONTAINER.SCALE_REVIEW = new ScaleReviewControl('divScaleReview', 'tableScalesReview');
+        P_CONTAINER.SCALE_REVIEW.render();
+
+        function generateSelectedScale() {
+            new ScaleControl(
+                "divOutputScale",
+                getSelectedValue("cbTones"),
+                getSelectedValue("cbScales"),
+                "tbOutputScale",
+                true,
+                3
+            ).render();
+        }        
     </script>
 </body>
 

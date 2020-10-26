@@ -7,12 +7,21 @@ import {DB} from "../core/leaflet.mjs"
 export class ChordTypeSelectControl extends BaseControl{
     constructor(controlId) {
         super(controlId);
+        this.SelectedChordTypeName = DB.chords[0].name;
     }
 
-    render(document, onRefresh) {
+    render(document) {
         let to = document.getElementById(this.ControlId);
-        to.addEventListener("change", onRefresh);
+        to.addEventListener("change", this.onSelect);
         this.fillChordTypes(to, document);
+    }
+
+    get chordType() {
+        return this.Core.chord(this.SelectedChordTypeName);
+    }    
+
+    onSelect(e){
+        this.SelectedChordTypeName = DB.tones[e.target.selectedIndex];
     }
     
     fillChordTypes(cbChordTypes) {

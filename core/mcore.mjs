@@ -208,6 +208,12 @@ export class MCore {
     }
 
     guitarRootStrings(guitarName){
+        // [E] ->
+        // [A] ->
+        // [D] ->
+        // [G] ->
+        // [H] ->
+        // [E] ->
         let guitar = this.guitar(guitarName);
         return guitar
             .template
@@ -228,6 +234,12 @@ export class MCore {
     }
 
     unwindGuitarString(tone, frets){
+        // [**E**] [F] [F#] [G], ...
         return Array.from(Array(frets), (x, fret) => this.shiftTone(tone, fret));
+    }
+
+    generateGuitarFretboard(tuning, frets){
+        let rootStrings = this.guitarRootStrings(tuning);
+        return rootStrings.map((rootNote) => this.unwindGuitarString(rootNote, frets));
     }
 }

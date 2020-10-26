@@ -16,6 +16,7 @@ export class ChordReviewControl extends BaseControl{
             this.printHeader() +
             this.renderRows() +
         "</table>");
+        $(`#${this.TableId}`).DataTable( { searching: false, paging: false, info: false } );
     }
 
     renderRows(){

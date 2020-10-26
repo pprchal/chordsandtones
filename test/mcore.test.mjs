@@ -66,17 +66,18 @@ describe('Music math', () => {
         checkGuitarTuning("DADGHE");
     });
 
-    it('toneFreq(F) = 21.83Hz', () => {
+    it('toneFreq(F1) = 21.83Hz', () => {
         strictEqual(21.83, mcore.toneFreq('F', 0));
     });
 
+    it('toneFreq(F3) = 87.31Hz', () => {
+        strictEqual(87.31, mcore.toneFreq('F', 2));
+    });
+    
     function debugPrint(tuning, frets){
-        let rootStrings = mcore.guitarRootStrings(tuning);
-        let results = rootStrings.map((rootNote) => {
-            let semitonesOnString = mcore.unwindGuitarString(rootNote, frets);    
-            return semitonesOnString.reduce((s, tone) => s += `${tone.name}${tone.octave} `, '')
-        });
-        return results;
+        return mcore.generateGuitarFretboard(tuning, frets).map((semitonesOnString) => 
+            semitonesOnString.reduce((s, tone) => s += `${tone.name}${tone.octave} `, '')
+        );
     }
 
     function checkGuitarTuning(name){

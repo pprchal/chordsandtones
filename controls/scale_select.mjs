@@ -16,11 +16,12 @@ export class ScaleSelectControl extends BaseControl{
     }
     
     fillScales(cbScales, document) {
-        for (let i = 0; i < DB.scales.length; i++) {
-            let scale = DB.scales[i];
-            let option = document.createElement("option");
-            option.text = scale.name;
-            cbScales.add(option);
-        }
+        DB.scales.forEach((scale) => cbScales.add(this.createScaleOption(scale, document)));
+    }
+
+    createScaleOption(scale, document){
+        let option = document.createElement("option");
+        option.text = scale.name;
+        return option;
     }
 }
