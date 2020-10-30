@@ -4,21 +4,44 @@ import {BaseControl} from "./control.mjs"
 import {DB} from "../core/leaflet.mjs"
 
 export class ChordControl extends BaseControl{
-    constructor(controlId, chordTypeControl) {
+    constructor(controlId) {
         super(controlId);
         this.ChordToneId = 1;
-        this.ChordType = chordTypeControl.chordType;
     }
 
     // @chordTypeName (maj7)
-    render() {
-        // window.console.debug(`Rendering chord table: [${this.ChordType.name}]`);
+    render(chordType) {
+        if(chordType == undefined){
+            chordType = DB.chords[0];
+        }
+        window.console.debug(`Rendering chords table: [${chordType.name}]`);
         let chordsInType = DB.tones.map(tone => 
-            this.Core.generateChordTableForTone(this.ChordType, tone)
+            this.Core.generateChordTableForTone(chordType, tone)
         );
 
-        this.setHtml(this.printChordTable(chordsInType, this.ChordType));
+        this.setHtml(this.printChordTable(chordsInType, chordType));
+
+        // this.subscribeTo('CHORD_TYPE', this.onChordTypeChanged, this);
+        // document.addEventListener("CHORD_TYPE", (e) => this.onChordTypeChanged(e, this));
     }  
+
+    subscribeTo(eventName, messageGroup){
+        this.MessageGroup = messageGroup;
+        document.addEventListener(eventName, (e) => 
+        {
+            if(messageGroup === this.MessageGroup){
+                this.onChordTypeChanged(e, this);
+            }
+        }
+        );
+
+        return this;
+    }
+
+
+    onChordTypeChanged(e, self){
+        self.render(e.ChordType);
+    }
 
 
     printChordTable(chordsInType, chordType) {

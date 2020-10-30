@@ -41,7 +41,7 @@
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-chords" role="tabpanel" aria-labelledby="pills-chords-tab">
                 <h3 class="bd-title">Tabulka akordů <select id="cbChordTypes"></select></h3>
-                <div id="divOutput"></div>
+                <div id="divChordTypes"></div>
                 <br />
         
                 <div id="divCharChords"></div>
@@ -125,79 +125,52 @@
         import { HarmonicaControl } from './controls/harmonica.mjs';
         import { SoundControl } from './sound/sound.mjs';
 
-        // window.refreshChords = refreshChords;
         window.setCssClass = setCssClass;
         window.P_CONTAINER = new Container();
-        window.playToneWithOctave = playToneWithOctave;
-
-        new ScaleSelectControl("cbScales").render(document, generateSelectedScale);
-        new ScaleSelectControl("cbScalesHarp").render(document, refreshHarp);
-
-        function refreshChords() {
-            generateSelectedChord();
-        }
-
-        function refreshHarp(){
-            // prepare args...
-            let harpKey = P_CONTAINER.HARP_KEY.tone; 
-            let playKey = getSelectedValue('cbTonesHarp');
-            let playScale = getSelectedValue('cbScalesHarp');
-            console.debug(P_CONTAINER.HARP_KEY.selectedTone);
-
-            // render harp
-            P_CONTAINER.HARP = new HarmonicaControl('divHarmonica', harpKey);
-            P_CONTAINER.HARP.render();
-
-            // render scale
-            P_CONTAINER.HARP_SCALE = new ScaleControl(
-                'divOutputScaleHarp', 
-                playKey, 
-                playScale, 
-                'tbOutputScaleHarp', 
-                true, 
-                P_CONTAINER.HARP.Harmonica.octave
-            );
-            P_CONTAINER.HARP_SCALE.render();
-
-            // do coloring
-            P_CONTAINER.HARP.colorKeyTones(P_CONTAINER.HARP_SCALE);
-        }
-
         P_CONTAINER.SOUND = new SoundControl();
-        function playToneWithOctave(toneName, toneOctave, tuningName, appendControlId, tt) {
-            // document.getElementById(appendControlId).value += toneName;
-            P_CONTAINER.SOUND.playToneWithOctave(toneName, toneOctave, tuningName);
-        }
 
-        // -- init ui
-        P_CONTAINER.CHORD_TYPES = new ChordTypeSelectControl('cbChordTypes');
-        P_CONTAINER.CHORD_TYPES.render(document, refreshChords);
-        
-        P_CONTAINER.CHORD = new ChordControl("divOutput", P_CONTAINER.CHORD_TYPES)
+        // PAGE [1]
+        P_CONTAINER.CHORD_TYPES = new ChordTypeSelectControl('cbChordTypes', 'PAGE1')
+        P_CONTAINER.CHORD_TYPES.render(document);
+        P_CONTAINER.CHORD = new ChordControl('divChordTypes').subscribeTo("CHORD_TYPE", "PAGE1");
         P_CONTAINER.CHORD.render();
 
+         // P_CONTAINER.TONES = new ToneSelectControl('cbTones', 'PAGE1');
+        // P_CONTAINER.TONES.render(document);
+        // P_CONTAINER.SCALE = new ScaleSelectControl("cbScales");
+        // P_CONTAINER.SCALE.render(document);
 
-        new ToneSelectControl('cbTones').render(document, generateSelectedScale);
-        new ToneSelectControl('cbTonesHarp').render(document, refreshHarp);
-        P_CONTAINER.HARP_KEY = new ToneSelectControl('cbHarmonicaKeys');
-        P_CONTAINER.HARP_KEY.render(document, refreshHarp);
+        // PAGE [2]
+        // P_CONTAINER.CHORD_REVIEW = new ChordReviewControl('divChordReview', 'tableChordsReview');
+        // P_CONTAINER.CHORD_REVIEW.render();
+        // P_CONTAINER.SCALE_REVIEW = new ScaleReviewControl('divScaleReview', 'tableScalesReview');
+        // P_CONTAINER.SCALE_REVIEW.render();
 
-        P_CONTAINER.CHORD_REVIEW = new ChordReviewControl('divChordReview', 'tableChordsReview');
-        P_CONTAINER.CHORD_REVIEW.render();
+        // PAGE [3]
+        // P_CONTAINER.SCALE_HARP = new ScaleSelectControl("cbScalesHarp");
+        // P_CONTAINER.SCALE_HARP.render(document);
+        // P_CONTAINER.HARP_KEY = new ToneSelectControl('cbHarmonicaKeys');
+        // P_CONTAINER.HARP_KEY.render(document);
+        // P_CONTAINER.HARP_SCALE = new ToneSelectControl('cbTonesHarp');
+        // P_CONTAINER.HARP_SCALE.render(document);
+        // P_CONTAINER.HARP = new HarmonicaControl('divHarmonica', P_CONTAINER.HARP_KEY);
+        // P_CONTAINER.HARP.render();
+        // P_CONTAINER.HARP.colorKeyTones(P_CONTAINER.HARP_SCALE);
 
-        P_CONTAINER.SCALE_REVIEW = new ScaleReviewControl('divScaleReview', 'tableScalesReview');
-        P_CONTAINER.SCALE_REVIEW.render();
+            // let harpKey = P_CONTAINER.HARP_KEY.tone; 
+            // let playKey = getSelectedValue('cbTonesHarp');
+            // let playScale = getSelectedValue('cbScalesHarp');
 
-        function generateSelectedScale() {
-            new ScaleControl(
-                "divOutputScale",
-                getSelectedValue("cbTones"),
-                getSelectedValue("cbScales"),
-                "tbOutputScale",
-                true,
-                3
-            ).render();
-        }        
+            // // render scale
+            // P_CONTAINER.HARP_SCALE = new ScaleControl(
+            //     'divOutputScaleHarp', 
+            //     playKey, 
+            //     playScale, 
+            //     'tbOutputScaleHarp', 
+            //     true, 
+            //     P_CONTAINER.HARP.Harmonica.octave
+            // );
+            // P_CONTAINER.HARP_SCALE.render();
     </script>
 </body>
 

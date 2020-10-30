@@ -14,12 +14,12 @@ export class ToneMapRecord {
 }
 
 export class HarmonicaControl extends BaseControl {
-    constructor(controlId, key) {
+    constructor(controlId, harpKeyControl) {
         super(controlId);
         this.HarmonicaToneId = 1;
         this.ToneMap = [];
-        this.Harmonica = this.Core.harmonica('Richter diatonická', key.name);
-        this.HarpRootTone = this.Core.tone(key.name, this.Harmonica.octave);
+        this.Harmonica = this.Core.harmonica('Richter diatonická', harpKeyControl.tone.name);
+        this.HarpRootTone = this.Core.tone(harpKeyControl.tone.name, this.Harmonica.octave);
     }
 
     render() {

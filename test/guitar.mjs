@@ -15,9 +15,9 @@ describe('👁 Guitar', () => {
         let ht = document.getElementById('guitar');
     });
 
-    it('👁 renderSVG', () => {
-        let ctl = new GuitarControl("guitar", "EADGHE", 3);
-        let svg = ctl.renderSVG();
-    });
+    // it('👁 renderSVG', () => {
+    //     let ctl = new GuitarControl("guitar", "EADGHE", 3);
+    //     let svg = ctl.renderSVG();
+    // });
 });
 

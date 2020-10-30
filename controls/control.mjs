@@ -14,6 +14,14 @@ export class BaseControl{
         document.getElementById(this.ControlId).innerHTML = html;
     }
 
+    subscribeTo(eventName, handler, self){
+        document.addEventListener(eventName, (e) => {
+            if(self.MessageGroup === e.MessageGroup){
+                handler.call(e, self);
+            }
+        });
+    }
+
     getControlId(){
         this.CtID++;
         return `${this.ControlId}_${this.CtID}`;

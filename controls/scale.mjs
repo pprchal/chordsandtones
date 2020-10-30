@@ -53,10 +53,14 @@ export class ScaleControl extends BaseControl{
         return this.Core.toneAsText(tone) + (this.ShowOctaves ? tone.octave : '');
     }
 
-    toneClickScript(tone){
-        return `playToneWithOctave('${tone.name}', '${tone.octave}', '${this.Tuning.name}', '${this.AppendControlId}', event)`;
+    // toneClickScript(tone){
+    //     return `playToneWithOctave('${tone.name}', '${tone.octave}', '${this.Tuning.name}', '${this.AppendControlId}', event)`;
+    // }
+    
+    playToneWithOctave(toneName, toneOctave, tuningName, appendControlId, tt) {
+        // document.getElementById(appendControlId).value += toneName;
+        P_CONTAINER.SOUND.playToneWithOctave(toneName, toneOctave, tuningName);
     }
-
 
     printScaleHeader(distances) {
         return "<tr>" +
