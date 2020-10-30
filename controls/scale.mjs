@@ -4,24 +4,50 @@
 import {BaseControl} from "./control.mjs"
 
 export class ScaleControl extends BaseControl{
-    constructor(controlId, rootToneName, scaleName, appendControlId, showOctaves, octave) {
+    constructor(controlId, showOctaves, octave) {
         super(controlId);
-        this.Scale = this.Core.scale(scaleName);
-        this.AppendControlId = appendControlId;
         this.Octave = octave == undefined ? 4 : octave;
-        this.RootTone = this.Core.tone(rootToneName, this.Octave);
-        this.TonesInScale = this.Core.generateScaleTablesForTone(this.RootTone, this.Scale);
         this.ShowOctaves = showOctaves == undefined ? false : showOctaves;
+        this.RootTone = this.Core.tone('C', this.Octave);
+        this.Scale = this.Core.scale('dur');
     }
 
     // @rootToneName (C)
     // @scaleName (dur)
-    render() {
+    render(rootTone, scale) {
+        if(rootTone != undefined){
+            this.RootTone = rootTone;
+        }
+
+        if(scale != undefined){
+            this.Scale = scale;
+        }
+
+        this.TonesInScale = this.Core.generateScaleTablesForTone(this.RootTone, this.Scale);
+
         let html = "";
         for(let i=0; i<this.Scale.distances.length; i++){
             html += this.renderSingleScale(i);
         }
         this.setHtml(html);
+    }
+
+    subscribeTo(eventName, messageGroup){
+        this.MessageGroup = messageGroup;
+        document.addEventListener(eventName, (e) => 
+        {
+            if(messageGroup === this.MessageGroup){
+                if(e.type === 'SCALE_TYPE'){
+                    this.render(undefined, e.EventData);
+                }
+                else if(e.type === 'TONE'){
+                    this.render(e.EventData, undefined);
+                }                
+            }
+        }
+        );
+
+        return this;
     }
 
     renderSingleScale(i){
@@ -45,7 +71,8 @@ export class ScaleControl extends BaseControl{
     } 
 
     renderScaleButton(tone){
-        let button = `<a class="btn btn-primary btn-block" href="javascript:none" onclick="${this.toneClickScript(tone)}; return false;" role="button">${this.fromatScaleTone(tone)}</a>`;
+        // ${this.toneClickScript(tone)}; return false;
+        let button = `<a class="btn btn-primary btn-block" href="javascript:none" onclick="" role="button">${this.fromatScaleTone(tone)}</a>`;
         return button;
     }
 

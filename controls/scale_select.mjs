@@ -9,9 +9,11 @@ export class ScaleSelectControl extends BaseControl{
         super(controlId);
     }
 
-    render(document, onRefresh) {
+    render(document) {
         let to = document.getElementById(this.ControlId);
-        to.addEventListener("change", onRefresh);
+        to.addEventListener("change", (e) =>{
+            this.fireEvent('SCALE_TYPE', DB.scales[e.target.selectedIndex]);
+        });
         this.fillScales(to, document);
     }
     

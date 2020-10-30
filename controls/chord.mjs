@@ -20,9 +20,6 @@ export class ChordControl extends BaseControl{
         );
 
         this.setHtml(this.printChordTable(chordsInType, chordType));
-
-        // this.subscribeTo('CHORD_TYPE', this.onChordTypeChanged, this);
-        // document.addEventListener("CHORD_TYPE", (e) => this.onChordTypeChanged(e, this));
     }  
 
     subscribeTo(eventName, messageGroup){
@@ -30,19 +27,12 @@ export class ChordControl extends BaseControl{
         document.addEventListener(eventName, (e) => 
         {
             if(messageGroup === this.MessageGroup){
-                this.onChordTypeChanged(e, this);
+                this.render(e.EventData);
             }
-        }
-        );
+        });
 
         return this;
     }
-
-
-    onChordTypeChanged(e, self){
-        self.render(e.ChordType);
-    }
-
 
     printChordTable(chordsInType, chordType) {
         return "<table class=\"table table-hover table-sm\">" + 

@@ -5,27 +5,16 @@ import {BaseControl} from "./control.mjs"
 import {DB} from "../core/leaflet.mjs"
 
 export class ToneSelectControl extends BaseControl{
-    constructor(controlId, messageGroup) {
-        super(controlId, messageGroup);
-        this.selectedTone = DB.tones[0];
+    constructor(controlId) {
+        super(controlId);
     }
 
-    render(document, onRefresh) {
+    render(document) {
         let to = document.getElementById(this.ControlId);
         to.addEventListener("change", (e) => {
-            this.selectedTone = DB.tones[e.target.selectedIndex];
-           if(onRefresh != null){
-                onRefresh();
-           }
+            this.fireEvent('TONE', DB.tones[e.target.selectedIndex]);
         });
         this.fillTones(to, document);
-    }
-
-    onToneChange(e){
-    }
-
-    get tone() {
-        return this.selectedTone;
     }
     
     // fill tones

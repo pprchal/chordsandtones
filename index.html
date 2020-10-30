@@ -130,15 +130,17 @@
         P_CONTAINER.SOUND = new SoundControl();
 
         // PAGE [1]
-        P_CONTAINER.CHORD_TYPES = new ChordTypeSelectControl('cbChordTypes', 'PAGE1')
-        P_CONTAINER.CHORD_TYPES.render(document);
-        P_CONTAINER.CHORD = new ChordControl('divChordTypes').subscribeTo("CHORD_TYPE", "PAGE1");
-        P_CONTAINER.CHORD.render();
-
-         // P_CONTAINER.TONES = new ToneSelectControl('cbTones', 'PAGE1');
-        // P_CONTAINER.TONES.render(document);
-        // P_CONTAINER.SCALE = new ScaleSelectControl("cbScales");
-        // P_CONTAINER.SCALE.render(document);
+        new ChordTypeSelectControl('cbChordTypes').publishTo('PAGE1').render(document);
+        new ChordControl('divChordTypes').subscribeTo('CHORD_TYPE', 'PAGE1').render();
+        new ToneSelectControl('cbTones').publishTo('PAGE1').render(document);
+        new ScaleSelectControl('cbScales').publishTo('PAGE1').render(document);
+        new ScaleControl(
+            'divOutputScale', 
+            true, 
+            null
+        ).subscribeTo('TONE', 'PAGE1')
+            .subscribeTo('SCALE_TYPE', 'PAGE1')
+            .render();
 
         // PAGE [2]
         // P_CONTAINER.CHORD_REVIEW = new ChordReviewControl('divChordReview', 'tableChordsReview');

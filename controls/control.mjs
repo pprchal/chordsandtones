@@ -14,6 +14,20 @@ export class BaseControl{
         document.getElementById(this.ControlId).innerHTML = html;
     }
 
+    publishTo(messageGroup){
+        this.MessageGroup = messageGroup;
+        return this;
+    }
+
+    fireEvent(name, eventData){
+        var evt = document.createEvent("Event");
+        evt.initEvent(name, true, true);
+        evt.MessageGroup = this.MessageGroup;
+        evt.Sender = this;
+        evt.EventData = eventData;
+        document.dispatchEvent(evt);
+    }
+
     subscribeTo(eventName, handler, self){
         document.addEventListener(eventName, (e) => {
             if(self.MessageGroup === e.MessageGroup){
