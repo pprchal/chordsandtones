@@ -1,7 +1,9 @@
 // Pavel Prchal 2020
 // -------------------- MetronomeControl
 // --------------------
-class MetronomeControl extends MetronomeControlBase{
+import {MetronomeControlBase} from "./metronome_base.mjs"
+
+export class MetronomeControl extends MetronomeControlBase{
     constructor(controlId, holderId, metroA, metroB, bpm, sound) {
         super(controlId, metroA, metroB, bpm);
         this.r = Raphael(holderId, 640, 480);
@@ -40,6 +42,26 @@ class MetronomeControl extends MetronomeControlBase{
         return this.running;
     }
 
+        // P_CONTAINER.METRONOME = new MetronomeControlBase("metronomeHolder", P_CONTAINER.SOUND);
+        // P_CONTAINER.METRONOME.render();
+        // refreshMetronome();
+        // function toggleMetronome() {
+        //     document.getElementById("btStartStop").innerText = P_CONTAINER.METRONOME.isRunning() ? "Start" : "Stop";
+        //     if(P_CONTAINER.METRONOME.isRunning()){
+        //         P_CONTAINER.METRONOME.stop();
+        //     }else{
+        //         refreshMetronome();
+        //         P_CONTAINER.METRONOME.start();
+        //     }
+        // }
+
+    refreshMetronome(){
+        let a = parseInt(getSelectedValue("cbMetroA"));
+        let b = parseInt(getSelectedValue("cbMetroB"));
+        let s = parseInt(getSelectedValue("cbMetroS"));
+        let bpm = parseInt(getSelectedValue2("tbBPM"));
+        P_CONTAINER.METRONOME.update(a, b, bpm, s);
+    }
 
     update(metroA, metroB){
         this.A = metroA;

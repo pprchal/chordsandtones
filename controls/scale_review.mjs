@@ -1,10 +1,14 @@
 // Pavel Prchal  2020
 // -------------------- ScaleReviewControl
 // --------------------
-class ScaleReviewControl extends BaseControl{
-    constructor(controlId) {
+import {BaseControl} from "./control.mjs"
+import {DB} from "../core/leaflet.mjs"
+
+export class ScaleReviewControl extends BaseControl{
+    constructor(controlId, tableId) {
         super(controlId);
-        this.ScaleRows = []
+        this.ScaleRows = [];
+        this.TableId = tableId;
     }
 
     render(){
@@ -12,6 +16,7 @@ class ScaleReviewControl extends BaseControl{
             this.printHeader() +
             DB.scales.reduce((html, scale) => html + this.renderScale(scale), "") +
         "</table>");
+        $(`#${this.TableId}`).DataTable( { searching: false, paging: false, info: false } );
     }
 
     renderScale(scale){
@@ -83,6 +88,10 @@ class ScaleReviewControl extends BaseControl{
             control.innerText = shiftedTone.name;
         }
     }
+
+    // function shiftScale(direction, sender, n){
+    //     P_CONTAINER.SCALE_REVIEW.shiftScale(direction, n);
+    // }
 
     printHeader(){
         let html = '<thead><tr><td>&nbsp;</td>' +

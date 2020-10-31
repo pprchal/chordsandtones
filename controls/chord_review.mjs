@@ -1,7 +1,10 @@
 // Pavel Prchal  2020
 // -------------------- ChordReviewControl
 // --------------------
-class ChordReviewControl extends BaseControl{
+import {BaseControl} from "./control.mjs"
+import {DB} from "../core/leaflet.mjs"
+
+export class ChordReviewControl extends BaseControl{
     constructor(controlId, tableId) {
         super(controlId);
         this.ChordToneId = 1;
@@ -13,6 +16,7 @@ class ChordReviewControl extends BaseControl{
             this.printHeader() +
             this.renderRows() +
         "</table>");
+        $(`#${this.TableId}`).DataTable( { searching: false, paging: false, info: false } );
     }
 
     renderRows(){
@@ -64,11 +68,11 @@ class ChordReviewControl extends BaseControl{
     printHeader(){
         let html = '<thead><tr><td>&nbsp;</td>';
         for (let i=0; i<DB.tones.length; i++){
-            html += `<th>${this.formatHtmlTone(DB.tones[i])}</th>`;
+            html += `<th>${this.Core.toneAsHtml(DB.tones[i])}</th>`;
         }
 
         for (let i=0; i<DB.tones.length; i++){
-            html += `<th>${this.formatHtmlTone(DB.tones[i])}</th>`;
+            html += `<th>${this.Core.toneAsHtml(DB.tones[i])}</th>`;
         }
         return html + '</tr></thead>';
     }

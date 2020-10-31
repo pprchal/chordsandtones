@@ -2,16 +2,35 @@
 
 // -------------------- HarmonicaControl
 // --------------------
-class HarmonicaControl extends BaseControl {
-    constructor(controlId, harpKey) {
+import {MCore} from "../core/mcore.mjs"
+import {BaseControl} from "./control.mjs"
+import {setCssClass} from "../core/shared.mjs"
+
+export class ToneMapRecord {
+    constructor(controlId, tone){
+        this.ControlId = controlId;
+        this.Tone = tone;
+    }
+}
+
+export class HarmonicaControl extends BaseControl {
+    constructor(controlId) {
         super(controlId);
         this.HarmonicaToneId = 1;
         this.ToneMap = [];
-        this.HarpRootTone = this.Core.findToneByName(harpKey);
-        this.Harmonica = this.Core.findHarmonicaByName('Richter diatonická');
+        this.HarpRootTone = this.Core.tone('C', 4);
+        this.Harmonica = this.Core.harmonica('Richter diatonická', this.HarpRootTone.name);
     }
 
-    render() {
+    render(harpRootTone) {
+        if(harpRootTone != undefined){
+            this.HarpRootTone = harpRootTone;
+            this.Harmonica = this.Core.harmonica('Richter diatonická', this.HarpRootTone.name);
+        }
+
+
+
+
         this.debug(`Rendering harp in key: [${this.HarpRootTone.name}] [${this.Harmonica.name}]`);
 
         let html = "<table>";
@@ -27,6 +46,18 @@ class HarmonicaControl extends BaseControl {
         this.setHtml(html + "</table>");
     }        
     
+    subscribeTo(eventName, messageGroup){
+        this.MessageGroup = messageGroup;
+        document.addEventListener(eventName, (e) => 
+        {
+            if(e.MessageGroup === this.MessageGroup){
+                this.render(e.EventData);
+            }
+        });
+
+        return this;
+    }
+
     formatHarmonicaRowTitle(row){
         let htmlName = row.name;
         if(row.name === "1/2"){
@@ -45,35 +76,23 @@ class HarmonicaControl extends BaseControl {
         return "<tr>" +
             `<td>${this.formatHarmonicaRowTitle(row)}</td>` +
             `<td>${row.type}</td>` +
-            row.offsets.reduce((html, offset) => {
-                if(isNaN(offset)){
+            row.offsets.reduce((html, distance) => {
+                if(isNaN(distance)){
                     return html + "<td>&nbsp;</td>";
                 }
                 else{
                     this.HarmonicaToneId = this.HarmonicaToneId + 1;
-                    var harmonicaTone = this.Core.shiftTone(rootTone, offset);
-                    harmonicaTone.octave = this.getOctaveForHarmonicaTone(rowNumber, 1);
-                    let harmonicaToneId = `harmonicaTone_${harmonicaTone.name}_${this.HarmonicaToneId}`;
-                    this.ToneMap.push(new ToneMapRecord(harmonicaToneId, harmonicaTone));
-                    this.debug(`${harmonicaTone.name} - ${harmonicaToneId}`);
-                    return html + `<td id="${harmonicaToneId}">${this.formatHtmlTone(harmonicaTone)}</td>`;
+                    let tone = this.Core.shiftTone(rootTone, distance);
+                    let toneId = `harmonicaTone_${tone.name}_${this.HarmonicaToneId}`;
+                    this.ToneMap.push(new ToneMapRecord(toneId, tone));
+                    return html + this.formatHarpTone(tone, toneId);
                 }
             }, "") +
         "</tr>";
     }
 
-    getOctaveForHarmonicaTone(col){
-        // TODO: need this octave? ....
-        if(col >= 9)
-            return 4;
-    
-        if(col >= 6)
-            return 3;
-
-        if(col >= 3)
-            return 2;
-    
-        return 1;
+    formatHarpTone(tone, toneId){
+        return `<td id="${toneId}">${this.Core.toneAsHtml(tone)}${tone.octave}</td>`;
     }
 
     // @harmonica
@@ -106,7 +125,6 @@ class HarmonicaControl extends BaseControl {
     }
 
     setColor(toneControlId, on) {
-        // window.console.debug(`${toneControlId}: [${(on ? "ON" : "OFF")}]`);
         setCssClass(
             document.getElementById(toneControlId), 
             'note-on',

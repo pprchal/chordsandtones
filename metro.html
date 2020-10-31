@@ -90,7 +90,7 @@
             P_CONTAINER.METRONOME.update(a, b, bpm, s);
         }
 
-        this.P_SOUND = new SoundControl('sctl');
+        this.P_SOUND = new SoundControl();
         let METRONOME = new MetronomeControlBase("metronomeHolder", P_SOUND);
         METRONOME.render();
         refreshMetronome();

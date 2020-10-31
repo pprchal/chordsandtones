@@ -9,63 +9,12 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-    <script src="extlib/raphael.min.js" type="text/javascript" charset="utf-8"></script>
+    <script defer="true" src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script defer="true" src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js" defer="true"></script>
 
-    <style>
-        table {
-            border: 1px solid black;
-        }
-
-        th,
-        td {
-            text-align: left;
-            padding: 8px;
-        }
-
-        .note-on {
-            background-color: yellow;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        .metroTable {
-        border-collapse: collapse;
-        text-align: center;
-        }
-        .table, td, th {
-        border: 1px solid black;
-        }
-
-        .tickA{
-            background-color: rgb(241, 80, 80);
-        }
-
-        .tickB{
-            background-color: rgb(255, 194, 199);
-        }        
-    </style>
-
-
-    <script src="core/container.js"></script>
-    <script src="core/shared.js"></script>
-    <script src="core/database.js"></script>
-    <script src="core/mcore.js"></script>
-
-    <script src="controls/scale_control.js"></script>
-    <script src="controls/scale_review_control.js"></script>
-    <script src="controls/chord_control.js"></script>
-    <script src="controls/chord_review_control.js"></script>
-    <script src="controls/harmonica_control.js"></script>
-    <script src="controls/sound_control.js"></script>
-    <script src="controls/metronome_control_base.js"></script>
-    <script src="controls/metronome_control.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
@@ -83,44 +32,95 @@
             <li class="nav-item">
                 <a class="nav-link" id="pills-metro-tab" data-toggle="pill" href="#pills-metro" role="tab" aria-controls="pillsmetro" aria-selected="false">Metronom</a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link" id="pills-tuning-tab" data-toggle="pill" href="#pills-tuning" role="tab" aria-controls="pillsharp" aria-selected="false">Ladění</a>
-            </li>
+            </li> -->
         </ul>
 
         <div class="tab-content" id="pills-tabContent">
+            <!-- PAGE [1] -->
             <div class="tab-pane fade show active" id="pills-chords" role="tabpanel" aria-labelledby="pills-chords-tab">
-                <h3 class="bd-title">Tabulka akordů <select id="cbChordTypes" onchange="refreshChords()"></select></h3>
-                <div id="divOutput"></div>
+                <h3 class="bd-title">Tabulka akordů <select id="cbChordTypes"></select></h3>
+                <div id="divChordTypes"></div>
                 <br />
         
                 <div id="divCharChords"></div>
 
-                <h3>Stupnice <select id="cbTones" onchange="refreshChords()"></select>
-                    <select id="cbScales" onchange="refreshChords()"></select>
+                <h3>Stupnice <select id="cbTones"></select>
+                    <select id="cbScales"></select>
                 </h3>
 
                 <div>
                     <div id="divOutputScale"></div>
-                    <input id="tbOutputScale" type="text" />
                 </div>
+                <script type="module" defer="true">
+                    import { getSelectedValue, getSelectedValue2, setCssClass } from "./core/shared.mjs";
+                    import { ChordControl } from './controls/chord.mjs';
+                    import { ChordTypeSelectControl } from './controls/chord_type_select.mjs';
+                    import { ScaleSelectControl } from './controls/scale_select.mjs';
+                    import { ScaleControl } from './controls/scale.mjs';
+                    import { ToneSelectControl } from './controls/tone_select.mjs';
+            
+                    window.setCssClass = setCssClass;
+            
+                    // PAGE [1]
+                    new ChordTypeSelectControl('cbChordTypes').publishTo('PAGE [1]').render(document);
+                    new ChordControl('divChordTypes').subscribeTo('CHORD_TYPE', 'PAGE [1]').render();
+                    new ToneSelectControl('cbTones').publishTo('PAGE [1]').render(document);
+                    new ScaleSelectControl('cbScales').publishTo('PAGE [1]').render(document);
+                    new ScaleControl('divOutputScale',  true).subscribeTo('TONE', 'PAGE [1]')
+                        .subscribeTo('SCALE_TYPE', 'PAGE [1]')
+                        .render();
+                </script>
             </div>
 
+            <!-- PAGE [2] -->
             <div class="tab-pane fade" id="pills-chordsdef" role="tabpanel" aria-labelledby="pills-chordsdef-tab">
                 <h3>Akordy - přehled</h3>
                 <div id="divChordReview"></div>
 
                 <h3>Stupnice - přehled</h3>
                 <div id="divScaleReview"></div>
-            </div>            
+                <script type="module" defer="true">
+                    import { ChordReviewControl } from './controls/chord_review.mjs';
+                    import { ScaleReviewControl } from './controls/scale_review.mjs';
 
+                    new ChordReviewControl('divChordReview', 'tableChordsReview').render();
+                    new ScaleReviewControl('divScaleReview', 'tableScalesReview').render();
+                </script>
+
+            </div>             
+
+            <!-- PAGE [3] -->
             <div class="tab-pane fade" id="pills-harp" role="tabpanel" aria-labelledby="pills-harp-tab">
-                <h3>Harmonika, klíč: <select id="cbHarmonicaKeys" onchange="refreshHarp()"></select></h3>
+                <h3>Harmonika, klíč: <select id="cbHarmonicaKeys"></select></h3>
                 <div id="divHarmonica"></div>
+
                 <br/>
-                <h3>Stupnice - <select id="cbTonesHarp" onchange="refreshHarp()"></select><select id="cbScalesHarp" onchange="refreshHarp()"></select></h3>
+
+                <h3>Stupnice - <select id="cbTonesHarp"></select><select id="cbScalesHarp"></select></h3>
                 <div id="divOutputScaleHarp"></div>
+
+                <script type="module" defer="true">
+                    import { ScaleSelectControl } from './controls/scale_select.mjs';
+                    import { ToneSelectControl } from './controls/tone_select.mjs';
+                    import { HarmonicaControl } from './controls/harmonica.mjs';
+                    import { ScaleControl } from './controls/scale.mjs';
+
+                    new ToneSelectControl('cbHarmonicaKeys').publishTo('PAGE [3].1').render(document);
+                    new HarmonicaControl('divHarmonica')
+                        .subscribeTo('TONE', 'PAGE [3].1')
+                        .render();                    
+
+                    new ToneSelectControl('cbTonesHarp').publishTo('PAGE [3].2').render(document);
+                    new ScaleSelectControl('cbScalesHarp').publishTo('PAGE [3].2').render(document);
+                    new ScaleControl('divOutputScaleHarp',  true).subscribeTo('TONE', 'PAGE [3].2')
+                        .subscribeTo('SCALE_TYPE', 'PAGE [3].2')
+                        .render();
+                </script>
             </div>
+
+            <!-- PAGE [4] -->
 
             <div class="tab-pane fade" id="pills-metro" role="tabpanel" aria-labelledby="pills-metro-tab">
                 <span>A:</span>
@@ -152,177 +152,26 @@
                 </select>
 
                 <div id="metronomeHolder"></div>
+                <script type="module" defer="true">
+                    // import { MetronomeControl } from './controls/metronome.mjs'; 
+                </script>
             </div>
 
-            <div class="tab-pane fade" id="pills-tuning" role="tabpanel" aria-labelledby="pills-tuning-tab">
+            <!-- <div class="tab-pane fade" id="pills-tuning" role="tabpanel" aria-labelledby="pills-tuning-tab">
                 <h3>Ladění</h3>
                 <select id="cbTunings"></select>
-            </div>
+            </div> -->
         </div>
     </div>
 
-
-    <script>
-        function toggleMetronome() {
-            let running = P_CONTAINER.METRONOME.toggleStartStop();
-            document.getElementById('btStartStop').innerText = running ? "Stop" : "Start";
-        }
-
-        function generateSelectedChord() {
-            let chordTypeName = getSelectedValue('cbChordTypes');
-            P_CONTAINER.CHORD = new ChordControl('divOutput', chordTypeName)
-            P_CONTAINER.CHORD.render();
-        }
-
-        function generateSelectedScale() {
-            new ScaleControl(
-                'divOutputScale',
-                getSelectedValue('cbTones'),
-                getSelectedValue('cbScales'),
-                'tbOutputScale'
-            ).render();
-        }
-
-        function fillChordsReview(){
-             new ChordReviewControl('divChordReview', 'tableChordsReview').render();
-            $('#tableChordsReview').DataTable( {
-                searching: false,
-                paging: false,
-                info: false
-            } );
-        }
-
-        function fillScalesReview(){
-            P_CONTAINER.SCALE_REVIEW = new ScaleReviewControl('divScaleReview', 'tableScalesReview');
-            P_CONTAINER.SCALE_REVIEW.render();
-            $('#tableScalesReview').DataTable( {
-                searching: false,
-                paging: false,
-                info: false
-            } );
-        }
-        
-        function refreshAll() {
-            refreshChords();
-            refreshHarp();
-        }
-
-        function refreshChords() {
-            generateSelectedChord();
-            generateSelectedScale();
-        }
-
-        function refreshHarp(){
-            // prepare args...
-            let harpKey = getSelectedValue('cbHarmonicaKeys');
-            let playKey = getSelectedValue('cbTonesHarp');
-            let playScale = getSelectedValue('cbScalesHarp');
-            // window.console.debug(`Harp in key: [${harpKey}] colorize scale: [${playKey}${playScale}]`);
-
-            // render scale
-            let scaleCtl = new ScaleControl('divOutputScaleHarp', playKey, playScale, 'tbOutputScaleHarp')
-            scaleCtl.render();
-
-            // render harp
-            let harpCtl = new HarmonicaControl('divHarmonica', harpKey);
-            harpCtl.render();
-
-            // do coloring
-            harpCtl.colorKeyTones(scaleCtl);
-        }
-
-        function refreshMetronome(){
-            let a = parseInt(getSelectedValue('cbMetroA'));
-            let b = parseInt(getSelectedValue('cbMetroB'));
-            let s = parseInt(getSelectedValue('cbMetroS'));
-            let bpm = parseInt(getSelectedValue2('tbBPM'));
-            P_CONTAINER.METRONOME.update(a, b, bpm, s);
-        }
-
-        function toggleMetronome() {
-            document.getElementById('btStartStop').innerText = P_CONTAINER.METRONOME.isRunning() ? "Start" : "Stop";
-            if(P_CONTAINER.METRONOME.isRunning()){
-                P_CONTAINER.METRONOME.stop();
-            }else{
-                refreshMetronome();
-                P_CONTAINER.METRONOME.start();
-            }
-        }
-
-        let P_CONTAINER = new Container();
-        this.getContainer = () => P_CONTAINER;
-
-        P_CONTAINER.DB = DB;
-        P_CONTAINER.SOUND = new SoundControl('sctl');
-        P_CONTAINER.METRONOME = new MetronomeControlBase("metronomeHolder", P_CONTAINER.SOUND);
-        P_CONTAINER.METRONOME.render();
-        refreshMetronome();
-
-        function playToneWithOctave(toneName, toneOctave, tuningName, appendControlId) {
-            document.getElementById(appendControlId).value += toneName;
-            P_CONTAINER.SOUND.playToneWithOctave(toneName, toneOctave, tuningName);
-        }
-
-        function shiftScale(direction, sender, n){
-            P_CONTAINER.SCALE_REVIEW.shiftScale(direction, n);
-        }
-
-        // fill tones
-        function fillTones(cbTones) {
-            for (let i = 0; i < DB.tones.length; i++) {
-                let tone = DB.tones[i];
-                let option = document.createElement("option");
-                option.text = tone.name;
-                cbTones.add(option);
-            }
-        }
-
-        // fill tones
-        function fillChordTypes(cbChordTypes) {
-            for (let i = 0; i < DB.chords.length; i++) {
-                let chord = DB.chords[i];
-                let option = document.createElement("option");
-                option.text = chord.name;
-                cbChordTypes.add(option);
-            }
-        }
-
-        // fill scales
-        function fillScales(cbScales) {
-            for (let i = 0; i < DB.scales.length; i++) {
-                let scale = DB.scales[i];
-                let option = document.createElement("option");
-                option.text = scale.name;
-                cbScales.add(option);
-            }
-        }
-
-        // fill tunings
-        function fillTunings(cbTunings) {
-            for (let i = 0; i < DB.tunings.length; i++) {
-                let tuning = DB.tunings[i];
-                let option = document.createElement("option");
-                option.text = tuning.name;
-                cbTunings.add(option);
-            }
-        }
-
-        function displayCharChords(rootTone, chordType){
-            document.getElementById('divCharChords').innerText = new MCore().findCharChords(rootTone);
-        }
-
-        // -- init ui
-        fillChordTypes(document.getElementById('cbChordTypes'));
-        fillTones(document.getElementById('cbTones'));
-        fillScales(document.getElementById('cbScales'));
-        fillTones(document.getElementById('cbTonesHarp'));
-        fillScales(document.getElementById('cbScalesHarp'));
-        fillTones(document.getElementById('cbHarmonicaKeys'));
-        fillTunings(document.getElementById('cbTunings'));
-        fillChordsReview();
-        fillScalesReview();
-        refreshAll();
+    <script type="module" defer="true">
+        import { SoundControl } from './sound/sound.mjs';
+        new SoundControl().subscribeTo('PLAY_TONE');
     </script>
+
 </body>
 
 </html>
+
+
+

@@ -1,11 +1,14 @@
-// Pavel Prchal 2019
+// Pavel Prchal 2019, 2020
 
-// -------------------- Sound
+// -------------------- SoundControl
 // --------------------
-class SoundControl extends BaseControl{ 
-    constructor(controlId){
-        super(controlId);
+import {BaseControl} from "./control.mjs"
+import {MCore} from "../core/mcore.mjs"
+
+export class SoundControl extends BaseControl { 
+    constructor(){
         this.audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+        this.Core = new MCore();
     }
     
     playNote(frequency, duration) {
@@ -22,10 +25,10 @@ class SoundControl extends BaseControl{
     }
 
     playChord(rootNoteName, chordTypeName){
-        let rootNote = this.Core.findToneByName(rootNoteName);
-        let chordType = this.Core.findChordByName(chordTypeName);
+        let rootTone = this.Core.tone(rootNoteName);
+        let chordType = this.Core.chord(chordTypeName);
 
-        let chord = this.Core.generateChordTableForTone(chordType, rootNote);
+        let chord = this.Core.generateChordTableForTone(chordType, rootTone);
         for(let tone of chord.tones){
             this.playNote(this.getFrequency(tone, this.Tuning), 200);
         };
@@ -36,10 +39,12 @@ class SoundControl extends BaseControl{
         return tuning.frequencies[index];
     }
     
-    playToneWithOctave(toneName, toneOctave, tuningName, duration){
-        let index = DB.tones.indexOf(this.Core.findToneByName(toneName)) + (DB.tones.length * toneOctave);
-        let freq = this.Core.findTuningByName(tuningName).frequencies[index];
+    // C, 3, 
+    playToneWithOctave(tone, octave, tuningName, duration){
+        if(duration == undefined){
+            duration = 200;
+        }
+        let freq = this.Core.toneFreq(tone, octave);
         this.playNote(freq, duration);
-        return index;
     }
 }
