@@ -29,9 +29,9 @@
             <li class="nav-item">
                 <a class="nav-link" id="pills-harp-tab" data-toggle="pill" href="#pills-harp" role="tab" aria-controls="pillsharp" aria-selected="false">Harmonika</a>
             </li>
-            <!-- <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link" id="pills-metro-tab" data-toggle="pill" href="#pills-metro" role="tab" aria-controls="pillsmetro" aria-selected="false">Metronom</a>
-            </li> -->
+            </li>
             <!-- <li class="nav-item">
                 <a class="nav-link" id="pills-tuning-tab" data-toggle="pill" href="#pills-tuning" role="tab" aria-controls="pillsharp" aria-selected="false">Ladění</a>
             </li> -->
@@ -52,8 +52,26 @@
 
                 <div>
                     <div id="divOutputScale"></div>
-                    <input id="tbOutputScale" type="text" />
                 </div>
+                <script type="module" defer="true">
+                    import { getSelectedValue, getSelectedValue2, setCssClass } from "./core/shared.mjs";
+                    import { ChordControl } from './controls/chord.mjs';
+                    import { ChordTypeSelectControl } from './controls/chord_type_select.mjs';
+                    import { ScaleSelectControl } from './controls/scale_select.mjs';
+                    import { ScaleControl } from './controls/scale.mjs';
+                    import { ToneSelectControl } from './controls/tone_select.mjs';
+            
+                    window.setCssClass = setCssClass;
+            
+                    // PAGE [1]
+                    new ChordTypeSelectControl('cbChordTypes').publishTo('PAGE [1]').render(document);
+                    new ChordControl('divChordTypes').subscribeTo('CHORD_TYPE', 'PAGE [1]').render();
+                    new ToneSelectControl('cbTones').publishTo('PAGE [1]').render(document);
+                    new ScaleSelectControl('cbScales').publishTo('PAGE [1]').render(document);
+                    new ScaleControl('divOutputScale',  true).subscribeTo('TONE', 'PAGE [1]')
+                        .subscribeTo('SCALE_TYPE', 'PAGE [1]')
+                        .render();
+                </script>
             </div>
 
             <!-- PAGE [2] -->
@@ -77,24 +95,34 @@
             <div class="tab-pane fade" id="pills-harp" role="tabpanel" aria-labelledby="pills-harp-tab">
                 <h3>Harmonika, klíč: <select id="cbHarmonicaKeys"></select></h3>
                 <div id="divHarmonica"></div>
+
                 <br/>
+
                 <h3>Stupnice - <select id="cbTonesHarp"></select><select id="cbScalesHarp"></select></h3>
                 <div id="divOutputScaleHarp"></div>
+
                 <script type="module" defer="true">
                     import { ScaleSelectControl } from './controls/scale_select.mjs';
                     import { ToneSelectControl } from './controls/tone_select.mjs';
                     import { HarmonicaControl } from './controls/harmonica.mjs';
+                    import { ScaleControl } from './controls/scale.mjs';
 
-                    new ScaleSelectControl('cbScalesHarp').publishTo('PAGE [3]').render(document);
-                    new ToneSelectControl('cbHarmonicaKeys').publishTo('PAGE [3]').render(document);
-                    new ToneSelectControl('cbTonesHarp').publishTo('PAGE [3]').render(document);
+                    new ToneSelectControl('cbHarmonicaKeys').publishTo('PAGE [3].1').render(document);
                     new HarmonicaControl('divHarmonica')
-                        .subscribeTo('TONE', 'PAGE [3]')
+                        .subscribeTo('TONE', 'PAGE [3].1')
                         .render();                    
+
+                    new ToneSelectControl('cbTonesHarp').publishTo('PAGE [3].2').render(document);
+                    new ScaleSelectControl('cbScalesHarp').publishTo('PAGE [3].2').render(document);
+                    new ScaleControl('divOutputScaleHarp',  true).subscribeTo('TONE', 'PAGE [3].2')
+                        .subscribeTo('SCALE_TYPE', 'PAGE [3].2')
+                        .render();
                 </script>
             </div>
 
-            <!-- <div class="tab-pane fade" id="pills-metro" role="tabpanel" aria-labelledby="pills-metro-tab">
+            <!-- PAGE [4] -->
+
+            <div class="tab-pane fade" id="pills-metro" role="tabpanel" aria-labelledby="pills-metro-tab">
                 <span>A:</span>
                 <select id="cbMetroA" onchange="refreshMetronome()">
                     <option>3</option>
@@ -124,7 +152,10 @@
                 </select>
 
                 <div id="metronomeHolder"></div>
-            </div> -->
+                <script type="module" defer="true">
+                    // import { MetronomeControl } from './controls/metronome.mjs'; 
+                </script>
+            </div>
 
             <!-- <div class="tab-pane fade" id="pills-tuning" role="tabpanel" aria-labelledby="pills-tuning-tab">
                 <h3>Ladění</h3>
@@ -134,48 +165,10 @@
     </div>
 
     <script type="module" defer="true">
-        import { Container } from "./core/container.mjs";
-        import { getSelectedValue, getSelectedValue2, setCssClass } from "./core/shared.mjs";
-        import { ChordControl } from './controls/chord.mjs';
-        import { ChordTypeSelectControl } from './controls/chord_type_select.mjs';
-        import { ScaleSelectControl } from './controls/scale_select.mjs';
-        import { ScaleControl } from './controls/scale.mjs';
-        import { ToneSelectControl } from './controls/tone_select.mjs';
-        import { MetronomeControl } from './controls/metronome.mjs';
         import { SoundControl } from './sound/sound.mjs';
-
-        window.setCssClass = setCssClass;
-        window.P_CONTAINER = new Container();
-        P_CONTAINER.SOUND = new SoundControl();
-
-        // PAGE [1]
-        new ChordTypeSelectControl('cbChordTypes').publishTo('PAGE [1]').render(document);
-        new ChordControl('divChordTypes').subscribeTo('CHORD_TYPE', 'PAGE [1]').render();
-        new ToneSelectControl('cbTones').publishTo('PAGE [1]').render(document);
-        new ScaleSelectControl('cbScales').publishTo('PAGE [1]').render(document);
-        new ScaleControl('divOutputScale',  true).subscribeTo('TONE', 'PAGE [1]')
-            .subscribeTo('SCALE_TYPE', 'PAGE [1]')
-            .render();
-
-
-        // P_CONTAINER.HARP.render();
-        // P_CONTAINER.HARP.colorKeyTones(P_CONTAINER.HARP_SCALE);
-
-            // let harpKey = P_CONTAINER.HARP_KEY.tone; 
-            // let playKey = getSelectedValue('cbTonesHarp');
-            // let playScale = getSelectedValue('cbScalesHarp');
-
-            // // render scale
-            // P_CONTAINER.HARP_SCALE = new ScaleControl(
-            //     'divOutputScaleHarp', 
-            //     playKey, 
-            //     playScale, 
-            //     'tbOutputScaleHarp', 
-            //     true, 
-            //     P_CONTAINER.HARP.Harmonica.octave
-            // );
-            // P_CONTAINER.HARP_SCALE.render();
+        new SoundControl().subscribeTo('PLAY_TONE');
     </script>
+
 </body>
 
 </html>

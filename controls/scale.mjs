@@ -25,6 +25,7 @@ export class ScaleControl extends BaseControl{
 
         this.TonesInScale = this.Core.generateScaleTablesForTone(this.RootTone, this.Scale);
 
+        // this.Scale.distances.reduce((html, scaleDistance) => html += this.renderSingleScale(i))
         let html = "";
         for(let i=0; i<this.Scale.distances.length; i++){
             html += this.renderSingleScale(i);
@@ -36,7 +37,7 @@ export class ScaleControl extends BaseControl{
         this.MessageGroup = messageGroup;
         document.addEventListener(eventName, (e) => 
         {
-            if(messageGroup === this.MessageGroup){
+            if(e.MessageGroup === this.MessageGroup){
                 if(e.type === 'SCALE_TYPE'){
                     this.render(undefined, e.EventData);
                 }
@@ -51,16 +52,16 @@ export class ScaleControl extends BaseControl{
     }
 
     renderSingleScale(i){
-        return "<table>" +
+        return '<table>' +
             this.printScaleHeader(this.Scale.distances[i]) +
             this.printSingleScaleTableBody(this.TonesInScale[i]) +
-        "</table>";
+        '</table>';
     }
 
     printTonesHeader(){
-        return "<tr><td>&nbsp;</td>" +
+        return '<tr><td>&nbsp;</td>' +
             DB.tones.reduce((html, tone) => html + `<th>${this.Core.toneAsHtml(tone)}</th>`, "") +
-        "</tr>";
+        '</tr>';
     }
 
     // @tones[]
@@ -80,11 +81,9 @@ export class ScaleControl extends BaseControl{
         return this.Core.toneAsText(tone) + (this.ShowOctaves ? tone.octave : '');
     }
 
-    // toneClickScript(tone){
-    //     return `playToneWithOctave('${tone.name}', '${tone.octave}', '${this.Tuning.name}', '${this.AppendControlId}', event)`;
-    // }
-    
+   
     playToneWithOctave(toneName, toneOctave, tuningName, appendControlId, tt) {
+        this.fireEvent('PLAY_TONE', tone);
         // document.getElementById(appendControlId).value += toneName;
         P_CONTAINER.SOUND.playToneWithOctave(toneName, toneOctave, tuningName);
     }

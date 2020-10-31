@@ -50,7 +50,7 @@ export class HarmonicaControl extends BaseControl {
         this.MessageGroup = messageGroup;
         document.addEventListener(eventName, (e) => 
         {
-            if(messageGroup === this.MessageGroup){
+            if(e.MessageGroup === this.MessageGroup){
                 this.render(e.EventData);
             }
         });
