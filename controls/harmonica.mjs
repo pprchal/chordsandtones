@@ -14,15 +14,23 @@ export class ToneMapRecord {
 }
 
 export class HarmonicaControl extends BaseControl {
-    constructor(controlId, harpKeyControl) {
+    constructor(controlId) {
         super(controlId);
         this.HarmonicaToneId = 1;
         this.ToneMap = [];
-        this.Harmonica = this.Core.harmonica('Richter diatonická', harpKeyControl.tone.name);
-        this.HarpRootTone = this.Core.tone(harpKeyControl.tone.name, this.Harmonica.octave);
+        this.HarpRootTone = this.Core.tone('C', 4);
+        this.Harmonica = this.Core.harmonica('Richter diatonická', this.HarpRootTone.name);
     }
 
-    render() {
+    render(harpRootTone) {
+        if(harpRootTone != undefined){
+            this.HarpRootTone = harpRootTone;
+            this.Harmonica = this.Core.harmonica('Richter diatonická', this.HarpRootTone.name);
+        }
+
+
+
+
         this.debug(`Rendering harp in key: [${this.HarpRootTone.name}] [${this.Harmonica.name}]`);
 
         let html = "<table>";
@@ -38,6 +46,18 @@ export class HarmonicaControl extends BaseControl {
         this.setHtml(html + "</table>");
     }        
     
+    subscribeTo(eventName, messageGroup){
+        this.MessageGroup = messageGroup;
+        document.addEventListener(eventName, (e) => 
+        {
+            if(messageGroup === this.MessageGroup){
+                this.render(e.EventData);
+            }
+        });
+
+        return this;
+    }
+
     formatHarmonicaRowTitle(row){
         let htmlName = row.name;
         if(row.name === "1/2"){
