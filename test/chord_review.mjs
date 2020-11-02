@@ -1,31 +1,75 @@
-// Pavel Prchal, 2020
-// import 'cache-require-paths';
-import { strictEqual } from "assert";
-import { ChordReviewControl } from "../controls/chord_review.mjs";
-import { MCore } from "../core/mcore.mjs";
-import jsdom from "jsdom";
-const { JSDOM } = jsdom;
-const dom = new JSDOM(`<body><div id="ctl"></div></body>`, { runScripts: "dangerously" });
-const { document } = dom.window;
+// Pavel Prchal  2020
+// -------------------- ChordReviewControl
+// --------------------
+import {BaseControl} from "./control.mjs"
+import {DB} from "../core/leaflet.mjs"
+
+export class ChordReviewControl extends BaseControl{
+    constructor(controlId, tableId) {
+        super(controlId);
+        this.ChordToneId = 1;
+        this.TableId = tableId;
+    }
+
+    render(document){
+        this.setHtml(`<table id="${this.TableId}" class="table table-hover">` +
+            this.printHeader() +
+            this.renderRows() +
+        '</table>');
+        $(`#${this.TableId}`).DataTable( { searching: false, paging: false, info: false } );
+    }
+
+    renderRows(){
+        return DB.chords.reduce((html, chord) => html + this.printChordRow(chord), "");
+    }
 
 
-describe('👁 Chord review', () => {
-    // it('👁 render', () => {
-    //     let ctl = new ChordReviewControl("ctl");
-    //     ctl.render(document);
-    // });
+    printChordRow(chord){
+        let html = `<tr><td><b>${chord.name}<b></td>`;
+        let arr = this.prepareTonesArray();
 
-    it('👁 Cdur', () => {
-        let Cdur = new MCore().chord("dur");
-        strictEqual(
-            '<tr><td><b>dur<b></td><td>C</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>E</td><td>&nbsp;</td><td>&nbsp;</td><td>G</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>', 
-            new ChordReviewControl("ctl").printChordRow(Cdur)
-        );
-    });
+        // C
+        let tone = this.Core.tone(DB.tones[0].name);
+        chord = this.Core.generateChordTableForTone(chord, tone);
+        chord.distances.reduce((distance, cur, n) =>
+        {
+            let tone = chord.tones[n];
+            distance += cur;
+            arr[distance] = tone.name;
+            return distance;
+        }, 0);
 
-    // it('👁 C9', () => {
-    //     let C9 = new MCore().chord("9");
-    //     new ChordReviewControl("ctl").printChordRow(C9)
-    // });
-});
+        return html + arr.reduce((html, td) => html += `<td>${td}</td>`, '') + '</tr>';
+    }
 
+    formatChordDistance(chordDistance){
+        let dist = chordDistance;
+        while(dist >= DB.tones.length)
+        {
+            dist -= DB.tones.length;
+        }
+
+        try{
+            return DB.tones[dist].name;
+        }
+        catch(e){
+            return "---";
+        }
+    }
+
+    prepareTonesArray() {
+        return Array.from(Array(2 * DB.tones.length), () => '&nbsp;');
+    }
+
+    printHeader(){
+        let html = '<thead><tr><td>&nbsp;</td>';
+        for (let i=0; i<DB.tones.length; i++){
+            html += `<th>${this.Core.toneAsHtml(DB.tones[i])}</th>`;
+        }
+
+        for (let i=0; i<DB.tones.length; i++){
+            html += `<th>${this.Core.toneAsHtml(DB.tones[i])}</th>`;
+        }
+        return html + '</tr></thead>';
+    }
+}
