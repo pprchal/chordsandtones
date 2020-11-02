@@ -7,18 +7,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
     
     <title>Chords and tones</title>
+    <script type="module" defer="true">
+        console.debug('preload1');
+        import { MCore } from "./core/mcore.mjs";
+        console.debug('preload2');
+    </script>
 
-    <link rel="preload" src="core/leaflet.msj">
-    <link rel="preload" src="core/mcore.msj">
-    
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <script defer="true" src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script defer="true" src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js" defer="true"></script>
 
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <script defer="true" type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js" ></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
 </head>
 
 <body>
@@ -57,7 +58,7 @@
                 <div>
                     <div id="divOutputScale"></div>
                 </div>
-                <script type="module" defer="true">
+                <script type="module" defer="true" async="true">
                     import { getSelectedValue, getSelectedValue2, setCssClass } from "./core/shared.mjs";
                     import { ChordControl } from './controls/chord.mjs';
                     import { ChordTypeSelectControl } from './controls/chord_type_select.mjs';
@@ -89,6 +90,7 @@
                     import { ChordReviewControl } from './controls/chord_review.mjs';
                     import { ScaleReviewControl } from './controls/scale_review.mjs';
 
+                    console.debug('Page [2] loading...');
                     new Promise(x =>
                     {
                         new ChordReviewControl('divChordReview', 'tableChordsReview').render();
@@ -115,9 +117,9 @@
                     import { HarmonicaControl } from './controls/harmonica.mjs';
                     import { ScaleControl } from './controls/scale.mjs';
 
+                    console.debug('Page [3] loading...');
                     new Promise(x => 
                     {
-
                         new ToneSelectControl('cbHarmonicaKeys').publishTo('PAGE [3].1').render(document);
                         new HarmonicaControl('divHarmonica')
                             .subscribeTo('TONE', 'PAGE [3].1')
@@ -180,7 +182,7 @@
         // import { SoundControl } from './controls/sound.mjs';
         // new SoundControl().subscribeTo('PLAY_TONE');
     </script>
-
+    <link rel="stylesheet" type="text/css" href="style.css">
 </body>
 
 </html>
