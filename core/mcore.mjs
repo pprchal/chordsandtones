@@ -22,22 +22,22 @@ export class MCore {
     // @chordTemplate
     // @rootTone
     generateChordTableForTone(chordTemplate, rootTone) {
-        // let chord = this.clone(chordTemplate);
-        // chord.rootTone = this.clone(rootTone);
-        // chord.tones = chord.distances.map((distance) => this.shiftTone(chord.rootTone, distance));
-        // return chord;
-
         let chord = this.clone(chordTemplate);
         chord.rootTone = this.clone(rootTone);
         chord.tones = chord
             .distances
-            .reduce((tones, distance, n) => {
-                if(n == 0) {
+            .reduce((tones, distance, n) => 
+                {
+                    if(n === 0) {
+                        tones[n] = this.clone(rootTone);
+                    }else{
+                        tones[n] = this.shiftTone(tones[n - 1], distance);
+                    }
                     return tones;
-                }else{
-                    return [...tones, this.shiftTone(tones[n - 1], distance)];
-                }
-            }, [chord.rootTone]);       
+                }, 
+                Array(chord.distances.length)
+            );  
+
         return chord; 
     }  
 
@@ -53,13 +53,17 @@ export class MCore {
     // @distances[]
     generateScaleTableForDistance(rootTone, distances){
         return distances
-            .reduce((tones, distance, n) => {
-                if(n == 0) {
+            .reduce((tones, distance, n) => 
+                {
+                    if(n === 0) {
+                        tones[n] = this.clone(rootTone)
+                    }else{
+                        tones[n] = this.shiftTone(tones[n - 1], distance);
+                    }
                     return tones;
-                }else{
-                    return [...tones, this.shiftTone(tones[n - 1], distance)];
-                }
-            }, [this.clone(rootTone)]);
+                }, 
+                Array(distances.length)
+            );
     }
 
     findCharChords(rootTone){
@@ -218,13 +222,17 @@ export class MCore {
         return guitar
             .template
             .offsets
-            .reduce((tones, offset, n) => {
-                if(n == 0) {
+            .reduce((tones, offset, n) => 
+                {
+                    if(n === 0) {
+                        tones[n] = this.guitarRootTone(guitar);
+                    }else{
+                        tones[n] = this.shiftTone(tones[n - 1], offset);
+                    }
                     return tones;
-                }else{
-                    return [...tones, this.shiftTone(tones[n - 1], offset)];
-                }
-            }, [this.guitarRootTone(guitar)]);
+                },
+                Array(guitar.template.offsets.length)
+            );
     }
 
     guitarRootTone(guitar){

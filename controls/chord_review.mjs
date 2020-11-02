@@ -11,11 +11,11 @@ export class ChordReviewControl extends BaseControl{
         this.TableId = tableId;
     }
 
-    render(){
+    render(document){
         this.setHtml(`<table id="${this.TableId}" class="table table-hover">` +
             this.printHeader() +
             this.renderRows() +
-        "</table>");
+        '</table>');
         $(`#${this.TableId}`).DataTable( { searching: false, paging: false, info: false } );
     }
 
@@ -26,19 +26,40 @@ export class ChordReviewControl extends BaseControl{
 
     printChordRow(chord){
         let html = `<tr><td><b>${chord.name}<b></td>`;
-        let arr = this.prepareArrByTones();
+        let arr = this.prepareTonesArray();
 
-        for(let i = 0; i<arr.length; i++){
-            if(i < chord.distances.length){
-                arr[chord.distances[i]] = this.formatChordDistance(chord.distances[i]); // DB.tones[chord.distances[i]].name;
+        // C
+        let tone = this.Core.tone(DB.tones[0].name);
+        chord = this.Core.generateChordTableForTone(chord, tone);
+        let octave = chord.tones[0].octave;
+
+        chord.tones.map((tone, n) => 
+            {
+                let k = tone.
+                n = ((tone.octave - octave) * 12) + n;
+                arr[n] = tone.name;
             }
-        }
+        );
+        // put tones to arr
+        // chord
+        //     .distances
+        //     .reduce((distance, cur, n) => 
+        //         {
+        //             try{
+        //                 distance += cur;
 
-        for(let j = 0; j<arr.length; j++){
-            html += `<td>${arr[j]}</td>`;
-        }
-
-        return html + '</tr>';
+        //                 let tone = DB.tones[distance];
+        //                 arr[distance] = tone.name;
+        //                 return distance;
+        //             }
+        //             catch(e){
+        //                 console.error(e);
+        //             }
+        //         }, 
+        //         chord.distances[0]
+        //     );
+        
+        return html + arr.reduce((html, td) => html += `<td>${td}</td>`, '') + '</tr>';
     }
 
     formatChordDistance(chordDistance){
@@ -56,13 +77,8 @@ export class ChordReviewControl extends BaseControl{
         }
     }
 
-    prepareArrByTones() {
-        let arr = [];
-        for(let i = 0; i<DB.tones.length * 2; i++){
-            arr[i] = '&nbsp;';
-        }
- 
-        return arr;
+    prepareTonesArray() {
+        return Array.from(Array(2 * DB.tones.length), () => '&nbsp;');
     }
 
     printHeader(){

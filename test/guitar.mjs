@@ -1,5 +1,5 @@
 // Pavel Prchal, 2020
-import 'cache-require-paths';
+// import 'cache-require-paths';
 import { strictEqual } from "assert";
 import { GuitarControl } from "../controls/guitar.mjs";
 import jsdom from "jsdom";

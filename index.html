@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 
-<html lang="cz">
+<html lang="cs">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+    
     <title>Chords and tones</title>
 
+    <link rel="preload" src="core/leaflet.msj">
+    <link rel="preload" src="core/mcore.msj">
+    
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <script defer="true" src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -81,12 +85,16 @@
 
                 <h3>Stupnice - přehled</h3>
                 <div id="divScaleReview"></div>
-                <script type="module" defer="true">
+                <script type="module" async="true">
                     import { ChordReviewControl } from './controls/chord_review.mjs';
                     import { ScaleReviewControl } from './controls/scale_review.mjs';
 
-                    new ChordReviewControl('divChordReview', 'tableChordsReview').render();
-                    new ScaleReviewControl('divScaleReview', 'tableScalesReview').render();
+                    new Promise(x =>
+                    {
+                        new ChordReviewControl('divChordReview', 'tableChordsReview').render();
+                        new ScaleReviewControl('divScaleReview', 'tableScalesReview').render();
+                    }).then(console.debug('Page [2] loaded'));
+
                 </script>
 
             </div>             
@@ -107,16 +115,20 @@
                     import { HarmonicaControl } from './controls/harmonica.mjs';
                     import { ScaleControl } from './controls/scale.mjs';
 
-                    new ToneSelectControl('cbHarmonicaKeys').publishTo('PAGE [3].1').render(document);
-                    new HarmonicaControl('divHarmonica')
-                        .subscribeTo('TONE', 'PAGE [3].1')
-                        .render();                    
+                    new Promise(x => 
+                    {
 
-                    new ToneSelectControl('cbTonesHarp').publishTo('PAGE [3].2').render(document);
-                    new ScaleSelectControl('cbScalesHarp').publishTo('PAGE [3].2').render(document);
-                    new ScaleControl('divOutputScaleHarp',  true).subscribeTo('TONE', 'PAGE [3].2')
-                        .subscribeTo('SCALE_TYPE', 'PAGE [3].2')
-                        .render();
+                        new ToneSelectControl('cbHarmonicaKeys').publishTo('PAGE [3].1').render(document);
+                        new HarmonicaControl('divHarmonica')
+                            .subscribeTo('TONE', 'PAGE [3].1')
+                            .render();                    
+
+                        new ToneSelectControl('cbTonesHarp').publishTo('PAGE [3].2').render(document);
+                        new ScaleSelectControl('cbScalesHarp').publishTo('PAGE [3].2').render(document);
+                        new ScaleControl('divOutputScaleHarp',  true).subscribeTo('TONE', 'PAGE [3].2')
+                            .subscribeTo('SCALE_TYPE', 'PAGE [3].2')
+                            .render();
+                    }).then(console.debug('Page [3] loaded'));
                 </script>
             </div>
 
@@ -165,8 +177,8 @@
     </div>
 
     <script type="module" defer="true">
-        import { SoundControl } from './sound/sound.mjs';
-        new SoundControl().subscribeTo('PLAY_TONE');
+        // import { SoundControl } from './controls/sound.mjs';
+        // new SoundControl().subscribeTo('PLAY_TONE');
     </script>
 
 </body>
