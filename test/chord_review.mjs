@@ -2,7 +2,7 @@
 // import 'cache-require-paths';
 import { strictEqual } from "assert";
 import { ChordReviewControl } from "../controls/chord_review.mjs";
-import { MCore } from "../core/MCore.mjs";
+import { MCore } from "../core/mcore.mjs";
 import jsdom from "jsdom";
 const { JSDOM } = jsdom;
 const dom = new JSDOM(`<body><div id="ctl"></div></body>`, { runScripts: "dangerously" });
@@ -23,9 +23,9 @@ describe('👁 Chord review', () => {
         );
     });
 
-    it('👁 C9', () => {
-        let C9 = new MCore().chord("9");
-        new ChordReviewControl("ctl").printChordRow(C9)
-    });
+    // it('👁 C9', () => {
+    //     let C9 = new MCore().chord("9");
+    //     new ChordReviewControl("ctl").printChordRow(C9)
+    // });
 });
 
