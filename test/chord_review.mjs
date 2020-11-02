@@ -22,5 +22,10 @@ describe('👁 Chord review', () => {
             new ChordReviewControl("ctl").printChordRow(Cdur)
         );
     });
+
+    it('👁 C9', () => {
+        let C9 = new MCore().chord("9");
+        new ChordReviewControl("ctl").printChordRow(C9)
+    });
 });
 

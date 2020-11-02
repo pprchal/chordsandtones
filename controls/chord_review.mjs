@@ -31,34 +31,14 @@ export class ChordReviewControl extends BaseControl{
         // C
         let tone = this.Core.tone(DB.tones[0].name);
         chord = this.Core.generateChordTableForTone(chord, tone);
-        let octave = chord.tones[0].octave;
+        chord.distances.reduce((distance, cur, n) =>
+        {
+            let tone = chord.tones[n];
+            distance += cur;
+            arr[distance] = tone.name;
+            return distance;
+        }, 0);
 
-        chord.tones.map((tone, n) => 
-            {
-                let k = tone.
-                n = ((tone.octave - octave) * 12) + n;
-                arr[n] = tone.name;
-            }
-        );
-        // put tones to arr
-        // chord
-        //     .distances
-        //     .reduce((distance, cur, n) => 
-        //         {
-        //             try{
-        //                 distance += cur;
-
-        //                 let tone = DB.tones[distance];
-        //                 arr[distance] = tone.name;
-        //                 return distance;
-        //             }
-        //             catch(e){
-        //                 console.error(e);
-        //             }
-        //         }, 
-        //         chord.distances[0]
-        //     );
-        
         return html + arr.reduce((html, td) => html += `<td>${td}</td>`, '') + '</tr>';
     }
 
