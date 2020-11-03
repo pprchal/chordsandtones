@@ -7,10 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
     
     <title>Chords and tones</title>
-    <script type="module" defer="true">
-        console.debug('preload1');
-        import { MCore } from "./core/mcore.mjs";
-        console.debug('preload2');
+    <script type="module" src="./controls/control.mjs" async="true">
     </script>
 
     <!-- Bootstrap CSS -->
@@ -58,7 +55,7 @@
                 <div>
                     <div id="divOutputScale"></div>
                 </div>
-                <script type="module" defer="true" async="true">
+                <script type="module" async="true">
                     import { getSelectedValue, getSelectedValue2, setCssClass } from "./core/shared.mjs";
                     import { ChordControl } from './controls/chord.mjs';
                     import { ChordTypeSelectControl } from './controls/chord_type_select.mjs';
@@ -73,7 +70,7 @@
                     new ChordControl('divChordTypes').subscribeTo('CHORD_TYPE', 'PAGE [1]').render();
                     new ToneSelectControl('cbTones').publishTo('PAGE [1]').render(document);
                     new ScaleSelectControl('cbScales').publishTo('PAGE [1]').render(document);
-                    new ScaleControl('divOutputScale',  true).subscribeTo('TONE', 'PAGE [1]')
+                    new ScaleControl('divOutputScale',  false).subscribeTo('TONE', 'PAGE [1]')
                         .subscribeTo('SCALE_TYPE', 'PAGE [1]')
                         .render();
                 </script>
@@ -90,13 +87,8 @@
                     import { ChordReviewControl } from './controls/chord_review.mjs';
                     import { ScaleReviewControl } from './controls/scale_review.mjs';
 
-                    console.debug('Page [2] loading...');
-                    new Promise(x =>
-                    {
-                        new ChordReviewControl('divChordReview', 'tableChordsReview').render();
-                        new ScaleReviewControl('divScaleReview', 'tableScalesReview').render();
-                    }).then(console.debug('Page [2] loaded'));
-
+                    new ChordReviewControl('divChordReview', 'tableChordsReview').render();
+                    new ScaleReviewControl('divScaleReview', 'tableScalesReview').render();
                 </script>
 
             </div>             
@@ -111,26 +103,23 @@
                 <h3>Stupnice - <select id="cbTonesHarp"></select><select id="cbScalesHarp"></select></h3>
                 <div id="divOutputScaleHarp"></div>
 
-                <script type="module" defer="true">
+                <script type="module" async="true">
                     import { ScaleSelectControl } from './controls/scale_select.mjs';
                     import { ToneSelectControl } from './controls/tone_select.mjs';
                     import { HarmonicaControl } from './controls/harmonica.mjs';
                     import { ScaleControl } from './controls/scale.mjs';
 
-                    console.debug('Page [3] loading...');
-                    new Promise(x => 
-                    {
-                        new ToneSelectControl('cbHarmonicaKeys').publishTo('PAGE [3].1').render(document);
-                        new HarmonicaControl('divHarmonica')
-                            .subscribeTo('TONE', 'PAGE [3].1')
-                            .render();                    
+                    console.debug('Page [3] >>loading<<');
+                    new ToneSelectControl('cbHarmonicaKeys').publishTo('PAGE [3].1').render(document);
+                    new HarmonicaControl('divHarmonica')
+                        .subscribeTo('TONE', 'PAGE [3].1')
+                        .render();                    
 
-                        new ToneSelectControl('cbTonesHarp').publishTo('PAGE [3].2').render(document);
-                        new ScaleSelectControl('cbScalesHarp').publishTo('PAGE [3].2').render(document);
-                        new ScaleControl('divOutputScaleHarp',  true).subscribeTo('TONE', 'PAGE [3].2')
-                            .subscribeTo('SCALE_TYPE', 'PAGE [3].2')
-                            .render();
-                    }).then(console.debug('Page [3] loaded'));
+                    new ToneSelectControl('cbTonesHarp').publishTo('PAGE [3].2').render(document);
+                    new ScaleSelectControl('cbScalesHarp').publishTo('PAGE [3].2').render(document);
+                    new ScaleControl('divOutputScaleHarp',  true).subscribeTo('TONE', 'PAGE [3].2')
+                        .subscribeTo('SCALE_TYPE', 'PAGE [3].2')
+                        .render();
                 </script>
             </div>
 

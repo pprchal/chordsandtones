@@ -1,49 +1,49 @@
 // Pavel Prchal, 2020
 import { strictEqual } from "assert"
+import { notStrictEqual } from "assert"
 import { MCore } from "../core/mcore.mjs"
 import { DB } from "../core/leaflet.mjs"
-let mcore = new MCore();
 
 describe('Music math', () => {
     it('chord F#dur', () => {
-        let Fisdur = mcore.generateChordTableForTone(mcore.chord('dur'), mcore.tone('F#'));
+        let Fisdur = MCore.generateChordTableForTone(MCore.chord('dur'), MCore.tone('F#'));
         strictEqual("F#", Fisdur.tones[0].name);
         strictEqual("B", Fisdur.tones[1].name);
         strictEqual("C#", Fisdur.tones[2].name);
     });
 
     it('C3 -> C3', () => {
-        let C3 = mcore.tone("C");
-        let C4 = mcore.shiftTone(C3, 12);
+        let C3 = MCore.tone("C");
+        let C4 = MCore.shiftTone(C3, 12);
         strictEqual("C", C4.name);
         strictEqual(C3.octave + 1, C4.octave);
     });
     
     it('E -> H (guitar)', () => {
         let E = DB.tones[4];
-        let H = mcore.shiftTone(E, 19);
+        let H = MCore.shiftTone(E, 19);
         strictEqual("H", H.name);
         strictEqual(E.octave + 1, H.octave);
     });
     
 
     it('C <- H', () => {
-        let C = mcore.tone("C");
-        let H = mcore.shiftTone(C, -1);
+        let C = MCore.tone("C");
+        let H = MCore.shiftTone(C, -1);
         strictEqual("H", H.name);
         strictEqual(C.octave - 1, H.octave);
     });
 
     it('C <- C# (copied)', () => {
-        let Cis = mcore.clone(mcore.tone("C#"));
-        let C = mcore.shiftTone(Cis, -1);
+        let Cis = MCore.clone(MCore.tone("C#"));
+        let C = MCore.shiftTone(Cis, -1);
         strictEqual("C", C.name);
     });
 
     it('generate scale', () => {
-        let Cdur = mcore.generateScaleTablesForTone(
-            mcore.tone("C"), 
-            mcore.scale("dur"))[0]
+        let Cdur = MCore.generateScaleTablesForTone(
+            MCore.tone("C"), 
+            MCore.scale("dur"))[0]
         .reduce((tones, tone) => tones + tone.name, "");
         strictEqual("CDEFGAH", Cdur);
     });
@@ -67,21 +67,21 @@ describe('Music math', () => {
     });
 
     it('toneFreq(F1) = 21.83Hz', () => {
-        strictEqual(21.83, mcore.toneFreq('F', 0));
+        strictEqual(21.83, MCore.toneFreq('F', 0));
     });
 
     it('toneFreq(F3) = 87.31Hz', () => {
-        strictEqual(87.31, mcore.toneFreq('F', 2));
+        strictEqual(87.31, MCore.toneFreq('F', 2));
     });
     
     function debugPrint(tuning, frets){
-        return mcore.generateGuitarFretboard(tuning, frets).map((semitonesOnString) => 
+        return MCore.generateGuitarFretboard(tuning, frets).map((semitonesOnString) => 
             semitonesOnString.reduce((s, tone) => s += `${tone.name}${tone.octave} `, '')
         );
     }
 
     function checkGuitarTuning(name){
-        let rootStrings = mcore.guitarRootStrings(name);
+        let rootStrings = MCore.guitarRootStrings(name);
         let gts = rootStrings.reduce((s, t) => s += t.name, "");
         strictEqual(name, gts);
     }
@@ -107,9 +107,18 @@ describe('Music math', () => {
     });
     
     function chordIs(rootNote, chordName, is){
-        let tones = mcore.generateChordTableForTone(mcore.chord(chordName), mcore.tone(rootNote)).tones;
+        let tones = MCore.generateChordTableForTone(MCore.chord(chordName), MCore.tone(rootNote)).tones;
         strictEqual(is, tones.reduce((acc, t) => acc += `${t.name}${t.octave} `, ''), `Chord ${rootNote}${chordName} is wrong`);
     }
+
+    it('fromRelative', () => {
+        notStrictEqual([0, 2, 6], MCore.fromRelative([0, 2, 4]));
+        notStrictEqual([0, 2], MCore.fromRelative([0, 2]));
+        notStrictEqual([0], MCore.fromRelative([0]));
+
+        notStrictEqual([1], MCore.fromRelative([1]));
+        notStrictEqual([1, 2], MCore.fromRelative([1, 3]));
+    });
 
     it('all scales', () => {
         scaleIs("C", "dur", "C3 D3 E3 F3 G3 A3 H3 ");
@@ -124,13 +133,13 @@ describe('Music math', () => {
     });
 
     function scaleIs(rootNote, scaleName, is){
-        let scale = mcore.generateScaleTablesForTone(mcore.tone(rootNote), mcore.scale(scaleName))[0];
+        let scale = MCore.generateScaleTablesForTone(MCore.tone(rootNote), MCore.scale(scaleName))[0];
         strictEqual(is, scale.reduce((acc, t) => acc += `${t.name}${t.octave} `, ''), `Scale ${rootNote}${scaleName} is wrong`);
     }
 
     it('indexOfTone D#', () => {
-        let Dis = mcore.tone("D#");
-        strictEqual(3, mcore.indexOfTone(Dis));
+        let Dis = MCore.tone("D#");
+        strictEqual(3, MCore.indexOfTone(Dis));
     });
 });
 

@@ -4,38 +4,39 @@
 import {DB} from "./leaflet.mjs"
 
 export class MCore {
-    clone(src) {
+    static clone(src) {
         let obj = {...src};
         return obj;
     }
 
-    toneAsHtml(tone){
+    static toneAsHtml(tone, showOctave){
         // D♯
-        return tone.name.replace('#', '<sup>&#9839;</sup>');
+        let toneName = tone.name.replace('#', '♯');
+        if(showOctave == undefined || showOctave === false){
+            return toneName;
+        }
+
+        return `${toneName}<sub>${tone.octave}</sub>`;
     }
 
-    // @tone
-    toneAsText(tone) {
-        return tone.name;
-    } 
-    
     // @chordTemplate
     // @rootTone
-    generateChordTableForTone(chordTemplate, rootTone) {
-        let chord = this.clone(chordTemplate);
-        chord.rootTone = this.clone(rootTone);
-        chord.tones = chord
-            .distances
-            .reduce((tones, distance, n) => 
+    static generateChordTableForTone(chordTemplate, rootTone, cb) {
+        let chord = MCore.clone(chordTemplate);
+        chord.rootTone = MCore.clone(rootTone);
+        chord.tones = Array(chord.distances.length);
+        chord.distances
+            .reduce((idx, distance, n) => 
                 {
-                    if(n === 0) {
-                        tones[n] = this.clone(rootTone);
-                    }else{
-                        tones[n] = this.shiftTone(tones[n - 1], distance);
+                    idx += distance;
+                    chord.tones[n] = MCore.shiftTone(rootTone, idx);
+                    if(cb != undefined){
+                        cb.call(this, idx, chord.tones[n]);
                     }
-                    return tones;
+
+                    return idx;
                 }, 
-                Array(chord.distances.length)
+                chord.distances[0]
             );  
 
         return chord; 
@@ -43,31 +44,56 @@ export class MCore {
 
     // @rootTone
     // @scale
-    generateScaleTablesForTone(rootTone, scale) {
+    static generateScaleTablesForTone(rootTone, scale) {
         return scale
             .distances
-            .map((scaleDistance) => this.generateScaleTableForDistance(rootTone, scaleDistance));
-    }          
+            .map((scaleDistance) => MCore.generateScaleTableForDistance(rootTone, scaleDistance));
+    }      
+    
+    // transform [0, 2, 3] => [0, 2, 5]
+    static fromRelative(relatives){
+        let absolutes = Array(relatives.length);
+        relatives.reduce((abs, rel, n) => absolutes[n] = abs + rel, relatives[0])
+        return absolutes;
+    }
 
     // @rootTone
     // @distances[]
-    generateScaleTableForDistance(rootTone, distances){
-        return distances
-            .reduce((tones, distance, n) => 
+    static generateScaleTableForDistance(rootTone, distances, tc){
+        let tones = Array(distances.length);
+        distances
+            .reduce((idx, distance, n) => 
                 {
-                    if(n === 0) {
-                        tones[n] = this.clone(rootTone)
-                    }else{
-                        tones[n] = this.shiftTone(tones[n - 1], distance);
+                    idx += distance;
+                    tones[n] = MCore.shiftTone(rootTone, idx);
+                    if(tc != null){
+                        tc.call(this, idx, tones[n]);
                     }
-                    return tones;
+                    return idx;
                 }, 
-                Array(distances.length)
+                distances[0]
             );
+        return tones;
+
+        // return distances
+        //     .reduce((tones, distance, n) => 
+        //         {
+        //             if(n === 0) {
+        //                 tones[n] = MCore.clone(rootTone)
+        //             }else{
+        //                 tones[n] = this.shiftTone(tones[n - 1], distance);
+        //             }
+        //             if(tc != null){
+        //                 tc.call(this, n, tones[n]);
+        //             }
+        //             return tones;
+        //         }, 
+        //         Array(distances.length)
+        //     );
     }
 
-    findCharChords(rootTone){
-        let chordRootTone = this.tone(rootTone);
+    static findCharChords(rootTone){
+        let chordRootTone = MCore.tone(rootTone);
         let res2 = "";
 
         for(let i=0; i < DB.qround.length; i++){
@@ -76,7 +102,7 @@ export class MCore {
                 continue;
             }
 
-            let t = this.shiftTone(chordRootTone, qr.n);
+            let t = MCore.shiftTone(chordRootTone, qr.n);
             res2 += `${qr.name} - ${t.name}${qr.chord}\n`;
         }
 
@@ -85,12 +111,12 @@ export class MCore {
 
     // @chord
     // @distance
-    isMatchingChordDistance(chord, distance){
+    static isMatchingChordDistance(chord, distance){
         return chord.distances.every((dist, n) => dist === distance[n]);
     }
 
-    shiftTone(rootTone, distance){
-        let n = this.indexOfTone(rootTone) + distance;
+    static shiftTone(rootTone, distance){
+        let n = MCore.indexOfTone(rootTone) + distance;
         let octave = rootTone.octave;
 
         while( (n < 0) || (n >= DB.tones.length) ) {
@@ -103,12 +129,12 @@ export class MCore {
             }
         }
 
-        let clonedTone = this.clone(DB.tones[n]);
+        let clonedTone = MCore.clone(DB.tones[n]);
         clonedTone.octave = octave;
         return clonedTone;
     }
 
-    indexOfTone(tone){
+    static indexOfTone(tone){
         return DB.tones.findIndex((t) => MCore.isToneEqual(t, tone));
     }
 
@@ -118,42 +144,42 @@ export class MCore {
 
     // =================================  FIND 
     // @chordName
-    chord(chordName) {
+    static chord(chordName) {
         return DB.chords.find(chord => MCore.isMatchingChordName(chord, chordName));
     }
 
     // @scaleName
-    scale(scaleName) {
+    static scale(scaleName) {
         return DB.scales.find(scale => MCore.isMatchingScaleName(scale, scaleName));
     }
 
     // @toneName
-    tone(toneName, octave) {
-        let tone = this.clone(DB.tones.find(tone => MCore.isMatchingToneName(tone, toneName)));
+    static tone(toneName, octave) {
+        let tone = MCore.clone(DB.tones.find(tone => MCore.isMatchingToneName(tone, toneName)));
         if(octave != undefined){
             tone.octave = octave;
         }
         return tone;
     }
 
-    toneFreq(toneName, octave){
-        let tone = this.tone(toneName, octave);
-        let n = this.indexOfTone(tone);
+    static toneFreq(toneName, octave){
+        let tone = MCore.tone(toneName, octave);
+        let n = MCore.indexOfTone(tone);
         return DB.tunings[0].frequencies[n + (tone.octave * 12)];        
     }
 
     // @guitarName
-    guitar(guitarName) {
-        return this.clone(DB.guitars.find(guitar => MCore.isMatchingGuitarName(guitar, guitarName)));
+    static guitar(guitarName) {
+        return MCore.clone(DB.guitars.find(guitar => MCore.isMatchingGuitarName(guitar, guitarName)));
     }
 
     // @tuningName
-    tuning(tuningName) {
+    static tuning(tuningName) {
         return DB.tunings.find(tuning => MCore.isMatchingTuningName(tuning, tuningName));
     }
     
     // @harmonicaName
-    harmonica(harmonicaName, key) {
+    static harmonica(harmonicaName, key) {
         let harp = DB.harmonicas.find(harmonica => MCore.isMatchingHarmonicaName(harmonica, harmonicaName));
         harp.octave = harp.octaves[key];
         if(harp.octave == undefined){
@@ -201,7 +227,7 @@ export class MCore {
 
     
     // @distance
-    findInterval(distance) {
+    static findInterval(distance) {
         for (let i=0; i<DB.intervals.length; i++){
             if(DB.intervals[i].distance == distance){
                 return DB.intervals[i];
@@ -211,23 +237,23 @@ export class MCore {
         return DB.intervals[0];
     }
 
-    guitarRootStrings(guitarName){
+    static guitarRootStrings(guitarName){
         // [E] ->
         // [A] ->
         // [D] ->
         // [G] ->
         // [H] ->
         // [E] ->
-        let guitar = this.guitar(guitarName);
+        let guitar = MCore.guitar(guitarName);
         return guitar
             .template
             .offsets
             .reduce((tones, offset, n) => 
                 {
                     if(n === 0) {
-                        tones[n] = this.guitarRootTone(guitar);
+                        tones[n] = MCore.guitarRootTone(guitar);
                     }else{
-                        tones[n] = this.shiftTone(tones[n - 1], offset);
+                        tones[n] = MCore.shiftTone(tones[n - 1], offset);
                     }
                     return tones;
                 },
@@ -235,19 +261,19 @@ export class MCore {
             );
     }
 
-    guitarRootTone(guitar){
-        let tone = this.clone(DB.tones[guitar.template.offsets[0]]);
+    static guitarRootTone(guitar){
+        let tone = MCore.clone(DB.tones[guitar.template.offsets[0]]);
         tone.octave = guitar.octave;
         return tone;
     }
 
-    unwindGuitarString(tone, frets){
+    static unwindGuitarString(tone, frets){
         // [**E**] [F] [F#] [G], ...
-        return Array.from(Array(frets), (x, fret) => this.shiftTone(tone, fret));
+        return Array.from(Array(frets), (x, fret) => MCore.shiftTone(tone, fret));
     }
 
-    generateGuitarFretboard(tuning, frets){
-        let rootStrings = this.guitarRootStrings(tuning);
-        return rootStrings.map((rootNote) => this.unwindGuitarString(rootNote, frets));
+    static generateGuitarFretboard(tuning, frets){
+        let rootStrings = MCore.guitarRootStrings(tuning);
+        return rootStrings.map((rootNote) => MCore.unwindGuitarString(rootNote, frets));
     }
 }

@@ -8,7 +8,6 @@ import {MCore} from "../core/mcore.mjs"
 export class SoundControl extends BaseControl { 
     constructor(){
         this.audioCtx = new(window.AudioContext || window.webkitAudioContext)();
-        this.Core = new MCore();
     }
     
     playNote(frequency, duration) {
@@ -25,10 +24,10 @@ export class SoundControl extends BaseControl {
     }
 
     playChord(rootNoteName, chordTypeName){
-        let rootTone = this.Core.tone(rootNoteName);
-        let chordType = this.Core.chord(chordTypeName);
+        let rootTone = MCore.tone(rootNoteName);
+        let chordType = MCore.chord(chordTypeName);
 
-        let chord = this.Core.generateChordTableForTone(chordType, rootTone);
+        let chord = MCore.generateChordTableForTone(chordType, rootTone);
         for(let tone of chord.tones){
             this.playNote(this.getFrequency(tone, this.Tuning), 200);
         };
@@ -44,7 +43,7 @@ export class SoundControl extends BaseControl {
         if(duration == undefined){
             duration = 200;
         }
-        let freq = this.Core.toneFreq(tone, octave);
+        let freq = MCore.toneFreq(tone, octave);
         this.playNote(freq, duration);
     }
 }

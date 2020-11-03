@@ -1,6 +1,7 @@
 // Pavel Prchal  2020
 // -------------------- ChordReviewControl
 // --------------------
+import {MCore} from "../core/mcore.mjs"
 import {BaseControl} from "./control.mjs"
 import {DB} from "../core/leaflet.mjs"
 
@@ -16,30 +17,38 @@ export class ChordReviewControl extends BaseControl{
             this.printHeader() +
             this.renderRows() +
         '</table>');
-        $(`#${this.TableId}`).DataTable( { searching: false, paging: false, info: false } );
+
+        try{
+            $(`#${this.TableId}`).DataTable( { searching: false, paging: false, info: false } );
+        }catch{
+        }
     }
 
     renderRows(){
-        return DB.chords.reduce((html, chord) => html + this.printChordRow(chord), "");
+        return DB.chords.reduce((html, chord) => html + this.printChordRow(chord), '');
     }
 
 
     printChordRow(chord){
-        let html = `<tr><td><b>${chord.name}<b></td>`;
-        let arr = this.prepareTonesArray();
+        let cols = Array.from(Array(2 * DB.tones.length), () => '&nbsp;');
 
         // C
-        let tone = this.Core.tone(DB.tones[0].name);
-        chord = this.Core.generateChordTableForTone(chord, tone);
-        chord.distances.reduce((distance, cur, n) =>
-        {
-            let tone = chord.tones[n];
-            distance += cur;
-            arr[distance] = tone.name;
-            return distance;
-        }, 0);
+        let rootTone = MCore.tone(DB.tones[0].name);
+        let chordWeight = 0;
+        MCore.generateChordTableForTone(
+            chord, 
+            rootTone, 
+            (idx, tone) =>
+            {
+                cols[idx] = MCore.toneAsHtml(tone);
+                chordWeight += idx;
+            }
+        );
 
-        return html + arr.reduce((html, td) => html += `<td>${td}</td>`, '') + '</tr>';
+        cols = ['&nbsp;', ...cols, chordWeight];
+        return `<tr><td><b>${chord.name}<b></td>` +
+            cols.reduce((html, td) => html += `<td>${td}</td>`, '') +
+        '</tr>';
     }
 
     formatChordDistance(chordDistance){
@@ -57,19 +66,20 @@ export class ChordReviewControl extends BaseControl{
         }
     }
 
-    prepareTonesArray() {
-        return Array.from(Array(2 * DB.tones.length), () => '&nbsp;');
-    }
-
     printHeader(){
-        let html = '<thead><tr><td>&nbsp;</td>';
-        for (let i=0; i<DB.tones.length; i++){
-            html += `<th>${this.Core.toneAsHtml(DB.tones[i])}</th>`;
-        }
+        let baseTone = MCore.tone('C');
+        let cols = Array.from(Array(2 * DB.tones.length), (n, k) => {
+            let tone = MCore.shiftTone(baseTone, k);
 
-        for (let i=0; i<DB.tones.length; i++){
-            html += `<th>${this.Core.toneAsHtml(DB.tones[i])}</th>`;
-        }
-        return html + '</tr></thead>';
+            if(tone.octave > baseTone.octave){
+                return `<b>${MCore.toneAsHtml(tone)}</b>`;
+            }
+            return MCore.toneAsHtml(tone);
+        });
+        cols.push('Váha'); // weight
+
+        return '<thead><tr><td>&nbsp;</td><td>&nbsp;</td>' +
+            cols.reduce((html, td) => html + `<td>${td}</td>`, '') +
+        '</tr></thead>';
     }
 }

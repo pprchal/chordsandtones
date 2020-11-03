@@ -2,15 +2,14 @@
 
 // -------------------- GuitarControl
 // --------------------
-// import {MCore} from "../core/mcore.mjs"
+import {MCore} from "../core/mcore.mjs"
 import {BaseControl} from "./control.mjs"
-import {setCssClass} from "../core/shared.mjs"
 
 export class GuitarControl extends BaseControl {
     constructor(controlId, tuning, frets) {
         super(controlId);
         this.StringRows = [];
-        this.Fretboard = this.Core.generateGuitarFretboard(tuning, frets);
+        this.Fretboard = MCore.generateGuitarFretboard(tuning, frets);
     }
 
     render(document) {

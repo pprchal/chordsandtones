@@ -5,8 +5,7 @@ import {MCore} from "../core/mcore.mjs"
 export class BaseControl{
     constructor(controlId) {
         this.ControlId = controlId;
-        this.Core = new MCore();
-        this.Tuning = this.Core.tuning('equal-tempered');
+        this.Tuning = MCore.tuning('equal-tempered');
         this.CtID = 0;
     }
 
@@ -52,6 +51,6 @@ export class BaseControl{
 
     // @distance
     formatDistance(distance) {
-        return `${(distance + 1)} - ${this.Core.findInterval(distance).name}`;
+        return `${(distance + 1)} - ${MCore.findInterval(distance).name}`;
     }    
 }

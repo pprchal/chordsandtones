@@ -1,6 +1,7 @@
 // Pavel Prchal  2020
 // -------------------- ScaleReviewControl
 // --------------------
+import {MCore} from "../core/mcore.mjs"
 import {BaseControl} from "./control.mjs"
 import {DB} from "../core/leaflet.mjs"
 
@@ -12,65 +13,81 @@ export class ScaleReviewControl extends BaseControl{
     }
 
     render(){
-        this.setHtml(`<table id="${this.ControlId}" class="table table-hover">` +
+        this.setHtml(`<table id="${this.TableId}" class="table table-hover">` +
             this.printHeader() +
-            DB.scales.reduce((html, scale) => html + this.renderScale(scale), "") +
-        "</table>");
+            DB.scales.reduce((html, scale) => html + this.renderScale(scale), '') +
+        '</table>');
+
         $(`#${this.TableId}`).DataTable( { searching: false, paging: false, info: false } );
+
+        this.ScaleRows.forEach(sr =>
+        {
+            let M = document.getElementById(sr.M);
+            M.addEventListener("click", (e, sr) => {
+                console.debug(e+ sr);
+            });
+
+            document.getElementById(sr.P).addEventListener("click", (e, sr) => {
+                console.debug(e + sr);
+            });
+
+        });
     }
 
     renderScale(scale){
+        let distances = scale.distances[0];
+        let rootTone = MCore.tone('C');
+        let cols = Array.from(Array(DB.tones.length), () => '&nbsp;');
+        let scaleWeight = 0;
+        
         let scaleRow = {
-            name: scale.name,
-            tones: [],
+            scaleName: scale.name,
+            rootTone: rootTone,
             ids: []
         };
         this.ScaleRows.push(scaleRow);
-        let scaleDistance = scale.distances[0];
 
-        let arr = [];
-        let j = 0;
-        for(let i=0; i<DB.tones.length; i++){
-            let k = scaleDistance[j];
-            if(k == i){
-                // render tone
-                let tone = DB.tones[k];
-                scaleRow.tones.push(this.Core.clone(tone));
-                let toneControl = this.createToneControl(tone, scaleRow);
-                arr.push(toneControl);
-                if(j < scaleDistance.length){
-                    j++;
-                }
-            }else{
-                // empty space
-                arr.push("&nbsp;");
+
+        MCore.generateScaleTableForDistance(
+            rootTone, 
+            distances, 
+            (n, tone) => 
+            { 
+                cols[n] = this.createToneControl(tone, scaleRow); 
+                scaleWeight += n;
             }
-        }
+        );
 
-        let n = this.ScaleRows.length-1;
-        arr = [`${(this.shiftButton('&lt;', n))}&nbsp;&nbsp;${(this.shiftButton('&gt;', n))}`, ...arr]
-        return "<tr>" +
-            `<td>${scale.name}</td>` + 
-            arr.reduce((html, x) =>  html + `<td>${x}</td>`, "") +
-        "</tr>";
+        // add column with shift buttons
+        scaleRow.M = `btShiftScale_${this.ControlId}_m`;
+        scaleRow.P = `btShiftScale_${this.ControlId}_p`;
+
+        cols = [
+            this.renderScaleButton(scale), 
+            this.renderShiftButton(-1, scaleRow.M) + this.renderShiftButton(1, scaleRow.P),
+            ...cols, 
+            scaleWeight
+        ];
+
+        return '<tr>' + 
+            cols.reduce((html, td) => html + `<td>${td}</td>`, '') +
+        '</tr>';
+    }
+
+    renderScaleButton(scale){
+        return scale.name;
     }
 
     createToneControl(tone, scaleRow){
-        let ctid = this.getControlId("tn");
+        let ctid = this.getControlId('tn');
         scaleRow.ids.push(ctid);
-        return `<td id="${ctid}">${tone.name}</td>`;
+        return `<div id="${ctid}">${MCore.toneAsHtml(tone)}</div>`;
     }
 
-    prepareArrByTones() {
-        let arr = [];
-        for(let i = 0; i<DB.tones.length; i++){
-            arr[i] = '&nbsp;';
-        }
-        return arr;
-    }
-
-    shiftButton(direction, n){
-        return `<a id="btShiftScale_${this.ControlId}"  href="javascript:none" onclick="shiftScale('${direction}', this, ${n}); return false;" role="button">${direction}</a>`;   
+    renderShiftButton(direction, id){
+        let dir = (direction > 0) ? '&gt;' : '&lt';
+        let sb = `<a id="${id}"  href="javascript:none" role="button">${dir}</a>`;
+        return sb;   
     }
 
     shiftScale(direction, n){
@@ -80,7 +97,7 @@ export class ScaleReviewControl extends BaseControl{
         for(let i=0; i<scaleRow.tones.length; i++){
             let tone = scaleRow.tones[i];
             tone.octave = 4;
-            let shiftedTone = this.Core.shiftTone(tone, dir);
+            let shiftedTone = MCore.shiftTone(tone, dir);
             scaleRow.tones[i] = shiftedTone;
             let control = document.getElementById(scaleRow.ids[i]);
             tone.octave = 4;
@@ -89,17 +106,10 @@ export class ScaleReviewControl extends BaseControl{
         }
     }
 
-    // function shiftScale(direction, sender, n){
-    //     P_CONTAINER.SCALE_REVIEW.shiftScale(direction, n);
-    // }
-
     printHeader(){
-        let html = '<thead><tr><td>&nbsp;</td>' +
-            `<td>&nbsp;</td>`;
-
-        for (let i=0; i<DB.tones.length; i++){
-            html += `<th>${(i + 1)}</th>`;
-        }
-        return html + '</tr></thead>';
+        return '<thead><tr><td>&nbsp;</td><td>&nbsp;</td>' + 
+            DB.tones.reduce((html, tone) => html + `<th>${(MCore.toneAsHtml(tone))}</th>`, '') +
+            '<td>váha</td>' + 
+        '</tr></thead>';
     }
 }
