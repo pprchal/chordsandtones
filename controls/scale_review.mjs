@@ -20,17 +20,17 @@ export class ScaleReviewControl extends BaseControl{
 
         $(`#${this.TableId}`).DataTable( { searching: false, paging: false, info: false } );
 
+        let i = 0;
         this.ScaleRows.forEach(sr =>
         {
-            let M = document.getElementById(sr.M);
-            M.addEventListener("click", (e, sr) => {
-                console.debug(e+ sr);
-            });
+            let fn = (n) =>
+            {
+                this.shiftScale(sr, n);
+            }
 
-            document.getElementById(sr.P).addEventListener("click", (e, sr) => {
-                console.debug(e + sr);
-            });
-
+            document.getElementById(sr.M).addEventListener("click", () => fn(1));
+            document.getElementById(sr.P).addEventListener("click", () => fn(-1));
+            i++;
         });
     }
 
@@ -59,8 +59,8 @@ export class ScaleReviewControl extends BaseControl{
         );
 
         // add column with shift buttons
-        scaleRow.M = `btShiftScale_${this.ControlId}_m`;
-        scaleRow.P = `btShiftScale_${this.ControlId}_p`;
+        scaleRow.M = this.getControlId('btShiftScale_m');
+        scaleRow.P = this.getControlId('btShiftScale_p');
 
         cols = [
             this.renderScaleButton(scale), 
@@ -90,20 +90,22 @@ export class ScaleReviewControl extends BaseControl{
         return sb;   
     }
 
-    shiftScale(direction, n){
-        let dir = direction === "+" ? 1 : -1;
-        let scaleRow = this.ScaleRows[n];
-
-        for(let i=0; i<scaleRow.tones.length; i++){
-            let tone = scaleRow.tones[i];
-            tone.octave = 4;
-            let shiftedTone = MCore.shiftTone(tone, dir);
-            scaleRow.tones[i] = shiftedTone;
-            let control = document.getElementById(scaleRow.ids[i]);
-            tone.octave = 4;
-        
-            control.innerText = shiftedTone.name;
+    shiftScale(scaleRow, dir){
+        for(let x of scaleRow.ids){
+            let toneCtl = document.getElementById(x);
+            let tone = MCore.shiftTone(MCore.tone(toneCtl.innerText), dir);
+            toneCtl.innerText = tone.name;
         }
+        // for(let i=0; i<scaleRow.tones.length; i++){
+        //     let tone = scaleRow.tones[i];
+        //     tone.octave = 4;
+        //     let shiftedTone = MCore.shiftTone(tone, dir);
+        //     scaleRow.tones[i] = shiftedTone;
+        //     let control = document.getElementById(scaleRow.ids[i]);
+        //     tone.octave = 4;
+        
+        //     control.innerText = shiftedTone.name;
+        // }
     }
 
     printHeader(){
