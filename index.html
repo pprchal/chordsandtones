@@ -11,12 +11,17 @@
     </script>
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <script defer="true" src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script defer="true" src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-
     <script defer="true" type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js" ></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+
+    <!-- FONT -->
+    <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/skeleton.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
@@ -42,7 +47,8 @@
         <div class="tab-content" id="pills-tabContent">
             <!-- PAGE [1] -->
             <div class="tab-pane fade show active" id="pills-chords" role="tabpanel" aria-labelledby="pills-chords-tab">
-                <h3 class="bd-title">Tabulka akordů <select id="cbChordTypes"></select></h3>
+                <h3 class="bd-title">Tabulka akordů </h3>
+                <label for="cbChordTypes">Zvolte typ akordů</label> <select id="cbChordTypes"></select>
                 <div id="divChordTypes"></div>
                 <br />
         
@@ -90,14 +96,12 @@
                     new ChordReviewControl('divChordReview', 'tableChordsReview').render();
                     new ScaleReviewControl('divScaleReview', 'tableScalesReview').render();
                 </script>
-
             </div>             
 
             <!-- PAGE [3] -->
             <div class="tab-pane fade" id="pills-harp" role="tabpanel" aria-labelledby="pills-harp-tab">
                 <h3>Harmonika, klíč: <select id="cbHarmonicaKeys"></select></h3>
                 <div id="divHarmonica"></div>
-
                 <br/>
 
                 <h3>Stupnice - <select id="cbTonesHarp"></select><select id="cbScalesHarp"></select></h3>
@@ -142,7 +146,7 @@
                 </select>
                 <span>BPM:</span>
                 <input id="tbBPM" type="text" value="40"></input>
-                <a id="btStartStop" class="btn btn-primary btn-block" href="javascript:none" onclick="toggleMetronome(); return false;" role="button">Start</a>   
+                <a id="btStartStop" class="button button-primary" href="javascript:none" onclick="toggleMetronome(); return false;" role="button">Start</a>   
                 <br>
                 <span>syncopation:</span>
                 <select id="cbMetroS" onchange="refreshMetronome()">
@@ -171,7 +175,6 @@
         // import { SoundControl } from './controls/sound.mjs';
         // new SoundControl().subscribeTo('PLAY_TONE');
     </script>
-    <link rel="stylesheet" type="text/css" href="style.css">
 </body>
 
 </html>

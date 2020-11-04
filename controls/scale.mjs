@@ -72,7 +72,7 @@ export class ScaleControl extends BaseControl{
     } 
 
     renderScaleButton(tone){
-        let button = `<a class="btn btn-primary btn-block" href="javascript:none" onclick="" role="button">${MCore.toneAsHtml(tone, this.ShowOctaves)}</a>`;
+        let button = `<a class="button button-primary" href="javascript:none" onclick="" role="button">${MCore.toneAsHtml(tone, this.ShowOctaves)}</a>`;
         return button;
     }
 
