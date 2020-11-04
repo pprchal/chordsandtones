@@ -1,6 +1,3 @@
-import 'cache-require-paths';
-
-
 import { strictEqual } from 'assert';
 import {DB} from "../core/leaflet.mjs"
 import { MCore } from "../core/mcore.mjs"

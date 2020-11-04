@@ -18,7 +18,13 @@ export class ScaleReviewControl extends BaseControl{
             DB.scales.reduce((html, scale) => html + this.renderScale(scale), '') +
         '</table>');
 
-        $(`#${this.TableId}`).DataTable( { searching: false, paging: false, info: false } );
+        try{
+            $(`#${this.TableId}`).DataTable( { searching: false, paging: false, info: false } );
+        }
+        catch{
+            // ignore bootstrap
+        }
+        
 
         let i = 0;
         this.ScaleRows.forEach(sr =>

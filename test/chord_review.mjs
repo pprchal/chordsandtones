@@ -1,34 +1,27 @@
 // Pavel Prchal, 2020
-// import 'cache-require-paths';
 import { strictEqual } from "assert";
 import { ChordReviewControl } from "../controls/chord_review.mjs";
-import { MCore } from "../core/MCore.mjs";
-import jsdom from "jsdom";
-const { JSDOM } = jsdom;
-const dom = new JSDOM(`<body><div id="ctl"></div></body>`, { runScripts: "dangerously" });
-const document = dom.window;
-
+import { MCore } from "../core/mcore.mjs";
+import jsdom from 'jsdom-global/register.js';
 
 describe('👁 Chord review', () => {
-    // it('👁 render', () => {
-    //     let ctl = new ChordReviewControl("ctl");
-    //     ctl.render(document);
-    // });
+    it('👁 render', () => {
+        document.body.innerHTML = '<body><div id="ctl"></div></body>';
+        new ChordReviewControl("ctl").render();
+        // TODO: select by tree
+    });
 
-    // it('👁 Cdur', () => {
+    it('👁 Cdur', () => {
+        let Cdur = MCore.chord("dur");
+        strictEqual(
+            '<tr><td><b>dur<b></td><td>&nbsp;</td><td>C</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>E</td><td>&nbsp;</td><td>&nbsp;</td><td>G</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>11</td></tr>', 
+            new ChordReviewControl("ctla").printChordRow(Cdur)
+        );
+    });
 
-    //     new ChordReviewControl("ctla").render(document);
-
-    //     let Cdur = MCore.chord("dur");
-    //     strictEqual(
-    //         '<tr><td><b>dur<b></td><td>C</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>E</td><td>&nbsp;</td><td>&nbsp;</td><td>G</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>', 
-    //         new ChordReviewControl("ctl").printChordRow(Cdur)
-    //     );
-    // });
-
-    // it('👁 C9', () => {
-    //     let C9 = new MCore().chord("9");
-    //     new ChordReviewControl("ctl").printChordRow(C9)
-    // });
+    it('👁 C9', () => {
+        let C9 = MCore.chord("9");
+        new ChordReviewControl("ctl").printChordRow(C9)
+    });
 });
 

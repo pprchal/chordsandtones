@@ -12,7 +12,7 @@ export class ChordReviewControl extends BaseControl{
         this.TableId = tableId;
     }
 
-    render(document){
+    render(){
         this.setHtml(`<table id="${this.TableId}" class="table table-hover">` +
             this.printHeader() +
             this.renderRows() +

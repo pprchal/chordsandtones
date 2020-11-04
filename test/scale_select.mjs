@@ -4,7 +4,7 @@ import { strictEqual } from "assert";
 import { ScaleSelectControl } from "../controls/scale_select.mjs";
 import jsdom from "jsdom";
 const { JSDOM } = jsdom;
-const dom = new JSDOM(`<body><select id="cbTest"></select></body>`, { runScripts: "dangerously" });
+const dom = new JSDOM('<body><select id="cbTest"></select></body>', { runScripts: "dangerously" });
 const { document } = dom.window;
 
 
