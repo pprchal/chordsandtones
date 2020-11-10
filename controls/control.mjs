@@ -7,6 +7,7 @@ export class BaseControl{
         this.ControlId = controlId;
         this.Tuning = MCore.tuning('equal-tempered');
         this.CtID = 0;
+        this.Childs = [];
     }
 
     setHtml(html){
@@ -27,24 +28,32 @@ export class BaseControl{
         document.dispatchEvent(evt);
     }
 
-    subscribeTo(eventName, handler, self){
+    subscribeTo(eventName){
         document.addEventListener(eventName, (e) => {
-            if(self.MessageGroup === e.MessageGroup){
-                handler.call(e, self);
+            if((self.MessageGroup == undefined) ||
+               (self.MessageGroup === e.MessageGroup)){
+                this.dispatchSubscribtion(e);
             }
         });
     }
 
-    getControlId(){
-        this.CtID++;
-        return `${this.ControlId}_${this.CtID}`;
+    dispatchSubscribtion(e){
     }
 
     getControlId(x){
         this.CtID++;
-        return `${this.ControlId}_${x}_${this.CtID}`;
+
+        let id = '';
+        if(x == undefined){
+            id = `${this.ControlId}_${this.CtID}`;
+        }
+        else {
+            id = `${this.ControlId}_${x}_${this.CtID}`
+        }
+        this.Childs.push(id);
+        return id;
     }
-    
+
     debug(msg){
         // window.console.debug(msg);
     }

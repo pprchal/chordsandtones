@@ -31,6 +31,12 @@ export class ScaleControl extends BaseControl{
             html += this.renderSingleScale(i);
         }
         this.setHtml(html);
+
+        this.Childs.forEach(chid =>
+            {
+                let button = document.getElementById(chid);
+                button.addEventListener('click', (e) => this.fireEvent('PLAY_TONE', 'C'));
+            });
     }
 
     subscribeTo(eventName, messageGroup){
@@ -72,12 +78,8 @@ export class ScaleControl extends BaseControl{
     } 
 
     renderScaleButton(tone){
-        let button = `<a class="button button-primary" href="javascript:none" onclick="" role="button">${MCore.toneAsHtml(tone, this.ShowOctaves)}</a>`;
+        let button = `<a id=${this.getControlId()} class="button button-primary" href="javascript:none" onclick="" role="button">${MCore.toneAsHtml(tone, this.ShowOctaves)}</a>`;
         return button;
-    }
-
-    playToneWithOctave(toneName, toneOctave, tuningName, appendControlId, tt) {
-        this.fireEvent('PLAY_TONE', tone);
     }
 
     printScaleHeader(distances) {

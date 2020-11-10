@@ -7,6 +7,7 @@ import {MCore} from "../core/mcore.mjs"
 
 export class SoundControl extends BaseControl { 
     constructor(){
+        super();
         this.audioCtx = new(window.AudioContext || window.webkitAudioContext)();
     }
     
@@ -21,6 +22,10 @@ export class SoundControl extends BaseControl {
             function() { oscillator.stop(); }, 
             duration
         );
+    }
+
+    dispatchSubscribtion(e){
+        console.debug(e.EventData);
     }
 
     playChord(rootNoteName, chordTypeName){
