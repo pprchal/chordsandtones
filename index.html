@@ -29,6 +29,7 @@
         function renderContent(n) { 
             contents[n].call(); 
         }
+        window.renderContent = renderContent;
 
         function setTemplate(html){
             document.getElementById('content').innerHTML = html;
