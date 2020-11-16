@@ -12,9 +12,11 @@ export class ChordControl extends BaseControl{
 
     // @chordTypeName (maj7)
     render(chordType) {
+        // handle events
         if(chordType == undefined){
             chordType = DB.chords[0];
         }
+
         let chordsInType = DB.tones.map(tone => 
             MCore.generateChordTableForTone(chordType, tone)
         );
@@ -72,7 +74,7 @@ export class ChordControl extends BaseControl{
         return `<a class="button button-primary" href="javascript:none" onclick="${script}; return false;" role="button">${MCore.toneAsHtml(chord.rootTone)}</a>`;
     }
 
-    displayCharChords(rootTone, chordType){
-        document.getElementById('divCharChords').innerText = MCore.findCharChords(rootTone);
-    }    
+    // displayCharChords(rootTone, chordType){
+    //     document.getElementById('divCharChords').innerText = MCore.findCharChords(rootTone);
+    // }    
 }

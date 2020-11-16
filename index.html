@@ -11,7 +11,7 @@
     <title>Akordy a stupnice</title>
     <script type="module" src="./controls/chord.mjs" async="true"></script>
     <script>
-        let pages = []; function renderContent(n) { pages[n].call(); }
+        let contents = []; function renderContent(n) { contents[n].call(); }
     </script>
 
     <!-- FONT -->
@@ -24,20 +24,6 @@
     <!-- Bootstrap CSS -->
     <script async="true" src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script async="true" type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
-</head>
-
-<body>
-    <div class="container">
-        <div class="container">
-            <div class="nav-item"><div class="one-third column button" onclick="renderContent(0);">Akordy</div></div>
-            <div class="nav-item"><div class="one-third column button" onclick="renderContent(1);">Katalog</div></div>
-            <div class="nav-item"><div class="one-third column button" onclick="renderContent(2);">Harmonika</div></div>
-        </div>
-
-        <div id="content"></div>
-    </div>
-
     <script type="module" async="true">
         import { ChordControl } from './controls/chord.mjs';
         import { ChordTypeSelectControl } from './controls/chord_type_select.mjs';
@@ -50,12 +36,13 @@
         import { SoundControl } from './controls/sound.mjs';
 
         // PAGE [1]
-        pages.push(() => {
-            document.getElementById('content').innerHTML = `<h3 class="bd-title">Tabulka akordů </h3><label for="cbChordTypes">Zvolte typ akordů</label> <select id="cbChordTypes"></select><div id="divChordTypes"></div>
-            <br /><div id="divCharChords"></div>
-            <h3 class="docs-header">Stupnice</h3><select id="cbTones"></select>
-            <select id="cbScales"></select></h3>
-            <div><div id="divOutputScale"></div>`;
+        contents.push(() => {
+            document.getElementById('content').innerHTML = `<h4>Tabulka akordů </h4><label for="cbChordTypes"><div class="row">Zvolte typ akordů</label>
+            <select id="cbChordTypes"></select><div id="divChordTypes"></div> </div>
+            <br />
+            <h4>Stupnice</h4> <select id="cbTones"></select>
+            <select id="cbScales"></select>
+            <div id="divOutputScale"></div>`;
             new ChordTypeSelectControl('cbChordTypes').publishTo('PAGE [1]').render(document);
             new ChordControl('divChordTypes').subscribeTo('CHORD_TYPE', 'PAGE [1]').render();
             new ToneSelectControl('cbTones').publishTo('PAGE [1]').render(document);
@@ -67,15 +54,15 @@
 
 
         // PAGE2
-        pages.push(() => {
-            document.getElementById('content').innerHTML = '<h3>Akordy - přehled</h3><div id="divChordReview"></div><h3>Stupnice - přehled</h3><div id="divScaleReview"></div>';
+        contents.push(() => {
+            document.getElementById('content').innerHTML = '<h4>Akordy - přehled</h4><div id="divChordReview"></div><h3>Stupnice - přehled</h3><div id="divScaleReview"></div>';
             new ChordReviewControl('divChordReview', 'tableChordsReview').render();
             new ScaleReviewControl('divScaleReview', 'tableScalesReview').render();
         });
 
         // PAGE3
-        pages.push(() => {
-            document.getElementById('content').innerHTML = '<h3>Harmonika, klíč:</h3><select id="cbHarmonicaKeys"></select><div id="divHarmonica"></div><br/><h3>Stupnice harmoniky</h3><select id="cbTonesHarp"></select><select id="cbScalesHarp"></select><div id="divOutputScaleHarp"></div>';
+        contents.push(() => {
+            document.getElementById('content').innerHTML = '<h4>Harmonika</h4><select id="cbHarmonicaKeys"></select><div id="divHarmonica"></div><br/><h3>Stupnice harmoniky</h3><select id="cbTonesHarp"></select><select id="cbScalesHarp"></select><div id="divOutputScaleHarp"></div>';
             new ToneSelectControl('cbHarmonicaKeys').publishTo('PAGE [3].1').render(document);
             new HarmonicaControl('divHarmonica')
                 .subscribeTo('TONE', 'PAGE [3].1')
@@ -89,8 +76,21 @@
         });
 
         new SoundControl().subscribeTo('PLAY_TONE');
-        renderContent(0);
-    </script>
+    </script>    
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+</head>
+
+<body onload="renderContent(0)">
+    <div class="container">
+        <div class="row">
+            <div class="one-third column button" onclick="renderContent(0);">Akordy</div>
+            <div class="one-third column button" onclick="renderContent(1);">Katalog</div>
+            <div class="one-third column button" onclick="renderContent(2);">Harmonika</div>
+        </div>
+
+        <div id="content"></div>
+        <div>Pavel Prchal, 2020</div>
+    </div>
 </body>
 
 </html>
