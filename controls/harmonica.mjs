@@ -4,7 +4,6 @@
 // --------------------
 import {MCore} from "../core/mcore.mjs"
 import {BaseControl} from "./control.mjs"
-import {setCssClass} from "../core/shared.mjs"
 
 export class ToneMapRecord {
     constructor(controlId, tone){
@@ -118,11 +117,11 @@ export class HarmonicaControl extends BaseControl {
     }
 
     setColor(toneControlId, on) {
-        setCssClass(
-            document.getElementById(toneControlId), 
-            'note-on',
-            on
-        );
+        // setCssClass(
+        //     document.getElementById(toneControlId), 
+        //     'note-on',
+        //     on
+        // );
     }
 
     decolorAll(toneMap) {

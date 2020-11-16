@@ -3,6 +3,7 @@
 // --------------------
 import {BaseControl} from "./control.mjs"
 
+//
 export class MetronomeControlBase extends BaseControl{
     constructor(controlId, sound) {
         super(controlId);
@@ -25,6 +26,27 @@ export class MetronomeControlBase extends BaseControl{
         return this.threadId != undefined;
     }
 
+    getSelectedValue(id){
+        return document.getElementById(id).selectedOptions[0].value;
+    }       
+    
+    getSelectedValue2(id){
+        return document.getElementById(id).value;
+    } 
+    
+    setCssClass(control, cssClass, on) {
+        let contains = control.classList.contains(cssClass);
+    
+        if (on) {
+            if (!contains)
+                control.classList.add(cssClass);
+        }
+        else {
+            if (contains)
+                control.classList.remove(cssClass);
+        }
+    }
+
     beat(metro)
     {
         let t = metro;
@@ -33,7 +55,7 @@ export class MetronomeControlBase extends BaseControl{
         let x = t.idxB % synco;
 
         let ctrB = document.getElementById(t.controlsB[t.idxB]); 
-        setCssClass(ctrB, 'tickB', true);
+        // setCssClass(ctrB, 'tickB', true);
 
         let ctrA = document.getElementById(t.controlsA[idxA]); 
         if(x === 0){
@@ -50,7 +72,7 @@ export class MetronomeControlBase extends BaseControl{
 
         // prev B
         if(t.ctrBPrev != null){
-            setCssClass(t.ctrBPrev, 'tickB', false);
+            // setCssClass(t.ctrBPrev, 'tickB', false);
         }
         t.ctrBPrev = ctrB;
 

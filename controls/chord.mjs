@@ -15,7 +15,6 @@ export class ChordControl extends BaseControl{
         if(chordType == undefined){
             chordType = DB.chords[0];
         }
-        window.console.debug(`Rendering chords table: [${chordType.name}]`);
         let chordsInType = DB.tones.map(tone => 
             MCore.generateChordTableForTone(chordType, tone)
         );
