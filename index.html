@@ -11,9 +11,10 @@
     <title>Akordy a stupnice</title>
     <script type="module" src="./controls/chord.mjs" async="true"></script>
     <script>
-        let contents = []; function renderContent(n) { contents[n].call(); }
-        function setTemplate(html){
-            document.getElementById('content').innerHTML = html;
+        let contents = []; 
+        function renderContent(n) { 
+            console.debug('renderContent: ' + n  + contents[n]);
+            contents[n].call(); 
         }
     </script>
 
@@ -28,6 +29,10 @@
     <script async="true" src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script async="true" type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
     <script type="module" async="true">
+        function setTemplate(html){
+            document.getElementById('content').innerHTML = html;
+        }
+
         import { ChordControl } from './controls/chord.mjs';
         import { ChordTypeSelectControl } from './controls/chord_type_select.mjs';
         import { ScaleSelectControl } from './controls/scale_select.mjs';
@@ -79,6 +84,8 @@
         });
 
         new SoundControl().subscribeTo('PLAY_TONE');
+        renderContent(0);
+
     </script>    
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
 </head>
@@ -95,10 +102,6 @@
         
         <div>Pavel Prchal, 2020</div>
     </div>
-
-    <script>
-        renderContent(0);
-    </script>
 </body>
 
 </html>
