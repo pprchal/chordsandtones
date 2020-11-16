@@ -70,8 +70,8 @@ export class ChordControl extends BaseControl{
     }
 
     renderChordButton(chord){
-        let script = `displayCharChords('${chord.rootTone.name}', '${chord.name}')`;
-        return `<a class="button button-primary" href="javascript:none" onclick="${script}; return false;" role="button">${MCore.toneAsHtml(chord.rootTone)}</a>`;
+        // let script = `displayCharChords('${chord.rootTone.name}', '${chord.name}')`;  onclick="${script};
+        return `<a class="button button-primary" href="javascript:none" return false;" role="button">${MCore.toneAsHtml(chord.rootTone)}</a>`;
     }
 
     // displayCharChords(rootTone, chordType){

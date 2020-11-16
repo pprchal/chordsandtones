@@ -12,6 +12,9 @@
     <script type="module" src="./controls/chord.mjs" async="true"></script>
     <script>
         let contents = []; function renderContent(n) { contents[n].call(); }
+        function setTemplate(html){
+            document.getElementById('content').innerHTML = html;
+        }
     </script>
 
     <!-- FONT -->
@@ -37,12 +40,12 @@
 
         // PAGE [1]
         contents.push(() => {
-            document.getElementById('content').innerHTML = `<h4>Tabulka akordů </h4><label for="cbChordTypes"><div class="row">Zvolte typ akordů</label>
+            setTemplate(`<h4>Tabulka akordů </h4><label for="cbChordTypes"><div class="row">Zvolte typ akordů</label>
             <select id="cbChordTypes"></select><div id="divChordTypes"></div> </div>
             <br />
             <h4>Stupnice</h4> <select id="cbTones"></select>
             <select id="cbScales"></select>
-            <div id="divOutputScale"></div>`;
+            <div id="divOutputScale"></div>`);
             new ChordTypeSelectControl('cbChordTypes').publishTo('PAGE [1]').render(document);
             new ChordControl('divChordTypes').subscribeTo('CHORD_TYPE', 'PAGE [1]').render();
             new ToneSelectControl('cbTones').publishTo('PAGE [1]').render(document);
@@ -55,14 +58,14 @@
 
         // PAGE2
         contents.push(() => {
-            document.getElementById('content').innerHTML = '<h4>Akordy - přehled</h4><div id="divChordReview"></div><h3>Stupnice - přehled</h3><div id="divScaleReview"></div>';
+            setTemplate('<h4>Akordy - přehled</h4><div id="divChordReview"></div><h3>Stupnice - přehled</h3><div id="divScaleReview"></div>');
             new ChordReviewControl('divChordReview', 'tableChordsReview').render();
             new ScaleReviewControl('divScaleReview', 'tableScalesReview').render();
         });
 
         // PAGE3
         contents.push(() => {
-            document.getElementById('content').innerHTML = '<h4>Harmonika</h4><select id="cbHarmonicaKeys"></select><div id="divHarmonica"></div><br/><h3>Stupnice harmoniky</h3><select id="cbTonesHarp"></select><select id="cbScalesHarp"></select><div id="divOutputScaleHarp"></div>';
+            setTemplate('<h4>Harmonika</h4><select id="cbHarmonicaKeys"></select><div id="divHarmonica"></div><br/><h3>Stupnice harmoniky</h3><select id="cbTonesHarp"></select><select id="cbScalesHarp"></select><div id="divOutputScaleHarp"></div>');
             new ToneSelectControl('cbHarmonicaKeys').publishTo('PAGE [3].1').render(document);
             new HarmonicaControl('divHarmonica')
                 .subscribeTo('TONE', 'PAGE [3].1')
@@ -80,7 +83,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
 </head>
 
-<body onload="renderContent(0)">
+<body>
     <div class="container">
         <div class="row">
             <div class="one-third column button" onclick="renderContent(0);">Akordy</div>
@@ -89,8 +92,13 @@
         </div>
 
         <div id="content"></div>
+        
         <div>Pavel Prchal, 2020</div>
     </div>
+
+    <script>
+        renderContent(0);
+    </script>
 </body>
 
 </html>
