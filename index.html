@@ -10,13 +10,6 @@
 
     <title>Akordy a stupnice</title>
     <script type="module" src="./controls/chord.mjs" async="true"></script>
-    <script>
-        let contents = []; 
-        function renderContent(n) { 
-            contents[n].call(); 
-        }
-    </script>
-
     <!-- FONT -->
     <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
 
@@ -32,6 +25,11 @@
 
 <body>
     <script type="module" async="true">
+        let contents = []; 
+        function renderContent(n) { 
+            contents[n].call(); 
+        }
+
         function setTemplate(html){
             document.getElementById('content').innerHTML = html;
         }
