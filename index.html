@@ -44,12 +44,12 @@
         // PAGE [1]
         contents.push(() => {
             setTemplate(`<h4>Tabulka akordů </h4><label for="cbChordTypes"><div class="row">Zvolte typ akordů</label>
-            <select id="cbChordTypes"></select><div id="divChordTypes"></div> </div>
+            <div id="cbChordTypes"></div><div id="divChordTypes"></div> </div>
             <br />
             <h4>Stupnice</h4> <select id="cbTones"></select>
             <select id="cbScales"></select>
             <div id="divOutputScale"></div>`);
-            new ChordTypeSelectControl('cbChordTypes').publishTo('PAGE [1]').render(document);
+            new ChordTypeSelectControl('cbChordTypes').publishTo('PAGE [1]').render();
             new ChordControl('divChordTypes').subscribeTo('CHORD_TYPE', 'PAGE [1]').render();
             new ToneSelectControl('cbTones').publishTo('PAGE [1]').render(document);
             new ScaleSelectControl('cbScales').publishTo('PAGE [1]').render(document);

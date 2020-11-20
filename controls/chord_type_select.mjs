@@ -7,22 +7,49 @@ import {DB} from "../core/leaflet.mjs"
 export class ChordTypeSelectControl extends BaseControl{
     constructor(controlId) {
         super(controlId);
-        this.SelectedChordTypeName = DB.chords[0].name;
+        // this.SelectedChordTypeName = DB.chords[0].name;
     }
 
-    render(document) {
-        let to = document.getElementById(this.ControlId);
-        to.addEventListener('change', (e) => {
+    render() {
+        this.createButton(-1);
+        this.select = this.createCombo();
+        this.createButton(1);
+        return this;
+    }
+
+    createCombo(){
+        let select = document.createElement('select');
+        document.getElementById(this.ControlId).appendChild(select);
+        select.addEventListener('change', (e) => {
             this.fireEvent('CHORD_TYPE', DB.chords[e.target.selectedIndex]);
         });
-         // to.self = this;
-        this.fillChordTypes(to, document);
-        return this;
+        this.fillChordTypes(select);
+        return select;
+    }
+
+    createButton(dir){
+        let button = document.createElement('div');
+        button.innerHTML = dir < 0 ? '&lt;' : '&gt;';
+        button.className = 'button';
+        document.getElementById(this.ControlId).appendChild(button);
+
+        button.addEventListener('click', (e) => {
+            let n = this.select.selectedIndex + dir;
+            if(n<0){
+                n = DB.chords.length - 1;
+            }
+            else if(n >= DB.chords.length){
+                n = 0;
+            }
+
+            this.select.selectedIndex = n;
+            this.fireEvent('CHORD_TYPE', DB.chords[n]);
+        });
     }
 
     fillChordTypes(cbChordTypes) {
         DB.chords.forEach((chord) => {
-            let option = document.createElement("option");
+            let option = document.createElement('option');
             option.text = chord.name;
             cbChordTypes.add(option);
         });
