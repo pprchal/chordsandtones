@@ -1,9 +1,8 @@
 // Pavel Prchal 2019,2020
 
-// -------------------- HarmonicaControl
-// --------------------
+
 import {MCore} from "../core/mcore.mjs"
-import {BaseControl} from "./control.mjs"
+import {BaseControl} from "./base_control.mjs"
 
 export class ToneMapRecord {
     constructor(controlId, tone){

@@ -1,9 +1,7 @@
 // Pavel Prchal 2020
 
-// -------------------- GuitarControl
-// --------------------
 import {MCore} from "../core/mcore.mjs"
-import {BaseControl} from "./control.mjs"
+import {BaseControl} from "./base_control.mjs"
 
 export class GuitarControl extends BaseControl {
     constructor(controlId, tuning, frets) {

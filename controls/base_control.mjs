@@ -10,6 +10,12 @@ export class BaseControl{
         this.Childs = [];
     }
 
+    // new... todo refactor all...
+    get Self(){
+        return document.getElementById(this.ControlId);
+    }
+
+
     setHtml(html){
         document.getElementById(this.ControlId).innerHTML = html;
     }

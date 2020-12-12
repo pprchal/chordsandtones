@@ -1,6 +1,6 @@
 // Pavel Prchal 2020
 
-import {BaseControl} from "./control.mjs"
+import {BaseControl} from "./base_control.mjs"
 import {DB} from "../core/leaflet.mjs"
 
 export class ScaleSelectControl extends BaseControl{
@@ -9,17 +9,19 @@ export class ScaleSelectControl extends BaseControl{
     }
 
     render(document) {
-        let cont = document.getElementById(this.ControlId);
-        cont.appendChild(this.createButton(-1));
+        // <
+        this.Self.appendChild(this.createShiftButton(-1));
 
         this.Select = document.createElement("select");
-        document.getElementById(this.ControlId).appendChild(this.Select);
+        this.Self.appendChild(this.Select);
         this.fillScales(this.Select, document);
-        this.Select.addEventListener("change", (e) =>{
-            this.fireEvent('SCALE_TYPE', DB.scales[e.target.selectedIndex]);
-        });
+        this.Select.addEventListener(
+            "change", 
+            (e) => this.fireEvent('SCALE_TYPE', DB.scales[e.target.selectedIndex])
+        );
 
-        cont.appendChild(this.createButton(1));
+        // >
+        this.Self.appendChild(this.createShiftButton(1));
     }
     
     fillScales(cbScales, document) {
@@ -32,7 +34,7 @@ export class ScaleSelectControl extends BaseControl{
         return option;
     }
 
-    createButton(dir){
+    createShiftButton(dir){
         let button = document.createElement('div');
         button.innerHTML = dir < 0 ? '&lt;' : '&gt;';
         button.className = 'button';
@@ -42,7 +44,7 @@ export class ScaleSelectControl extends BaseControl{
 
     shiftScale(dir){
         let n = this.Select.selectedIndex + dir;
-        if(n<0){
+        if(n < 0){
             n = DB.scales.length - 1;
         }
         else if(n >= DB.scales.length){

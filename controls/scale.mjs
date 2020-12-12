@@ -2,7 +2,7 @@
 // -------------------- ScaleControl
 // --------------------
 import {MCore} from "../core/mcore.mjs"
-import {BaseControl} from "./control.mjs"
+import {BaseControl} from "./base_control.mjs"
 
 export class ScaleControl extends BaseControl{
     constructor(controlId, showOctaves, octave) {

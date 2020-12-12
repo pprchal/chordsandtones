@@ -1,6 +1,6 @@
 // Pavel Prchal 2019, 2020
 
-import {BaseControl} from "./control.mjs"
+import {BaseControl} from "./base_control.mjs"
 import {MCore} from "../core/mcore.mjs"
 
 export class SoundControl extends BaseControl { 

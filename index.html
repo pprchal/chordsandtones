@@ -46,12 +46,12 @@
             setTemplate(`<h4>Tabulka akordů </h4><label for="cbChordTypes"><div class="row">Zvolte typ akordů</label>
             <div id="cbChordTypes"></div><div id="divChordTypes"></div> </div>
             <br />
-            <h4>Stupnice</h4> <select id="cbTones"></select>
+            <h4>Stupnice</h4> <div id="divTones"></div>
             <div id="divScales"></div>
             <div id="divOutputScale"></div>`);
             new ChordTypeSelectControl('cbChordTypes').publishTo('PAGE [1]').render();
             new ChordControl('divChordTypes').subscribeTo('CHORD_TYPE', 'PAGE [1]').render();
-            new ToneSelectControl('cbTones').publishTo('PAGE [1]').render(document);
+            new ToneSelectControl('divTones').publishTo('PAGE [1]').render();
             new ScaleSelectControl('divScales').publishTo('PAGE [1]').render(document);
             new ScaleControl('divOutputScale', false).subscribeTo('TONE', 'PAGE [1]')
                 .subscribeTo('SCALE_TYPE', 'PAGE [1]')
@@ -68,13 +68,13 @@
 
         // PAGE3
         contents.push(() => {
-            setTemplate('<h4>Harmonika</h4><select id="cbHarmonicaKeys"></select><div id="divHarmonica"></div><br/><h3>Stupnice harmoniky</h3><select id="cbTonesHarp"></select><select id="cbScalesHarp"></select><div id="divOutputScaleHarp"></div>');
-            new ToneSelectControl('cbHarmonicaKeys').publishTo('PAGE [3].1').render(document);
+            setTemplate('<h4>Harmonika</h4><div id="divHarmonicaKeys"></div><div id="divHarmonica"></div><br/><h3>Stupnice harmoniky</h3><select id="cbTonesHarp"></select><select id="cbScalesHarp"></select><div id="divOutputScaleHarp"></div>');
+            new ToneSelectControl('divHarmonicaKeys').publishTo('PAGE [3].1').render();
             new HarmonicaControl('divHarmonica')
                 .subscribeTo('TONE', 'PAGE [3].1')
                 .render();
 
-            new ToneSelectControl('cbTonesHarp').publishTo('PAGE [3].2').render(document);
+            new ToneSelectControl('cbTonesHarp').publishTo('PAGE [3].2').render();
             new ScaleSelectControl('cbScalesHarp').publishTo('PAGE [3].2').render(document);
             new ScaleControl('divOutputScaleHarp', true).subscribeTo('TONE', 'PAGE [3].2')
                 .subscribeTo('SCALE_TYPE', 'PAGE [3].2')

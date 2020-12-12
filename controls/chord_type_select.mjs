@@ -1,6 +1,6 @@
 // Pavel Prchal 2020
 
-import {BaseControl} from "./control.mjs"
+import {BaseControl} from "./base_control.mjs"
 import {DB} from "../core/leaflet.mjs"
 
 export class ChordTypeSelectControl extends BaseControl{
