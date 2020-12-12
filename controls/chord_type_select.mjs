@@ -1,23 +1,21 @@
 // Pavel Prchal 2020
-// -------------------- ChordTypeSelectControl
-// --------------------
+
 import {BaseControl} from "./control.mjs"
 import {DB} from "../core/leaflet.mjs"
 
 export class ChordTypeSelectControl extends BaseControl{
     constructor(controlId) {
         super(controlId);
-        // this.SelectedChordTypeName = DB.chords[0].name;
     }
 
     render() {
         this.createButton(-1);
-        this.select = this.createCombo();
+        this.select = this.createSelect();
         this.createButton(1);
         return this;
     }
 
-    createCombo(){
+    createSelect(){
         let select = document.createElement('select');
         document.getElementById(this.ControlId).appendChild(select);
         select.addEventListener('change', (e) => {
@@ -32,19 +30,20 @@ export class ChordTypeSelectControl extends BaseControl{
         button.innerHTML = dir < 0 ? '&lt;' : '&gt;';
         button.className = 'button';
         document.getElementById(this.ControlId).appendChild(button);
+        button.addEventListener('click', (e) => this.shiftChord(dir));
+    }
 
-        button.addEventListener('click', (e) => {
-            let n = this.select.selectedIndex + dir;
-            if(n<0){
-                n = DB.chords.length - 1;
-            }
-            else if(n >= DB.chords.length){
-                n = 0;
-            }
+    shiftChord(dir){
+        let n = this.select.selectedIndex + dir;
+        if(n<0){
+            n = DB.chords.length - 1;
+        }
+        else if(n >= DB.chords.length){
+            n = 0;
+        }
 
-            this.select.selectedIndex = n;
-            this.fireEvent('CHORD_TYPE', DB.chords[n]);
-        });
+        this.select.selectedIndex = n;
+        this.fireEvent('CHORD_TYPE', DB.chords[n]);
     }
 
     fillChordTypes(cbChordTypes) {

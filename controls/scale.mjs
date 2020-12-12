@@ -29,13 +29,14 @@ export class ScaleControl extends BaseControl{
         for(let i=0; i<this.Scale.distances.length; i++){
             html += this.renderSingleScale(tonesInScale, i);
         }
+
         this.setHtml(html);
 
-        this.Childs.forEach(chid =>
-            {
-                let button = document.getElementById(chid);
-                button.addEventListener('click', (e) => this.fireEvent('PLAY_TONE', 'C'));
-            });
+        // this.Childs.forEach(chid =>
+        //     {
+        //         let button = document.getElementById(chid);
+        //         button.addEventListener('click', (e) => this.fireEvent('PLAY_TONE', 'C'));
+        //     });
     }
 
     subscribeTo(eventName, messageGroup){

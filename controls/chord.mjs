@@ -1,5 +1,5 @@
 // Pavel Prchal 2019, 2020
-// -------------------- ChordControl
+
 import {MCore} from "../core/mcore.mjs"
 import {BaseControl} from "./control.mjs"
 import {DB} from "../core/leaflet.mjs"
@@ -73,8 +73,4 @@ export class ChordControl extends BaseControl{
         // let script = `displayCharChords('${chord.rootTone.name}', '${chord.name}')`;  onclick="${script};
         return `<a class="button button-primary" href="javascript:none" return false;" role="button">${MCore.toneAsHtml(chord.rootTone)}</a>`;
     }
-
-    // displayCharChords(rootTone, chordType){
-    //     document.getElementById('divCharChords').innerText = MCore.findCharChords(rootTone);
-    // }    
 }

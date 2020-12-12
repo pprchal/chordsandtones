@@ -1,7 +1,5 @@
 // Pavel Prchal 2019, 2020
 
-// -------------------- SoundControl
-// --------------------
 import {BaseControl} from "./control.mjs"
 import {MCore} from "../core/mcore.mjs"
 

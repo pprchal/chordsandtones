@@ -47,12 +47,12 @@
             <div id="cbChordTypes"></div><div id="divChordTypes"></div> </div>
             <br />
             <h4>Stupnice</h4> <select id="cbTones"></select>
-            <select id="cbScales"></select>
+            <div id="divScales"></div>
             <div id="divOutputScale"></div>`);
             new ChordTypeSelectControl('cbChordTypes').publishTo('PAGE [1]').render();
             new ChordControl('divChordTypes').subscribeTo('CHORD_TYPE', 'PAGE [1]').render();
             new ToneSelectControl('cbTones').publishTo('PAGE [1]').render(document);
-            new ScaleSelectControl('cbScales').publishTo('PAGE [1]').render(document);
+            new ScaleSelectControl('divScales').publishTo('PAGE [1]').render(document);
             new ScaleControl('divOutputScale', false).subscribeTo('TONE', 'PAGE [1]')
                 .subscribeTo('SCALE_TYPE', 'PAGE [1]')
                 .render();
@@ -89,7 +89,6 @@
 </head>
 
 <body>
-
     <div class="container">
         <div class="row">
             <div class="one-third column button" onclick="renderContent(0);">Akordy</div>

@@ -1,6 +1,5 @@
 // Pavel Prchal  2020
-// -------------------- ScaleReviewControl
-// --------------------
+
 import {MCore} from "../core/mcore.mjs"
 import {BaseControl} from "./control.mjs"
 import {DB} from "../core/leaflet.mjs"
@@ -25,18 +24,12 @@ export class ScaleReviewControl extends BaseControl{
             // ignore bootstrap
         }
         
-
-        let i = 0;
         this.ScaleRows.forEach(sr =>
         {
-            let fn = (n) =>
-            {
-                this.shiftScale(sr, n);
-            }
+            let fn = (n) => this.shiftScale(sr, n);
 
             document.getElementById(sr.M).addEventListener("click", () => fn(1));
             document.getElementById(sr.P).addEventListener("click", () => fn(-1));
-            i++;
         });
     }
 
@@ -70,7 +63,7 @@ export class ScaleReviewControl extends BaseControl{
 
         cols = [
             this.renderScaleButton(scale), 
-            this.renderShiftButton(-1, scaleRow.M) + this.renderShiftButton(1, scaleRow.P),
+            this.renderScaleShiftButton(-1, scaleRow.M) + this.renderScaleShiftButton(1, scaleRow.P),
             ...cols, 
             scaleWeight
         ];
@@ -90,7 +83,7 @@ export class ScaleReviewControl extends BaseControl{
         return `<div id="${ctid}">${MCore.toneAsHtml(tone)}</div>`;
     }
 
-    renderShiftButton(direction, id){
+    renderScaleShiftButton(direction, id){
         let dir = (direction > 0) ? '&gt;' : '&lt';
         let sb = `<a id="${id}"  href="javascript:none" role="button">${dir}</a>`;
         return sb;   
@@ -102,16 +95,6 @@ export class ScaleReviewControl extends BaseControl{
             let tone = MCore.shiftTone(MCore.tone(toneCtl.innerText), dir);
             toneCtl.innerText = tone.name;
         }
-        // for(let i=0; i<scaleRow.tones.length; i++){
-        //     let tone = scaleRow.tones[i];
-        //     tone.octave = 4;
-        //     let shiftedTone = MCore.shiftTone(tone, dir);
-        //     scaleRow.tones[i] = shiftedTone;
-        //     let control = document.getElementById(scaleRow.ids[i]);
-        //     tone.octave = 4;
-        
-        //     control.innerText = shiftedTone.name;
-        // }
     }
 
     printHeader(){
