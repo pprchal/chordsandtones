@@ -52,25 +52,13 @@ export class ChordControl extends BaseControl{
     
     // @chord
     printChord(chord) {
-        let html = '<tr>';
-
-        for(let i=0; i<chord.tones.length; i++)
-        {
-            let tone = chord.tones[i];
-            if(i == 0)
+        return '<tr>' + 
+            chord.tones.reduce((html, tone) => 
             {
-                html += `<td>${this.renderChordButton(chord)}</td>`;
-            }else{
-                html += `<td id="chordTone_${this.ChordToneId}"><a class="row">${MCore.toneAsHtml(tone)}</a></td>`;
-            }
-            this.ChordToneId++;
-        }
-
-        return html + '</tr>';
-    }
-
-    renderChordButton(chord){
-        // let script = `displayCharChords('${chord.rootTone.name}', '${chord.name}')`;  onclick="${script};
-        return `<a class="button button-primary" href="javascript:none" return false;" role="button">${MCore.toneAsHtml(chord.rootTone)}</a>`;
+                this.ChordToneId++;
+                return html += `<td id="chordTone_${this.ChordToneId}"><a class="row">${MCore.toneAsHtml(tone)}</a></td>`;
+            },
+            ''
+        ) + '</tr>';
     }
 }

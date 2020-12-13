@@ -8,7 +8,7 @@ export class ScaleSelectControl extends BaseControl{
         super(controlId);
     }
 
-    render(document) {
+    render() {
         // <
         this.Self.appendChild(this.createShiftButton(-1));
 

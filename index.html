@@ -52,7 +52,7 @@
             new ChordTypeSelectControl('cbChordTypes').publishTo('PAGE [1]').render();
             new ChordControl('divChordTypes').subscribeTo('CHORD_TYPE', 'PAGE [1]').render();
             new ToneSelectControl('divTones').publishTo('PAGE [1]').render();
-            new ScaleSelectControl('divScales').publishTo('PAGE [1]').render(document);
+            new ScaleSelectControl('divScales').publishTo('PAGE [1]').render();
             new ScaleControl('divOutputScale', false).subscribeTo('TONE', 'PAGE [1]')
                 .subscribeTo('SCALE_TYPE', 'PAGE [1]')
                 .render();
@@ -68,14 +68,15 @@
 
         // PAGE3
         contents.push(() => {
-            setTemplate('<h4>Harmonika</h4><div id="divHarmonicaKeys"></div><div id="divHarmonica"></div><br/><h3>Stupnice harmoniky</h3><select id="cbTonesHarp"></select><select id="cbScalesHarp"></select><div id="divOutputScaleHarp"></div>');
+            setTemplate('<h4>Harmonika</h4><div id="divHarmonicaKeys"></div><div id="divHarmonica"></div><br/><h3>Stupnice harmoniky</h3>' + 
+            '<div id="cbTonesHarp"></div><div id="cbScalesHarp"></div><div id="divOutputScaleHarp"></div>');
             new ToneSelectControl('divHarmonicaKeys').publishTo('PAGE [3].1').render();
             new HarmonicaControl('divHarmonica')
                 .subscribeTo('TONE', 'PAGE [3].1')
                 .render();
 
             new ToneSelectControl('cbTonesHarp').publishTo('PAGE [3].2').render();
-            new ScaleSelectControl('cbScalesHarp').publishTo('PAGE [3].2').render(document);
+            new ScaleSelectControl('cbScalesHarp').publishTo('PAGE [3].2').render();
             new ScaleControl('divOutputScaleHarp', true).subscribeTo('TONE', 'PAGE [3].2')
                 .subscribeTo('SCALE_TYPE', 'PAGE [3].2')
                 .render();
