@@ -1,21 +1,22 @@
 // Pavel Prchal 2019, 2020
-// -------------------- ChordControl
+
 import {MCore} from "../core/mcore.mjs"
-import {BaseControl} from "./control.mjs"
+import {BaseControl} from "./base_control.mjs"
 import {DB} from "../core/leaflet.mjs"
 
 export class ChordControl extends BaseControl{
-    constructor(controlId) {
-        super(controlId);
+    constructor(controlId, messageGroup) {
+        super(controlId, messageGroup);
         this.ChordToneId = 1;
     }
 
     // @chordTypeName (maj7)
     render(chordType) {
+        // handle events
         if(chordType == undefined){
             chordType = DB.chords[0];
         }
-        window.console.debug(`Rendering chords table: [${chordType.name}]`);
+
         let chordsInType = DB.tones.map(tone => 
             MCore.generateChordTableForTone(chordType, tone)
         );
@@ -24,10 +25,9 @@ export class ChordControl extends BaseControl{
     }  
 
     subscribeTo(eventName, messageGroup){
-        this.MessageGroup = messageGroup;
         document.addEventListener(eventName, (e) => 
         {
-            if(messageGroup === this.MessageGroup){
+            if(messageGroup === messageGroup){
                 this.render(e.EventData);
             }
         });
@@ -51,29 +51,13 @@ export class ChordControl extends BaseControl{
     
     // @chord
     printChord(chord) {
-        let html = '<tr>';
-
-        for(let i=0; i<chord.tones.length; i++)
-        {
-            let tone = chord.tones[i];
-            if(i == 0)
+        return '<tr>' + 
+            chord.tones.reduce((html, tone) => 
             {
-                html += `<td>${this.renderChordButton(chord)}</td>`;
-            }else{
-                html += `<td id="chordTone_${this.ChordToneId}"><a class="row">${MCore.toneAsHtml(tone)}</a></td>`;
-            }
-            this.ChordToneId++;
-        }
-
-        return html + '</tr>';
+                this.ChordToneId++;
+                return html += `<td id="chordTone_${this.ChordToneId}"><a class="row">${MCore.toneAsHtml(tone)}</a></td>`;
+            },
+            ''
+        ) + '</tr>';
     }
-
-    renderChordButton(chord){
-        let script = `displayCharChords('${chord.rootTone.name}', '${chord.name}')`;
-        return `<a class="button button-primary" href="javascript:none" onclick="${script}; return false;" role="button">${MCore.toneAsHtml(chord.rootTone)}</a>`;
-    }
-
-    displayCharChords(rootTone, chordType){
-        document.getElementById('divCharChords').innerText = MCore.findCharChords(rootTone);
-    }    
 }

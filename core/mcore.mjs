@@ -10,7 +10,7 @@ export class MCore {
     }
 
     static toneAsHtml(tone, showOctave){
-        // D♯
+        // D♯ .. TODO: align D, D#
         let toneName = tone.name.replace('#', '♯');
         if(showOctave == undefined || showOctave === false){
             return toneName;

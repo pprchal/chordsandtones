@@ -1,12 +1,11 @@
 // Pavel Prchal 2020
-// -------------------- ScaleControl
-// --------------------
+
 import {MCore} from "../core/mcore.mjs"
-import {BaseControl} from "./control.mjs"
+import {BaseControl} from "./base_control.mjs"
 
 export class ScaleControl extends BaseControl{
-    constructor(controlId, showOctaves, octave) {
-        super(controlId);
+    constructor(controlId, showOctaves, octave, messageGroup) {
+        super(controlId, messageGroup);
         this.Octave = octave == undefined ? 4 : octave;
         this.ShowOctaves = showOctaves == undefined ? false : showOctaves;
         this.RootTone = MCore.tone('C', this.Octave);
@@ -24,26 +23,24 @@ export class ScaleControl extends BaseControl{
             this.Scale = scale;
         }
 
-        this.TonesInScale = MCore.generateScaleTablesForTone(this.RootTone, this.Scale);
-
+        this.debug(`scale.render(${this.RootTone.name}, ${this.Scale.name})`);
+        let tonesInScale = MCore.generateScaleTablesForTone(this.RootTone, this.Scale);
         let html = '';
         for(let i=0; i<this.Scale.distances.length; i++){
-            html += this.renderSingleScale(i);
+            html += this.renderSingleScale(tonesInScale, i);
         }
-        this.setHtml(html);
 
-        this.Childs.forEach(chid =>
-            {
-                let button = document.getElementById(chid);
-                button.addEventListener('click', (e) => this.fireEvent('PLAY_TONE', 'C'));
-            });
+        this.setHtml(html);
+        this.fireEvent('SCALE_CHANGED', {
+            Scale : this.Scale,
+            TonesInScale : tonesInScale
+        });
     }
 
     subscribeTo(eventName, messageGroup){
-        this.MessageGroup = messageGroup;
         document.addEventListener(eventName, (e) => 
             {
-                if(e.MessageGroup === this.MessageGroup){
+                if(e.MessageGroup === messageGroup){
                     if(e.type === 'SCALE_TYPE'){
                         this.render(undefined, e.EventData);
                     }
@@ -57,10 +54,10 @@ export class ScaleControl extends BaseControl{
         return this;
     }
 
-    renderSingleScale(i){
-        return '<table>' +
+    renderSingleScale(tonesInScale, i){
+        return '<table class = "u-full-width">' +
             this.printScaleHeader(this.Scale.distances[i]) +
-            this.printSingleScaleTableBody(this.TonesInScale[i]) +
+            this.printSingleScaleTableBody(tonesInScale[i]) +
         '</table>';
     }
 
@@ -78,8 +75,7 @@ export class ScaleControl extends BaseControl{
     } 
 
     renderScaleButton(tone){
-        let button = `<a id=${this.getControlId()} class="button button-primary" href="javascript:none" onclick="" role="button">${MCore.toneAsHtml(tone, this.ShowOctaves)}</a>`;
-        return button;
+        return `<a id=${this.getControlId()} class="button button-primary" href="javascript:none" onclick="" role="button">${MCore.toneAsHtml(tone, this.ShowOctaves)}</a>`;
     }
 
     printScaleHeader(distances) {

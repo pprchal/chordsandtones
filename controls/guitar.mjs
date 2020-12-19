@@ -1,9 +1,7 @@
 // Pavel Prchal 2020
 
-// -------------------- GuitarControl
-// --------------------
 import {MCore} from "../core/mcore.mjs"
-import {BaseControl} from "./control.mjs"
+import {BaseControl} from "./base_control.mjs"
 
 export class GuitarControl extends BaseControl {
     constructor(controlId, tuning, frets) {
@@ -14,9 +12,8 @@ export class GuitarControl extends BaseControl {
 
     render(document) {
         let htmlStrings = this.Fretboard.map(guitarString => this.renderString(guitarString));
-        let container = document.getElementById(this.ControlId);
         let table = document.createElement('table');
-        container.appendChild(table);
+        this.Self.appendChild(table);
         table.innerHtml = htmlStrings.join('');
     }        
 

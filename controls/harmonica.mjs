@@ -1,23 +1,11 @@
 // Pavel Prchal 2019,2020
 
-// -------------------- HarmonicaControl
-// --------------------
 import {MCore} from "../core/mcore.mjs"
-import {BaseControl} from "./control.mjs"
-import {setCssClass} from "../core/shared.mjs"
-
-export class ToneMapRecord {
-    constructor(controlId, tone){
-        this.ControlId = controlId;
-        this.Tone = tone;
-    }
-}
+import {BaseControl} from "./base_control.mjs"
 
 export class HarmonicaControl extends BaseControl {
-    constructor(controlId) {
-        super(controlId);
-        this.HarmonicaToneId = 1;
-        this.ToneMap = [];
+    constructor(controlId, messageGroup) {
+        super(controlId, messageGroup);
         this.HarpRootTone = MCore.tone('C', 4);
         this.Harmonica = MCore.harmonica('Richter diatonická', this.HarpRootTone.name);
     }
@@ -28,8 +16,7 @@ export class HarmonicaControl extends BaseControl {
             this.Harmonica = MCore.harmonica('Richter diatonická', this.HarpRootTone.name);
         }
 
-        this.debug(`Rendering harp in key: [${this.HarpRootTone.name}] [${this.Harmonica.name}]`);
-
+        this.debug(`harmonica.render(${this.HarpRootTone.name}, [${this.Harmonica.name}])`);
         let html = '<table>';
         for (let i = 0; i < this.Harmonica.template.length; i++){
 
@@ -39,16 +26,25 @@ export class HarmonicaControl extends BaseControl {
             html += this.renderRow(this.HarpRootTone, this.Harmonica.template[i], i);
         }
 
-        this.uniqueTones = new Set(this.ToneMap.map(r => r.Tone.name));
         this.setHtml(html + '</table>');
     }        
     
-    subscribeTo(eventName, messageGroup){
-        this.MessageGroup = messageGroup;
+    subscribeTo(eventName, messageGroup, doAction){
         document.addEventListener(eventName, (e) => 
         {
-            if(e.MessageGroup === this.MessageGroup){
-                this.render(e.EventData);
+            this.debug(`harmonica.subscribeTo(${eventName}, ${e.MessageGroup}, ${doAction})`);
+            if(e.MessageGroup === messageGroup)
+            {
+                if(doAction === "COLORIZE")
+                {
+                    this.colorize(e.EventData);
+                }
+                else if(doAction === undefined)
+                {
+                    // default action - i don't want to write RENDER to all commands
+                    // but.. think twice to refactor
+                    this.render(e.EventData);
+                }
             }
         });
 
@@ -78,11 +74,8 @@ export class HarmonicaControl extends BaseControl {
                     return html + '<td>&nbsp;</td>';
                 }
                 else{
-                    this.HarmonicaToneId = this.HarmonicaToneId + 1;
                     let tone = MCore.shiftTone(rootTone, distance);
-                    let toneId = `harmonicaTone_${tone.name}_${this.HarmonicaToneId}`;
-                    this.ToneMap.push(new ToneMapRecord(toneId, tone));
-                    return html + `<td id="${toneId}">${MCore.toneAsHtml(tone, true)}</td>`;
+                    return html + `<td tone="${tone.name}" octave="${tone.octave}">${MCore.toneAsHtml(tone, true)}</td>`;
                 }
             }, '') +
         '</tr>';
@@ -100,11 +93,16 @@ export class HarmonicaControl extends BaseControl {
         return html + '</tr>';
     }  
 
-    colorKeyTones(scaleCtl) {
-        this.decolorAll(this.ToneMap);
-        scaleCtl
-            .TonesInScale
-            .forEach(tonesInScale => this.colorAllHarpTonesBy(tonesInScale));
+    colorize(scaleChanged) {
+        // this.Self.querySelectorAll("td[tone='C'][octave='4']")
+
+        this.Self.querySelectorAll("td[tone]").forEach(td => {
+            let tdToneName = td.attributes['tone'].value
+            let tdToneOctave = td.attributes['octave'].value
+        });
+
+        let tones = scaleChanged.TonesInScale;
+        
     }
 
     colorAllHarpTonesBy(tonesInScale) {
@@ -118,19 +116,19 @@ export class HarmonicaControl extends BaseControl {
     }
 
     setColor(toneControlId, on) {
-        setCssClass(
-            document.getElementById(toneControlId), 
-            'note-on',
-            on
-        );
+        // setCssClass(
+        //     document.getElementById(toneControlId), 
+        //     'note-on',
+        //     on
+        // );
     }
 
-    decolorAll(toneMap) {
-        toneMap.forEach(tc => this.setColor(tc.ControlId, false));
-    }
+    // decolorAll(toneMap) {
+    //     toneMap.forEach(tc => this.setColor(tc.ControlId, false));
+    // }
 
-    findToneControlIdsByTone(tone) {
-        return this.ToneMap
-            .filter(tr => MCore.isToneEqual(tr.Tone, tone));
-    }
+    // findToneControlIdsByTone(tone) {
+    //     return this.ToneMap
+    //         .filter(tr => MCore.isToneEqual(tr.Tone, tone));
+    // }
 }

@@ -3,29 +3,30 @@
 import {MCore} from "../core/mcore.mjs"
 
 export class BaseControl{
-    constructor(controlId) {
-        this.ControlId = controlId;
-        this.Tuning = MCore.tuning('equal-tempered');
-        this.CtID = 0;
-        this.Childs = [];
+    constructor(controlId, messageGroup) {
+        this.ControlId = controlId
+        this.Tuning = MCore.tuning('equal-tempered')
+        this.CtID = 0
+        this.Childs = []
+        this.MessageGroup = (messageGroup == undefined ? "---" : messageGroup)
     }
+
+    // new... todo refactor all...
+    get Self(){
+        return document.getElementById(this.ControlId)
+    }
+
 
     setHtml(html){
-        document.getElementById(this.ControlId).innerHTML = html;
-    }
-
-    publishTo(messageGroup){
-        this.MessageGroup = messageGroup;
-        return this;
+        this.Self.innerHTML = html
     }
 
     fireEvent(name, eventData){
-        var evt = document.createEvent("Event");
-        evt.initEvent(name, true, true);
-        evt.MessageGroup = this.MessageGroup;
-        evt.Sender = this;
-        evt.EventData = eventData;
-        document.dispatchEvent(evt);
+        this.debug(`fireEvent(${name}, ${eventData}, ${this.MessageGroup})`)
+        let evt = new CustomEvent(name)
+        evt.EventData = eventData
+        evt.MessageGroup = this.MessageGroup
+        document.dispatchEvent(evt)
     }
 
     subscribeTo(eventName){
@@ -55,7 +56,7 @@ export class BaseControl{
     }
 
     debug(msg){
-        // window.console.debug(msg);
+        window.console.debug(msg);
     }
 
     // @distance

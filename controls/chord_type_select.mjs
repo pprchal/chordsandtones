@@ -1,28 +1,54 @@
 // Pavel Prchal 2020
-// -------------------- ChordTypeSelectControl
-// --------------------
-import {BaseControl} from "./control.mjs"
+
+import {BaseControl} from "./base_control.mjs"
 import {DB} from "../core/leaflet.mjs"
 
 export class ChordTypeSelectControl extends BaseControl{
-    constructor(controlId) {
-        super(controlId);
-        this.SelectedChordTypeName = DB.chords[0].name;
+    constructor(controlId, messageGroup) {
+        super(controlId, messageGroup);
     }
 
-    render(document) {
-        let to = document.getElementById(this.ControlId);
-        to.addEventListener('change', (e) => {
+    render() {
+        this.createButton(-1);
+        this.select = this.createSelect();
+        this.createButton(1);
+        return this;
+    }
+
+    createSelect(){
+        let select = document.createElement('select');
+        this.Self.appendChild(select);
+        select.addEventListener('change', (e) => {
             this.fireEvent('CHORD_TYPE', DB.chords[e.target.selectedIndex]);
         });
-         // to.self = this;
-        this.fillChordTypes(to, document);
-        return this;
+        this.fillChordTypes(select);
+        return select;
+    }
+
+    createButton(dir){
+        let button = document.createElement('div');
+        button.innerHTML = dir < 0 ? '&lt;' : '&gt;';
+        button.className = 'button';
+        this.Self.appendChild(button);
+        button.addEventListener('click', (e) => this.shiftChord(dir));
+    }
+
+    shiftChord(dir){
+        let n = this.select.selectedIndex + dir;
+        if(n<0){
+            n = DB.chords.length - 1;
+        }
+        else if(n >= DB.chords.length){
+            n = 0;
+        }
+
+        this.select.selectedIndex = n;
+        this.fireEvent('CHORD_TYPE', DB.chords[n]);
     }
 
     fillChordTypes(cbChordTypes) {
         DB.chords.forEach((chord) => {
-            let option = document.createElement("option");
+            let option = document.createElement('option');
             option.text = chord.name;
             cbChordTypes.add(option);
         });

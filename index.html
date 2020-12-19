@@ -5,135 +5,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
-    <meta name="author" content="Pavel Prchal"> 
+    <meta name="author" content="Pavel Prchal">
     <meta name="description" content="Akordy a stupnice">
 
     <title>Akordy a stupnice</title>
-    <script type="module" src="./controls/control.mjs" async="true"></script>
-
-    <!-- Bootstrap CSS -->
-    <script defer="true" src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script defer="true" type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js" ></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
-
+    <script type="module" src="./controls/chord.mjs" async="true"></script>
     <!-- FONT -->
     <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
 
     <!-- CSS -->
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/skeleton.css">
-    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Bootstrap CSS -->
+    <script async="true" src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script async="true" type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <script type="module" async="true">
+        let contents = []; 
+        function renderContent(n) { 
+            contents[n].call(); 
+        }
+        window.renderContent = renderContent;
+
+        function setTemplate(html){
+            document.getElementById('content').innerHTML = html;
+        }
+
+        import { ChordControl } from './controls/chord.mjs';
+        import { ChordTypeSelectControl } from './controls/chord_type_select.mjs';
+        import { ScaleSelectControl } from './controls/scale_select.mjs';
+        import { ChordReviewControl } from './controls/chord_review.mjs';
+        import { ScaleReviewControl } from './controls/scale_review.mjs';
+        import { ToneSelectControl } from './controls/tone_select.mjs';
+        import { HarmonicaControl } from './controls/harmonica.mjs';
+        import { ScaleControl } from './controls/scale.mjs';
+        import { SoundControl } from './controls/sound.mjs';
+
+        // PAGE [1]
+        contents.push(() => {
+            setTemplate(`<h4>Tabulka akordů </h4><label for="cbChordTypes"><div class="row">Zvolte typ akordů</label>
+            <div id="cbChordTypes"></div><div id="divChordTypes"></div> </div>
+            <br />
+            <h4>Stupnice</h4> <div id="divTones"></div>
+            <div id="divScales"></div>
+            <div id="divOutputScale"></div>`);
+            new ChordTypeSelectControl('cbChordTypes', 'PAGE [1]').render();
+            new ChordControl('divChordTypes').subscribeTo('CHORD_TYPE', 'PAGE [1]').render();
+            new ToneSelectControl('divTones', 'PAGE [1]').render();
+            new ScaleSelectControl('divScales', 'PAGE [1]').render();
+            new ScaleControl('divOutputScale', false, undefined, 'PAGE [1]')
+                .subscribeTo('TONE', 'PAGE [1]')
+                .subscribeTo('SCALE_TYPE', 'PAGE [1]')
+                .render();
+        });
+
+
+        // PAGE2
+        contents.push(() => {
+            setTemplate('<h4>Akordy - přehled</h4><div id="divChordReview"></div><h3>Stupnice - přehled</h3><div id="divScaleReview"></div>');
+            new ChordReviewControl('divChordReview', 'tableChordsReview').render();
+            new ScaleReviewControl('divScaleReview', 'tableScalesReview').render();
+        });
+
+        // PAGE3
+        contents.push(() => {
+            setTemplate('<h4>Harmonika</h4><div id="divHarmonicaKeys"></div><div id="divHarmonica"></div><br/><h3>Stupnice harmoniky</h3>' + 
+            '<div id="cbTonesHarp"></div><div id="cbScalesHarp"></div><div id="divOutputScaleHarp"></div>');
+            new ToneSelectControl('divHarmonicaKeys', 'PAGE [3].1')
+                .render();
+
+            new HarmonicaControl('divHarmonica')
+                .subscribeTo('TONE', 'PAGE [3].1')
+                .subscribeTo('SCALE_CHANGED', 'PAGE [3].2', 'COLORIZE')
+                .render();
+
+            new ToneSelectControl('cbTonesHarp', 'PAGE [3].2')
+                .render();
+            
+            new ScaleSelectControl('cbScalesHarp', 'PAGE [3].2')
+                .render();
+            
+            new ScaleControl('divOutputScaleHarp', true, undefined, 'PAGE [3].2')
+                .subscribeTo('TONE', 'PAGE [3].2')
+                .subscribeTo('SCALE_TYPE', 'PAGE [3].2')
+                .render();
+        });
+
+        new SoundControl().subscribeTo('PLAY_TONE');
+        renderContent(0);
+
+    </script>    
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
 </head>
 
 <body>
     <div class="container">
-        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="pills-chords-tab" data-toggle="pill" href="#pills-chords" role="tab" aria-controls="pills-chords" aria-selected="true">Akordy</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="pills-chordsdef-tab" data-toggle="pill" href="#pills-chordsdef" role="tab" aria-controls="pills-chordsdef" aria-selected="true">Katalog</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="pills-harp-tab" data-toggle="pill" href="#pills-harp" role="tab" aria-controls="pillsharp" aria-selected="false">Harmonika</a>
-            </li>
-        </ul>
-
-        <div class="tab-content" id="pills-tabContent">
-            <!-- PAGE [1] -->
-            <div class="tab-pane fade show active" id="pills-chords" role="tabpanel" aria-labelledby="pills-chords-tab">
-                <h3 class="bd-title">Tabulka akordů </h3>
-                <label for="cbChordTypes">Zvolte typ akordů</label> <select id="cbChordTypes"></select>
-                <div id="divChordTypes"></div>
-                <br />
-        
-                <div id="divCharChords"></div>
-
-                <h3>Stupnice</h3>
-                    <select id="cbTones"></select>
-                    <select id="cbScales"></select>
-                </h3>
-
-                <div>
-                    <div id="divOutputScale"></div>
-                </div>
-                <script type="module" async="true">
-                    import { getSelectedValue, getSelectedValue2, setCssClass } from "./core/shared.mjs";
-                    import { ChordControl } from './controls/chord.mjs';
-                    import { ChordTypeSelectControl } from './controls/chord_type_select.mjs';
-                    import { ScaleSelectControl } from './controls/scale_select.mjs';
-                    import { ScaleControl } from './controls/scale.mjs';
-                    import { ToneSelectControl } from './controls/tone_select.mjs';
-            
-                    window.setCssClass = setCssClass;
-            
-                    // PAGE [1]
-                    new ChordTypeSelectControl('cbChordTypes').publishTo('PAGE [1]').render(document);
-                    new ChordControl('divChordTypes').subscribeTo('CHORD_TYPE', 'PAGE [1]').render();
-                    new ToneSelectControl('cbTones').publishTo('PAGE [1]').render(document);
-                    new ScaleSelectControl('cbScales').publishTo('PAGE [1]').render(document);
-                    new ScaleControl('divOutputScale',  false).subscribeTo('TONE', 'PAGE [1]')
-                        .subscribeTo('SCALE_TYPE', 'PAGE [1]')
-                        .render();
-                </script>
-            </div>
-
-            <!-- PAGE [2] -->
-            <div class="tab-pane fade" id="pills-chordsdef" role="tabpanel" aria-labelledby="pills-chordsdef-tab">
-                <h3>Akordy - přehled</h3>
-                <div id="divChordReview"></div>
-
-                <h3>Stupnice - přehled</h3>
-                <div id="divScaleReview"></div>
-                <script type="module" async="true">
-                    import { ChordReviewControl } from './controls/chord_review.mjs';
-                    import { ScaleReviewControl } from './controls/scale_review.mjs';
-
-                    new ChordReviewControl('divChordReview', 'tableChordsReview').render();
-                    new ScaleReviewControl('divScaleReview', 'tableScalesReview').render();
-                </script>
-            </div>             
-
-            <!-- PAGE [3] -->
-            <div class="tab-pane fade" id="pills-harp" role="tabpanel" aria-labelledby="pills-harp-tab">
-                <h3>Harmonika, klíč:</h3>
-                <select id="cbHarmonicaKeys"></select>
-                <div id="divHarmonica"></div>
-                <br/>
-
-                <h3>Stupnice harmoniky</h3>
-                <select id="cbTonesHarp"></select><select id="cbScalesHarp"></select>
-                <div id="divOutputScaleHarp"></div>
-
-                <script type="module" async="true">
-                    import { ScaleSelectControl } from './controls/scale_select.mjs';
-                    import { ToneSelectControl } from './controls/tone_select.mjs';
-                    import { HarmonicaControl } from './controls/harmonica.mjs';
-                    import { ScaleControl } from './controls/scale.mjs';
-
-                    console.debug('Page [3] >>loading<<');
-                    new ToneSelectControl('cbHarmonicaKeys').publishTo('PAGE [3].1').render(document);
-                    new HarmonicaControl('divHarmonica')
-                        .subscribeTo('TONE', 'PAGE [3].1')
-                        .render();                    
-
-                    new ToneSelectControl('cbTonesHarp').publishTo('PAGE [3].2').render(document);
-                    new ScaleSelectControl('cbScalesHarp').publishTo('PAGE [3].2').render(document);
-                    new ScaleControl('divOutputScaleHarp',  true).subscribeTo('TONE', 'PAGE [3].2')
-                        .subscribeTo('SCALE_TYPE', 'PAGE [3].2')
-                        .render();
-                </script>
-            </div>
+        <div class="row">
+            <div class="one-third column button" onclick="renderContent(0);">Akordy</div>
+            <div class="one-third column button" onclick="renderContent(1);">Katalog</div>
+            <div class="one-third column button" onclick="renderContent(2);">Harmonika</div>
         </div>
-    </div>
 
-    <script type="module" defer="true">
-        import { SoundControl } from './controls/sound.mjs';
-        new SoundControl().subscribeTo('PLAY_TONE');
-    </script>
+        <div id="content"></div>
+        
+        <div>Pavel Prchal, 2020</div>
+    </div>
 </body>
 
 </html>
-
-
-

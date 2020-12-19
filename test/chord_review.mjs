@@ -2,13 +2,11 @@
 import { strictEqual } from "assert";
 import { ChordReviewControl } from "../controls/chord_review.mjs";
 import { MCore } from "../core/mcore.mjs";
-import jsdom from 'jsdom-global/register.js';
 
 describe('👁 Chord review', () => {
     it('👁 render', () => {
         document.body.innerHTML = '<body><div id="ctl"></div></body>';
         new ChordReviewControl("ctl").render();
-        // TODO: select by tree
     });
 
     it('👁 Cdur', () => {

@@ -1,6 +1,5 @@
 // Pavel Prchal 2020
-// -------------------- MetronomeControl
-// --------------------
+
 import {MetronomeControlBase} from "./metronome_base.mjs"
 
 export class MetronomeControl extends MetronomeControlBase{
