@@ -21,6 +21,19 @@ export class BaseControl{
         this.Self.innerHTML = html
     }
 
+    setCssClass(control, cssClass, on) {
+        let contains = control.classList.contains(cssClass);
+    
+        if (on) {
+            if (!contains)
+                control.classList.add(cssClass);
+        }
+        else {
+            if (contains)
+                control.classList.remove(cssClass);
+        }
+    }
+    
     fireEvent(name, eventData){
         this.debug(`fireEvent(${name}, ${eventData}, ${this.MessageGroup})`)
         let evt = new CustomEvent(name)

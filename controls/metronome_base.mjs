@@ -32,19 +32,6 @@ export class MetronomeControlBase extends BaseControl{
         return document.getElementById(id).value;
     } 
     
-    setCssClass(control, cssClass, on) {
-        let contains = control.classList.contains(cssClass);
-    
-        if (on) {
-            if (!contains)
-                control.classList.add(cssClass);
-        }
-        else {
-            if (contains)
-                control.classList.remove(cssClass);
-        }
-    }
-
     beat(metro)
     {
         let t = metro;

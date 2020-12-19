@@ -19,11 +19,10 @@ export class HarmonicaControl extends BaseControl {
         this.debug(`harmonica.render(${this.HarpRootTone.name}, [${this.Harmonica.name}])`);
         let html = '<table>';
         for (let i = 0; i < this.Harmonica.template.length; i++){
-
             if(i === 3) {
                 html += this.printHoleNumbers(this.Harmonica);
             }
-            html += this.renderRow(this.HarpRootTone, this.Harmonica.template[i], i);
+            html += this.renderRow(this.HarpRootTone, this.Harmonica.template[i]);
         }
 
         this.setHtml(html + '</table>');
@@ -65,7 +64,7 @@ export class HarmonicaControl extends BaseControl {
         return `${row.type}${htmlName}`;
     }
 
-    renderRow(rootTone, row, rowNumber){
+    renderRow(rootTone, row){
         return '<tr>' +
             `<td>${this.formatHarmonicaRowTitle(row)}</td>` +
             `<td>${row.type}</td>` +
@@ -96,39 +95,25 @@ export class HarmonicaControl extends BaseControl {
     colorize(scaleChanged) {
         // this.Self.querySelectorAll("td[tone='C'][octave='4']")
 
-        this.Self.querySelectorAll("td[tone]").forEach(td => {
-            let tdToneName = td.attributes['tone'].value
-            let tdToneOctave = td.attributes['octave'].value
+        // todo: flat all tones .. for one special case...
+        let a = scaleChanged.TonesInScale[0];
+            a.forEach(tone => {
+            this.Self
+                .querySelectorAll(`td[tone='${tone.name}'][octave='${tone.octave}']`)
+                .forEach(td => this.setColor(td, true));
         });
-
-        let tones = scaleChanged.TonesInScale;
-        
     }
 
-    colorAllHarpTonesBy(tonesInScale) {
-        tonesInScale.forEach(tone => this.colorHarpTonesBy(tone))
+    setColor(td, on) {
+        this.setCssClass(
+            td, 
+            'note-on',
+            on
+        );
     }
 
-    colorHarpTonesBy(tone) {
-        this
-            .findToneControlIdsByTone(tone)
-            .forEach(row => this.setColor(row.ControlId, true));
+    decolorAll(toneMap) {
+        this.Self.querySelectorAll("td[tone]").forEach(td =>  this.setColor(td, false));
+        toneMap.forEach(tc => this.setColor(tc.ControlId, false));
     }
-
-    setColor(toneControlId, on) {
-        // setCssClass(
-        //     document.getElementById(toneControlId), 
-        //     'note-on',
-        //     on
-        // );
-    }
-
-    // decolorAll(toneMap) {
-    //     toneMap.forEach(tc => this.setColor(tc.ControlId, false));
-    // }
-
-    // findToneControlIdsByTone(tone) {
-    //     return this.ToneMap
-    //         .filter(tr => MCore.isToneEqual(tr.Tone, tone));
-    // }
 }

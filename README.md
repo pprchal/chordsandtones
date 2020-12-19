@@ -22,5 +22,8 @@ settings.json
 "mochaExplorer.files": "test/**/*.mjs"
 ```
 
+# TODO
+* fix harmonica octavese
+* make harp - coloring in palette
 
 Pavel Prchal
