@@ -102,11 +102,12 @@ export const DB = {
     { 
       name: "Richter diatonická",
       template : [
-          { name: "1",         type: "+", offsets: [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 10 ] },
-          { name: "1/2",       type: "+", offsets: [NaN, NaN, NaN, NaN, NaN, NaN, NaN, 3,   6,   11 ] },
+          { name: "1",         type: "+", offsets: [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 11 ] },
+          { name: "1/2",       type: "+", offsets: [NaN, NaN, NaN, NaN, NaN, NaN, NaN, 4,   3,   5  ] },
           { name: "výdech",    type: "+", offsets: [0,   4,   3,   5,   4,   3,   5,   4,   3,   5  ] },
           { name: "nádech",    type: "-", offsets: [2,   5,   4,   3,   3,   4,   2,   3,   3,   4  ] },
-          { name: "1/2",       type: "-", offsets: [1,   6,   10,  1,   NaN, 8  , NaN, NaN, NaN, NaN] },
+          { name: "1/2",       type: "-", offsets: [1,   5,   4,   3,   NaN, 9,   NaN, NaN, NaN, NaN] },
+
           { name: "1",         type: "-", offsets: [NaN, 5,   9,   NaN, NaN, NaN, NaN, NaN, NaN, NaN] },
           { name: "1 1/2",     type: "-", offsets: [NaN, NaN, 8,   NaN, NaN, NaN, NaN, NaN, NaN, NaN] }
       ],

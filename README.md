@@ -25,5 +25,6 @@ settings.json
 # TODO
 * fix harmonica octavese
 * make harp - coloring in palette
+* fix harp rendering - now is broken (more work on octaves)
 
 Pavel Prchal
