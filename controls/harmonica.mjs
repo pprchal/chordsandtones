@@ -80,6 +80,22 @@ export class HarmonicaControl extends BaseControl {
         '</tr>';
     }
 
+    rr(rootTone, row){
+        return row
+            .offsets
+            .reduce((tones, offset, n) => 
+                {
+                    if(n === 0) {
+                        tones[n] = MCore.shiftTone(rootTone, offset);
+                    }else{
+                        tones[n] = MCore.shiftTone(tones[n - 1], offset);
+                    }
+                    return tones;
+                },
+                Array(row.offsets.length)
+            );
+    }
+
     // @harmonica
     printHoleNumbers(harmonica) {
         let html = '<tr>' +

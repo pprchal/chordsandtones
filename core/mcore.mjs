@@ -74,22 +74,6 @@ export class MCore {
                 distances[0]
             );
         return tones;
-
-        // return distances
-        //     .reduce((tones, distance, n) => 
-        //         {
-        //             if(n === 0) {
-        //                 tones[n] = MCore.clone(rootTone)
-        //             }else{
-        //                 tones[n] = this.shiftTone(tones[n - 1], distance);
-        //             }
-        //             if(tc != null){
-        //                 tc.call(this, n, tones[n]);
-        //             }
-        //             return tones;
-        //         }, 
-        //         Array(distances.length)
-        //     );
     }
 
     static findCharChords(rootTone){
