@@ -16,9 +16,19 @@ export class MCore {
         return obj;
     }
 
-    // @distance
+    /**
+     * Format distance between notes(semitones)
+     * @param {int} distance 
+     */
     static distanceAsHtml(distance) {
-        return DB.intervals[distance].name;
+        let octave = Math.trunc(distance / DB.intervals.length)
+        let n = distance % DB.intervals.length 
+        let name = DB.intervals[n].name
+
+        if(octave > 0)
+            return `${name}<sub>+${octave}</sub>`
+        
+        return name
     }  
 
     /**
