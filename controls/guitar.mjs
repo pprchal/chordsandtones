@@ -1,13 +1,13 @@
 // Pavel Prchal 2020
 
-import {MCore} from "../core/mcore.mjs"
+import {MGuitar} from "../core/mguitar.mjs"
 import {BaseControl} from "./base_control.mjs"
 
 export class GuitarControl extends BaseControl {
     constructor(controlId, tuning, frets) {
         super(controlId);
         this.StringRows = [];
-        this.Fretboard = MCore.generateGuitarFretboard(tuning, frets);
+        this.Fretboard = MGuitar.generateGuitarFretboard(tuning, frets);
     }
 
     render(document) {

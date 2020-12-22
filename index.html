@@ -16,6 +16,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/skeleton.css">
+    <link rel="stylesheet" href="css/style.css">
 
     <!-- Bootstrap CSS -->
     <script async="true" src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -43,11 +44,16 @@
 
         // PAGE [1]
         contents.push(() => {
-            setTemplate(`<h4>Tabulka akordů </h4><label for="cbChordTypes"><div class="row">Zvolte typ akordů</label>
-            <div id="cbChordTypes"></div><div id="divChordTypes"></div> </div>
+            setTemplate(`<h4>Tabulka akordů</h4>
+              <label for="cbChordTypes">Zvolte typ akordů</label>
+              <div id="cbChordTypes"></div> <div id="divChordTypes"></div>
             <br />
-            <h4>Stupnice</h4> <div id="divTones"></div>
-            <div id="divScales"></div>
+            <h4>Stupnice</h4> 
+            
+            <div>
+                <div id="divTones"></div>
+                <div id="divScales"></div>
+            </div>
             <div id="divOutputScale"></div>`);
             new ChordTypeSelectControl('cbChordTypes', 'PAGE [1]').render();
             new ChordControl('divChordTypes').subscribeTo('CHORD_TYPE', 'PAGE [1]').render();
@@ -69,7 +75,7 @@
 
         // PAGE3
         contents.push(() => {
-            setTemplate('<h4>Harmonika</h4><div id="divHarmonicaKeys"></div><div id="divHarmonica"></div><br/><h3>Stupnice harmoniky</h3>' + 
+            setTemplate('<h4>Harmonika</h4><div id="divHarmonicaKeys"></div><div id="divHarmonica"></div><br/><h4>Stupnice harmoniky</h4>' + 
             '<div id="cbTonesHarp"></div><div id="cbScalesHarp"></div><div id="divOutputScaleHarp"></div>');
             new ToneSelectControl('divHarmonicaKeys', 'PAGE [3].1')
                 .render();

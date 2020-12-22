@@ -44,10 +44,9 @@ export class ScaleReviewControl extends BaseControl{
             rootTone: rootTone,
             ids: []
         };
-        this.ScaleRows.push(scaleRow);
 
 
-        MCore.generateScaleTableForDistance(
+        MCore.generateScalePart(
             rootTone, 
             distances, 
             (n, tone) => 
@@ -58,8 +57,8 @@ export class ScaleReviewControl extends BaseControl{
         );
 
         // add column with shift buttons
-        scaleRow.M = this.getControlId('btShiftScale_m');
-        scaleRow.P = this.getControlId('btShiftScale_p');
+        // scaleRow.M = this.getControlId('btShiftScale_m');
+        // scaleRow.P = this.getControlId('btShiftScale_p');
 
         cols = [
             this.renderScaleButton(scale), 
@@ -68,7 +67,7 @@ export class ScaleReviewControl extends BaseControl{
             scaleWeight
         ];
 
-        return '<tr>' + 
+        return `<tr scale="${scale.name}">` + 
             cols.reduce((html, td) => html + `<td>${td}</td>`, '') +
         '</tr>';
     }
@@ -78,9 +77,7 @@ export class ScaleReviewControl extends BaseControl{
     }
 
     createToneControl(tone, scaleRow){
-        let ctid = this.getControlId('tn');
-        scaleRow.ids.push(ctid);
-        return `<div id="${ctid}">${MCore.toneAsHtml(tone)}</div>`;
+        return `<div>${MCore.toneAsHtml(tone)}</div>`;
     }
 
     renderScaleShiftButton(direction, id){

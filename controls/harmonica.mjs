@@ -1,6 +1,7 @@
 // Pavel Prchal 2019,2020
 
 import {MCore} from "../core/mcore.mjs"
+import { MHarp } from "../core/mharp.mjs";
 import {BaseControl} from "./base_control.mjs"
 
 export class HarmonicaControl extends BaseControl {
@@ -12,124 +13,118 @@ export class HarmonicaControl extends BaseControl {
 
     render(harpRootTone) {
         if(harpRootTone != undefined){
-            this.HarpRootTone = harpRootTone;
-            this.Harmonica = MCore.harmonica('Richter diatonická', this.HarpRootTone.name);
+            this.HarpRootTone = harpRootTone
+            this.Harmonica = MCore.harmonica('Richter diatonická', this.HarpRootTone.name)
         }
 
-        this.debug(`harmonica.render(${this.HarpRootTone.name}, [${this.Harmonica.name}])`);
-        let html = '<table>';
-        for (let i = 0; i < this.Harmonica.template.length; i++){
-            if(i === 3) {
-                html += this.printHoleNumbers(this.Harmonica);
-            }
-            html += this.renderRow(this.HarpRootTone, this.Harmonica.template[i]);
-        }
+        this.clear()
+        this.debug(`harmonica.render(${this.HarpRootTone.name}, [${this.Harmonica.name}])`)
+        let table = document.createElement('table')
 
-        this.setHtml(html + '</table>');
+        for (let i = 0; i < this.Harmonica.template.length ; i++){
+            let templateRow = this.Harmonica.template[i]
+            let tones = MHarp.generateRow(this.HarpRootTone, templateRow)
+            if(i === 1)
+                table.appendChild(this.printHoleNumbers(this.Harmonica))
+            
+            table.appendChild(this.tr(tones, templateRow))
+        }
+        this.Self.appendChild(table)
     }        
     
     subscribeTo(eventName, messageGroup, doAction){
         document.addEventListener(eventName, (e) => 
         {
-            this.debug(`harmonica.subscribeTo(${eventName}, ${e.MessageGroup}, ${doAction})`);
-            if(e.MessageGroup === messageGroup)
-            {
-                if(doAction === "COLORIZE")
-                {
-                    this.colorize(e.EventData);
+            this.debug(`harmonica.subscribeTo(${eventName}, ${e.MessageGroup}, ${doAction})`)
+            if(e.MessageGroup === messageGroup) {
+                if(doAction === "COLORIZE") {
+                    this.colorize(e.EventData)
                 }
-                else if(doAction === undefined)
-                {
+                else if(doAction === undefined) {
                     // default action - i don't want to write RENDER to all commands
                     // but.. think twice to refactor
-                    this.render(e.EventData);
+                    this.render(e.EventData)
                 }
             }
-        });
+        })
 
-        return this;
+        return this
     }
 
     formatHarmonicaRowTitle(row){
         let htmlName = row.name;
         if(row.name === '1/2'){
-            htmlName = '&#189;';
+            htmlName = '&#189;'
         }
         else if(row.name === '1'){
-            htmlName = 'Celý tón';
+            htmlName = 'celý tón'
         }
         else if(row.name === '1 1/2'){
-            htmlName = '<span>1 &#189;</span>';
+            htmlName = '<span>1 &#189;</span>'
         }
-        return `${row.type}${htmlName}`;
+        return `${row.type}${htmlName}`
     }
 
-    renderRow(rootTone, row){
-        return '<tr>' +
-            `<td>${this.formatHarmonicaRowTitle(row)}</td>` +
-            `<td>${row.type}</td>` +
-            row.offsets.reduce((html, distance) => {
-                if(isNaN(distance)){
-                    return html + '<td>&nbsp;</td>';
-                }
-                else{
-                    let tone = MCore.shiftTone(rootTone, distance);
-                    return html + `<td tone="${tone.name}" octave="${tone.octave}">${MCore.toneAsHtml(tone, true)}</td>`;
-                }
-            }, '') +
-        '</tr>';
+    tr(tones, templateRow){
+        let tr = document.createElement('tr')
+        tr.append(...[
+            this.td(this.formatHarmonicaRowTitle(templateRow)), 
+            this.td(templateRow.type), 
+            ...tones.map(tone => this.tdTone(tone, templateRow))]
+        )
+        return tr
     }
 
-    rr(rootTone, row){
-        return row
-            .offsets
-            .reduce((tones, offset, n) => 
-                {
-                    if(n === 0) {
-                        tones[n] = MCore.shiftTone(rootTone, offset);
-                    }else{
-                        tones[n] = MCore.shiftTone(tones[n - 1], offset);
-                    }
-                    return tones;
-                },
-                Array(row.offsets.length)
-            );
+    tdTone(tone, templateRow) {
+        if(tone == undefined){
+            return this.td('&nbsp;')
+        }
+
+        let td = this.td(MHarp.bendTone(tone, templateRow))
+        td.setAttribute('tone', tone.name)
+        td.setAttribute('octave', tone.octave)
+        return td
+    }
+
+    td(html){
+        let td = document.createElement('td')
+        td.innerHTML = html
+        return td
     }
 
     // @harmonica
     printHoleNumbers(harmonica) {
-        let html = '<tr>' +
-            '<td></td><td></td>';
-
-        for (let i =0; i<harmonica.template[0].offsets.length; i++) {
-            html += `<th>${(i+1)}</th>`;
-        }
-
-        return html + '</tr>';
+        let tr = document.createElement('tr')
+        tr.append(...[
+            this.td(''),
+            this.td(''),
+            ...harmonica.template[0].offsets.map((_, n) => this.td(n + 1))
+        ])
+        return tr
     }  
 
-    colorize(scaleChanged) {
-        // this.Self.querySelectorAll("td[tone='C'][octave='4']")
 
+    colorize(SCALE_CHANGED) {
+        this.decolorAll()
         // todo: flat all tones .. for one special case...
-        let a = scaleChanged.TonesInScale[0];
-            a.forEach(tone => {
+        let tonesInScale = MCore.generateScale(SCALE_CHANGED.RootTone, SCALE_CHANGED.Scale)
+
+        tonesInScale.forEach(tone => {
+            let a = this.Self.querySelectorAll(`td[tone='${tone.name}']`)
             this.Self
-                .querySelectorAll(`td[tone='${tone.name}'][octave='${tone.octave}']`)
-                .forEach(td => this.setColor(td, true));
-        });
+                .querySelectorAll(`td[tone='${tone.name}']`)  // .querySelectorAll(`td[tone='${tone.name}'][octave='${tone.octave}']`)
+                .forEach(td => this.setColor(td, true))
+        })
     }
 
     setColor(td, on) {
-        this.setCssClass(
-            td, 
-            'note-on',
-            on
-        );
+        td.classList.toggle('note-on')
     }
 
-    decolorAll(toneMap) {
-        this.Self.querySelectorAll("td[tone]").forEach(td =>  this.setColor(td, false));
-        toneMap.forEach(tc => this.setColor(tc.ControlId, false));
+    decolorAll() {
+        this
+            .Self
+            .querySelectorAll("td[tone]")
+            .forEach(td => this.setColor(td, false))
     }
 }

@@ -3,26 +3,44 @@ import { strictEqual } from "assert"
 import { notStrictEqual } from "assert"
 import { MCore } from "../core/mcore.mjs"
 import { DB } from "../core/leaflet.mjs"
+import { MGuitar } from "../core/mguitar.mjs";
 
 describe('Music math', () => {
+    it('toneAsHtml', () => {
+        // C3
+        strictEqual('<span>C<sub>3</sub></span>', MCore.toneAsHtml(MCore.tone('C', 3), true));
+
+        // F#
+        strictEqual('F♯', MCore.toneAsHtml(MCore.tone('F#', 3), false));
+
+        //  H3 ->  Cb4
+        strictEqual('<span>C♭<sub>4</sub></span>', MCore.toneAsHtml(MCore.tone('H', 3), true, +1));
+
+        //  F4 ->  Gbb  
+        strictEqual('<span>G𝄫<sub>4</sub></span>', MCore.toneAsHtml(MCore.tone('F', 4), true, +1));
+
+        //  G3 ->  F3𝄪
+        strictEqual('<span>F𝄪<sub>3</sub></span>', MCore.toneAsHtml(MCore.tone('G', 3), true, -1));
+    })
+
     it('chord F#dur', () => {
-        let Fisdur = MCore.generateChordTableForTone(MCore.chord('dur'), MCore.tone('F#'));
-        strictEqual("F#", Fisdur.tones[0].name);
-        strictEqual("B", Fisdur.tones[1].name);
-        strictEqual("C#", Fisdur.tones[2].name);
-    });
+        let Fisdur = MCore.generateChordTableForTone(MCore.chord('dur'), MCore.tone('F#'))
+        strictEqual("F#", Fisdur.tones[0].name)
+        strictEqual("B", Fisdur.tones[1].name)
+        strictEqual("C#", Fisdur.tones[2].name)
+    })
 
     it('C3 -> C3', () => {
-        let C3 = MCore.tone("C");
-        let C4 = MCore.shiftTone(C3, 12);
-        strictEqual("C", C4.name);
-        strictEqual(C3.octave + 1, C4.octave);
+        let C3 = MCore.tone('C')
+        let C4 = MCore.shiftTone(C3, 12)
+        strictEqual('C', C4.name);
+        strictEqual(C3.octave + 1, C4.octave)
     });
     
     it('E -> H (guitar)', () => {
         let E = DB.tones[4];
         let H = MCore.shiftTone(E, 19);
-        strictEqual("H", H.name);
+        strictEqual('H', H.name);
         strictEqual(E.octave + 1, H.octave);
     });
     
@@ -36,26 +54,27 @@ describe('Music math', () => {
 
     it('C <- C# (copied)', () => {
         let Cis = MCore.clone(MCore.tone("C#"));
-        let C = MCore.shiftTone(Cis, -1);
-        strictEqual("C", C.name);
+        let C = MCore.shiftTone(Cis, -1)
+        strictEqual("C", C.name)
     });
 
     it('generate scale', () => {
-        let Cdur = MCore.generateScaleTablesForTone(
+        let Cdur = MCore.generateScale(
             MCore.tone("C"), 
-            MCore.scale("dur"))[0]
-        .reduce((tones, tone) => tones + tone.name, "");
-        strictEqual("CDEFGAH", Cdur);
+            MCore.scale("dur")
+        )
+        .reduce((tones, tone) => tones + tone.name, "")
+        strictEqual("CDEFGAH", Cdur)
     });
 
     it('strat fretboard', () => {
         let fretboard = debugPrint("EADGHE", 22);
-        strictEqual("E5 F5 F#5 G5 G#5 A5 B5 H5 C6 C#6 D6 D#6 E6 F6 F#6 G6 G#6 A6 B6 H6 C7 C#7 ", fretboard[5]);
-        strictEqual("H4 C5 C#5 D5 D#5 E5 F5 F#5 G5 G#5 A5 B5 H5 C6 C#6 D6 D#6 E6 F6 F#6 G6 G#6 ", fretboard[4]);
-        strictEqual("G4 G#4 A4 B4 H4 C5 C#5 D5 D#5 E5 F5 F#5 G5 G#5 A5 B5 H5 C6 C#6 D6 D#6 E6 ", fretboard[3]);
-        strictEqual("D4 D#4 E4 F4 F#4 G4 G#4 A4 B4 H4 C5 C#5 D5 D#5 E5 F5 F#5 G5 G#5 A5 B5 H5 ", fretboard[2]);
-        strictEqual("A3 B3 H3 C4 C#4 D4 D#4 E4 F4 F#4 G4 G#4 A4 B4 H4 C5 C#5 D5 D#5 E5 F5 F#5 ", fretboard[1]);
-        strictEqual("E3 F3 F#3 G3 G#3 A3 B3 H3 C4 C#4 D4 D#4 E4 F4 F#4 G4 G#4 A4 B4 H4 C5 C#5 ", fretboard[0]);
+        strictEqual('E5 F5 F#5 G5 G#5 A5 B5 H5 C6 C#6 D6 D#6 E6 F6 F#6 G6 G#6 A6 B6 H6 C7 C#7 ', fretboard[5]);
+        strictEqual('H4 C5 C#5 D5 D#5 E5 F5 F#5 G5 G#5 A5 B5 H5 C6 C#6 D6 D#6 E6 F6 F#6 G6 G#6 ', fretboard[4]);
+        strictEqual('G4 G#4 A4 B4 H4 C5 C#5 D5 D#5 E5 F5 F#5 G5 G#5 A5 B5 H5 C6 C#6 D6 D#6 E6 ', fretboard[3]);
+        strictEqual('D4 D#4 E4 F4 F#4 G4 G#4 A4 B4 H4 C5 C#5 D5 D#5 E5 F5 F#5 G5 G#5 A5 B5 H5 ', fretboard[2]);
+        strictEqual('A3 B3 H3 C4 C#4 D4 D#4 E4 F4 F#4 G4 G#4 A4 B4 H4 C5 C#5 D5 D#5 E5 F5 F#5 ', fretboard[1]);
+        strictEqual('E3 F3 F#3 G3 G#3 A3 B3 H3 C4 C#4 D4 D#4 E4 F4 F#4 G4 G#4 A4 B4 H4 C5 C#5 ', fretboard[0]);
     });
 
     it('guitar tuning EADGHE', () => {
@@ -75,13 +94,13 @@ describe('Music math', () => {
     });
     
     function debugPrint(tuning, frets){
-        return MCore.generateGuitarFretboard(tuning, frets).map((semitonesOnString) => 
+        return MGuitar.generateGuitarFretboard(tuning, frets).map((semitonesOnString) => 
             semitonesOnString.reduce((s, tone) => s += `${tone.name}${tone.octave} `, '')
         );
     }
 
     function checkGuitarTuning(name){
-        let rootStrings = MCore.guitarRootStrings(name);
+        let rootStrings = MGuitar.guitarRootStrings(name);
         let gts = rootStrings.reduce((s, t) => s += t.name, "");
         strictEqual(name, gts);
     }
@@ -133,7 +152,7 @@ describe('Music math', () => {
     });
 
     function scaleIs(rootNote, scaleName, is){
-        let scale = MCore.generateScaleTablesForTone(MCore.tone(rootNote), MCore.scale(scaleName))[0];
+        let scale = MCore.generateScale(MCore.tone(rootNote), MCore.scale(scaleName));
         strictEqual(is, scale.reduce((acc, t) => acc += `${t.name}${t.octave} `, ''), `Scale ${rootNote}${scaleName} is wrong`);
     }
 

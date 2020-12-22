@@ -42,12 +42,12 @@ export class ChordReviewControl extends BaseControl{
                 cols[idx] = MCore.toneAsHtml(tone);
                 chordWeight += idx;
             }
-        );
+        )
 
         cols = ['&nbsp;', ...cols, chordWeight];
         return `<tr><td><b>${chord.name}<b></td>` +
             cols.reduce((html, td) => html += `<td>${td}</td>`, '') +
-        '</tr>';
+        '</tr>'
     }
 
     formatChordDistance(chordDistance){

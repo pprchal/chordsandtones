@@ -12,8 +12,6 @@ export class ScaleControl extends BaseControl{
         this.Scale = MCore.scale('dur');
     }
 
-    // @rootToneName (C)
-    // @scaleName (dur)
     render(rootTone, scale) {
         if(rootTone != undefined){
             this.RootTone = rootTone;
@@ -24,17 +22,21 @@ export class ScaleControl extends BaseControl{
         }
 
         this.debug(`scale.render(${this.RootTone.name}, ${this.Scale.name})`);
-        let tonesInScale = MCore.generateScaleTablesForTone(this.RootTone, this.Scale);
-        let html = '';
+        this.clear()
+
+        // Cdur
+        // ...and speciality...
         for(let i=0; i<this.Scale.distances.length; i++){
-            html += this.renderSingleScale(tonesInScale, i);
+            this.Self.appendChild(this.renderScale(i))
         }
 
-        this.setHtml(html);
-        this.fireEvent('SCALE_CHANGED', {
-            Scale : this.Scale,
-            TonesInScale : tonesInScale
-        });
+        this.fireEvent(
+            'SCALE_CHANGED', 
+            {
+                RootTone: this.RootTone,
+                Scale: this.Scale
+            }
+        );
     }
 
     subscribeTo(eventName, messageGroup){
@@ -54,33 +56,48 @@ export class ScaleControl extends BaseControl{
         return this;
     }
 
-    renderSingleScale(tonesInScale, i){
-        return '<table class = "u-full-width">' +
-            this.printScaleHeader(this.Scale.distances[i]) +
-            this.printSingleScaleTableBody(tonesInScale[i]) +
-        '</table>';
+    renderScale(n){
+        let gs = MCore.generateScale(this.RootTone, this.Scale, n)
+
+        let table = document.createElement('table')
+        table.class = 'u-full-width'
+        table.appendChild(this.thead(this.Scale.distances[n]))
+        table.appendChild(this.tr(gs))
+        return table
     }
 
-    printTonesHeader(){
-        return '<tr><td>&nbsp;</td>' +
-            DB.tones.reduce((html, tone) => html + `<th>${MCore.toneAsHtml(tone)}</th>`, '') +
-        '</tr>';
-    }
-
-    // @tones[]
-    printSingleScaleTableBody(tonesInScale) {
-        return '<tr>' +
-            tonesInScale.reduce((html, tone) => html + `<td>${this.renderScaleButton(tone)}</td>`, '') +
-        '</tr>';
+    tr(tonesInScale) {
+        let tr = document.createElement('tr')
+        tr.append(...tonesInScale.map(tone => 
+            {
+                let td = document.createElement('td')
+                td.appendChild(this.button(tone))
+                return td
+            }
+        ))
+        return tr
     } 
 
-    renderScaleButton(tone){
-        return `<a id=${this.getControlId()} class="button button-primary" href="javascript:none" onclick="" role="button">${MCore.toneAsHtml(tone, this.ShowOctaves)}</a>`;
+    button(tone){
+        let a = document.createElement('a')
+        a.className = 'button button-primary'
+        a.innerHTML = MCore.toneAsHtml(tone, this.ShowOctaves)
+        return a
     }
 
-    printScaleHeader(distances) {
-        return '<tr>' +
-            distances.reduce((html, distance) => html + `<th>${this.formatDistance(distance)}</th>`, "") +
-        '</tr>';
+    thead(distances) {
+        let thead = document.createElement('thead')
+        let tr = document.createElement('tr')
+
+        thead.appendChild(tr)
+        tr.append(...MCore.fromRelative(distances).map(distance =>
+            {
+                let td = document.createElement('th')
+                td.innerHTML = MCore.distanceAsHtml(distance)
+                return td
+            }
+        ));
+            
+        return thead
     } 
 }

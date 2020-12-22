@@ -22,6 +22,22 @@ settings.json
 "mochaExplorer.files": "test/**/*.mjs"
 ```
 
+# ussage
+## tones
+```js
+// get tone
+let C4 = MCore.tone('C', 4)
+
+// shift tone
+let D = MCore.shiftTone(C4, 2)
+```
+
+## chords
+```js
+// get chord
+let chord = MCore.chord('dur')
+```
+
 # TODO
 * fix harmonica octavese
 * make harp - coloring in palette

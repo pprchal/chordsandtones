@@ -1,25 +1,25 @@
 // Pavel Prchal 2019, 2020
 
 export const DB = {
-  version: "1.4",
+  version: "1.5",
   chords: [
-    { name: "dur",  distances: [ 0, 4, 3 ], families: ["dur"] },
-    { name: "aug",  distances: [ 0, 4, 4 ], families: ["aug"] },
-    { name: "7",    distances: [ 0, 4, 3, 3 ], families: ["7"] },
-    { name: "7/6",  distances: [ 0, 4, 3, 2, 1 ], families: ["7"] },
-    { name: "maj7", distances: [ 0, 4, 3, 4 ], families: ["7"] },
-    { name: "5",    distances: [ 0, 7 ], families: ["5"] },
-    { name: "6/9",  distances: [ 0, 2, 2, 3, 4 ], families: ["6"] },
-    { name: "6",    distances: [ 0, 4, 3, 2 ], families: ["6"] },
-    { name: "9",    distances: [ 0, 4, 6, 4 ], families: ["9"] },
-    { name: "11",   distances: [ 0, 5, 5, 4, 5 ], families: ["11"] },
-    { name: "m11",  distances: [ 0, 5, 5, 4, 3 ], families: ["11"] },    
-    { name: "13",   distances: [ 0, 4, 6, 4, 7 ], families: ["13"] },
-    { name: "m13",  distances: [ 0, 7, 3, 5, 6 ], families: ["13"] },
-    { name: "aug7", distances: [ 0, 4, 3, 3 ], families: ["7"] },
-    { name: "mol",  distances: [ 0, 3, 4], families: ["mol"] },
-    { name: "dim",  distances: [ 0, 3, 3, 3 ], families: ["dim"]  },
-    { name: "sus",  distances: [ 0, 5, 2 ], families: ["sus"] }
+    { name: "dur",  distances: [ 0, 4, 3 ] },
+    { name: "aug",  distances: [ 0, 4, 4 ] },
+    { name: "7",    distances: [ 0, 4, 3, 3 ] },
+    { name: "7/6",  distances: [ 0, 4, 3, 2, 1 ] },
+    { name: "maj7", distances: [ 0, 4, 3, 4 ] },
+    { name: "5",    distances: [ 0, 7 ] },
+    { name: "6/9",  distances: [ 0, 2, 2, 3, 4 ] },
+    { name: "6",    distances: [ 0, 4, 3, 2 ] },
+    { name: "9",    distances: [ 0, 4, 6, 4 ] },
+    { name: "11",   distances: [ 0, 5, 5, 4, 5 ] },
+    { name: "m11",  distances: [ 0, 5, 5, 4, 3 ] },
+    { name: "13",   distances: [ 0, 4, 6, 4, 7 ] },
+    { name: "m13",  distances: [ 0, 7, 3, 5, 6 ] },
+    { name: "aug7", distances: [ 0, 4, 3, 3 ] },
+    { name: "mol",  distances: [ 0, 3, 4] },
+    { name: "dim",  distances: [ 0, 3, 3, 3 ]  },
+    { name: "sus",  distances: [ 0, 5, 2 ] }
   ],
 
   scales: [
@@ -51,20 +51,20 @@ export const DB = {
   ],
 
   intervals:[
-    { name: "???", distance: -1 },
-    { name: "čistá prima", distance: 0 },
-    { name: "malá sekunda", distance: 1 },
-    { name: "velká sekunda", distance: 2 },
-    { name: "malá tercie", distance: 3 },
-    { name: "velká tercie", distance: 4 },
-    { name: "čistá kvarta", distance: 5 },
-    { name: "zvětšená kvarta", distance: 6 },
-    { name: "kvinta", distance: 7 },
-    { name: "malá sexta", distance: 8 },
-    { name: "velká sexta", distance: 9 },
-    { name: "malá septima", distance: 10 },
-    { name: "velká septima", distance: 11 },
-    { name: "čistá oktáva", distance: 12 }
+    { name: "základní tón" },
+    { name: "malá sekunda" },
+    { name: "velká sekunda" },
+    { name: "malá tercie" },
+    { name: "velká tercie" },
+    { name: "čistá kvarta" },
+    { name: "zvětšená kvarta" },
+    { name: "kvinta" },
+    { name: "malá sexta" },
+    { name: "velká sexta" },
+    { name: "malá septima" },
+    { name: "velká septima" },
+    { name: "čistá oktáva" },
+    { name: "???" }
   ],
 
   tunings : [ 
@@ -102,19 +102,15 @@ export const DB = {
     { 
       name: "Richter diatonická",
       template : [
-          { name: "1",         type: "+", offsets: [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 11 ] },
-          { name: "1/2",       type: "+", offsets: [NaN, NaN, NaN, NaN, NaN, NaN, NaN, 4,   3,   5  ] },
-          { name: "výdech",    type: "+", offsets: [0,   4,   3,   5,   4,   3,   5,   4,   3,   5  ] },
-          { name: "nádech",    type: "-", offsets: [2,   5,   4,   3,   3,   4,   2,   3,   3,   4  ] },
-          { name: "1/2",       type: "-", offsets: [1,   5,   4,   3,   NaN, 9,   NaN, NaN, NaN, NaN] },
-
-          { name: "1",         type: "-", offsets: [NaN, 5,   9,   NaN, NaN, NaN, NaN, NaN, NaN, NaN] },
-          { name: "1 1/2",     type: "-", offsets: [NaN, NaN, 8,   NaN, NaN, NaN, NaN, NaN, NaN, NaN] }
+          // { name: "1",         type: "+", offsets: [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 11 ] },
+          // { name: "1/2",       type: "+", offsets: [NaN, NaN, NaN, NaN, NaN, NaN, NaN, 4,   3,   5  ] },
+          { name: "výdech",    type: "+", offsets: [0,   4,   3,   5,   4,   3,   5,   4,   3,   5  ], bend: 0 },
+          { name: "nádech",    type: "-", offsets: [2,   5,   4,   3,   3,   4,   2,   3,   3,   4  ], bend: +1 },
+          // { name: "1/2",       type: "-", offsets: [1,   5,   4,   3,   NaN, 9,   NaN, NaN, NaN, NaN] },
+          // { name: "1",         type: "-", offsets: [NaN, 5,   9,   NaN, NaN, NaN, NaN, NaN, NaN, NaN] },
+          // { name: "1 1/2",     type: "-", offsets: [NaN, NaN, 8,   NaN, NaN, NaN, NaN, NaN, NaN, NaN] }
       ],
-      octaves :{
-        "C": 4,
-        "G": 3
-      }
+      octaves : { "C": 4, "G": 3  }
     }
   ],
 
