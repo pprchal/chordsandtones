@@ -95,6 +95,7 @@ export class HarmonicaControl extends BaseControl {
     // @harmonica
     printHoleNumbers(harmonica) {
         let tr = document.createElement('tr')
+        tr.classList.add('harpHolesRow')
         tr.append(...[
             this.td(''),
             this.td(''),
