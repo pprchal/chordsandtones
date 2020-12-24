@@ -12,24 +12,26 @@ export class ChordControl extends BaseControl{
     // @chordTypeName (maj7)
     render(chordType) {
         // handle events
-        if(chordType == undefined){
-            chordType = DB.chords[0]
+        this.ChordType = chordType
+        if(this.ChordType == undefined){
+            this.ChordType = DB.chords[0]
         }
         this.clear()
 
         // table
         let table = document.createElement('table')
+        table.className = 'u-full-width'
         this.Self.appendChild(table)
 
         // rows... [C E G]
-        table.appendChild(this.thead(chordType.distances))
+        table.appendChild(this.thead())
         this
-            .chordsOfType(chordType)
+            .chordsOfType()
             .forEach(chord => table.appendChild(this.tr(chord)))
     }  
 
-    chordsOfType(chordType) {
-        return DB.tones.map(tone => MCore.generateChordTableForTone(chordType, tone))
+    chordsOfType() {
+        return DB.tones.map(tone => MCore.generateChordTableForTone(this.ChordType, tone))
     }
 
     subscribeTo(eventName, messageGroup){
@@ -43,7 +45,7 @@ export class ChordControl extends BaseControl{
         return this
     }
 
-    thead(distances) {
+    thead() {
         let thead = document.createElement('thead')
         let tr = document.createElement('tr')
         thead.appendChild(tr)
@@ -51,7 +53,7 @@ export class ChordControl extends BaseControl{
         // 0               +4              +7
         // C                E               G   
         // Základní tón	    Velká tercie	Kvinta
-        tr.append(...MCore.fromRelative(distances).map(distance => this.th(distance)))
+        tr.append(...MCore.fromRelative(this.ChordType.distances).map(distance => this.th(distance)))
         return thead
     }        
 
@@ -68,11 +70,18 @@ export class ChordControl extends BaseControl{
     }
 
     button(tone){
-        let a = document.createElement('a')
-        a.className = 'button button-primary'
+        let a = document.createElement('span')
+        // a.className = 'button'
         a.innerHTML = MCore.toneAsHtml(tone, false)
+        a.addEventListener('click', (e) => this.showSubChords(tone))
         return a
     }
+    
+    showSubChords(tone){
+        this.debug(MCore.findCharChords(tone.name))
+        
+    }
+
 
     td(tone, n){
         let td = document.createElement('td')
