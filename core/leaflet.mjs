@@ -36,22 +36,22 @@ export const DB = {
   ],
 
   tones: [
-    { name: "C",  octave: 3 }, 
-    { name: "C#", octave: 3 },
-    { name: "D",  octave: 3 },
-    { name: "D#", octave: 3 },
-    { name: "E",  octave: 3 },
-    { name: "F",  octave: 3 },
-    { name: "F#", octave: 3 },
-    { name: "G",  octave: 3 },
-    { name: "G#", octave: 3 },
-    { name: "A",  octave: 3 },
-    { name: "B",  octave: 3 },
-    { name: "H",  octave: 3 }
+    { name: "C"  }, 
+    { name: "C#" },
+    { name: "D"  },
+    { name: "D#" },
+    { name: "E"  },
+    { name: "F"  },
+    { name: "F#" },
+    { name: "G"  },
+    { name: "G#" },
+    { name: "A"  },
+    { name: "B"  },
+    { name: "H"  }
   ],
 
   intervals:[
-    { name: "základní tón" },
+    { name: "čistá prima" },
     { name: "malá sekunda" },
     { name: "velká sekunda" },
     { name: "malá tercie" },
@@ -63,8 +63,7 @@ export const DB = {
     { name: "velká sexta" },
     { name: "malá septima" },
     { name: "velká septima" },
-    { name: "čistá oktáva" },
-    { name: "???" }
+    { name: "čistá oktáva" }
   ],
 
   tunings : [ 
@@ -108,7 +107,7 @@ export const DB = {
           { name: "nádech",    type: "-", offsets: [2,   5,   4,   3,   3,   4,   2,   3,   3,   4  ], bend: +1 },
           // { name: "1/2",       type: "-", offsets: [1,   5,   4,   3,   NaN, 9,   NaN, NaN, NaN, NaN] },
           // { name: "1",         type: "-", offsets: [NaN, 5,   9,   NaN, NaN, NaN, NaN, NaN, NaN, NaN] },
-          // { name: "1 1/2",     type: "-", offsets: [NaN, NaN, 8,   NaN, NaN, NaN, NaN, NaN, NaN, NaN] }
+          { name: "1 1/2",     type: "-", offsets: [NaN, NaN, 8,   NaN, NaN, NaN, NaN, NaN, NaN, NaN] }
       ],
       octaves : { "C": 4, "G": 3  }
     }
