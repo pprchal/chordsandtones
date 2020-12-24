@@ -28,6 +28,23 @@ export class MHarp {
         }
 
         return tones
+
+        // let a = templateRow.offsets.reduce((prevTone, offset, n, offsets) =>
+        // {
+        //     if(isNaN(offset)){
+        //         tones[n] = undefined
+        //     }else if(prevTone === undefined){
+        //         tones[n] = MCore.shiftTone(rootTone, offset)
+        //         prevTone = tones[n]
+        //     }else {
+        //         tones[n] = MCore.shiftTone(prevTone, offset)
+        //         prevTone = tones[n]
+        //     }
+
+        //     return prevTone
+        // }, templateRow.offsets[0])
+
+        // return tones
     }
 
     static bendTone(tone, templateRow){
