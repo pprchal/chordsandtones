@@ -80,7 +80,7 @@ export class ScaleControl extends BaseControl{
 
     button(tone){
         let a = document.createElement('a')
-        a.className = 'button button-primary'
+        // a.className = 'button-primary'
         a.innerHTML = MCore.toneAsHtml(tone, this.ShowOctaves)
         return a
     }

@@ -20,16 +20,16 @@ export class HarmonicaControl extends BaseControl {
         this.clear()
         this.debug(`harmonica.render(${this.HarpRootTone.name}, [${this.Harmonica.name}])`)
         let table = document.createElement('table')
-
-        for (let i = 0; i < this.Harmonica.template.length ; i++){
-            let templateRow = this.Harmonica.template[i]
-            let tones = MHarp.generateRow(this.HarpRootTone, templateRow)
-            if(i === 1)
-                table.appendChild(this.printHoleNumbers(this.Harmonica))
-            
-            table.appendChild(this.tr(tones, templateRow))
-        }
         this.Self.appendChild(table)
+       
+        let rows = this.Harmonica.template.flatMap((templateRow, n) => 
+        {
+            let tones = MHarp.generateRow(this.HarpRootTone, templateRow)
+            let tr = this.tr(tones, templateRow)
+
+            return (n === 1) ? [tr, this.printHoleNumbers(this.Harmonica)] : tr
+        })
+        table.append(...rows)
     }        
     
     subscribeTo(eventName, messageGroup, doAction){
@@ -38,7 +38,7 @@ export class HarmonicaControl extends BaseControl {
             this.debug(`harmonica.subscribeTo(${eventName}, ${e.MessageGroup}, ${doAction})`)
             if(e.MessageGroup === messageGroup) {
                 if(doAction === "COLORIZE") {
-                    this.colorize(e.EventData)
+                    this.colorizeByScale(e.EventData)
                 }
                 else if(doAction === undefined) {
                     // default action - i don't want to write RENDER to all commands
@@ -62,14 +62,13 @@ export class HarmonicaControl extends BaseControl {
         else if(row.name === '1 1/2'){
             htmlName = '<span>1 &#189;</span>'
         }
-        return `${row.type}${htmlName}`
+        return `${row.type} ${htmlName}`
     }
 
     tr(tones, templateRow){
         let tr = document.createElement('tr')
         tr.append(...[
             this.td(this.formatHarmonicaRowTitle(templateRow)), 
-            this.td(templateRow.type), 
             ...tones.map(tone => this.tdTone(tone, templateRow))]
         )
         return tr
@@ -98,34 +97,32 @@ export class HarmonicaControl extends BaseControl {
         tr.classList.add('harpHolesRow')
         tr.append(...[
             this.td(''),
-            this.td(''),
             ...harmonica.template[0].offsets.map((_, n) => this.td(n + 1))
         ])
         return tr
     }  
 
 
-    colorize(SCALE_CHANGED) {
+    colorizeByScale(SCALE_CHANGED) {
         this.decolorAll()
         // todo: flat all tones .. for one special case...
         let tonesInScale = MCore.generateScale(SCALE_CHANGED.RootTone, SCALE_CHANGED.Scale)
-
-        tonesInScale.forEach(tone => {
-            let a = this.Self.querySelectorAll(`td[tone='${tone.name}']`)
-            this.Self
-                .querySelectorAll(`td[tone='${tone.name}']`)  // .querySelectorAll(`td[tone='${tone.name}'][octave='${tone.octave}']`)
-                .forEach(td => this.setColor(td, true))
-        })
+        tonesInScale.forEach(tone => this.colorizeByTone(tone))
     }
 
-    setColor(td, on) {
-        td.classList.toggle('note-on')
+    colorizeByTone(tone){
+        let a = this.Self.querySelectorAll(`td[tone='${tone.name}']`) // [octave='${tone.octave}']
+        a.forEach(td => this.setColor(tone, td))
+    }
+
+    setColor(tone, td) {
+        td.classList.add('note-on')
     }
 
     decolorAll() {
         this
             .Self
-            .querySelectorAll("td[tone]")
-            .forEach(td => this.setColor(td, false))
+            .querySelectorAll('td[tone]')
+            .forEach(td => td.classList.value = '')
     }
 }
