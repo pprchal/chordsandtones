@@ -110,10 +110,19 @@ export class HarmonicaControl extends BaseControl {
         tonesInScale.forEach(tone => this.colorizeByTone(tone))
     }
 
+    colorizeByPosition(position){
+        this.decolorAll() 
+
+        // 1 + C  => Cdur 
+        this.HarpRootTone
+        
+    }
+
     colorizeByTone(tone){
-        let a = this.Self.querySelectorAll(`td[tone='${tone.name}']`) // [octave='${tone.octave}']
+        let a = this.Self.querySelectorAll(`td[tone='${tone.name}'][octave='${tone.octave}']`) // [octave='${tone.octave}']
         a.forEach(td => this.setColor(tone, td))
     }
+
 
     setColor(tone, td) {
         td.classList.add('note-on')
