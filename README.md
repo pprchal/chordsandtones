@@ -1,15 +1,11 @@
 # chordsandtones
 
 Learning app for chords, tones and scales
-
-For this moment, stable is hosted on my private blog:
-[http://pavel.borec.cz/chordGen.html]
-
-
-or - little bit experimental on
-[https://pprchal.github.io/chordsandtones/]
+Try it out:
+https://pprchal.github.io/chordsandtones/
 
 # release history
+* 01-30-2022 modules works in firefox
 * 10-31-2020 modules, lot of tests, work on guitar fretboard
 * 01-06-2020 bug hunting
 * 03-03-2020 new chord-distance table for exploring chord similiarities 

@@ -8,7 +8,8 @@
   "dependencies": {
     "cache-require-paths": "^0.3.0",
     "jsdom": "^16.4.0",
-    "jsdom-global": "^3.0.2"
+    "jsdom-global": "^3.0.2",
+    "restore": "^0.3.0"
   },
   "devDependencies": {
     "mocha": "^8.2.1"
